@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+option csharp_namespace = "MobileApiGetway";
+
+package mobileApi;
+
+service MobileApi{
+  // UserRepoService
+	rpc ApiAddUser(ApiAddUserRequest) returns (ApiAddUserReply);
+	rpc ApiGetUser (ApiGetUserRequest) returns (ApiGetUserReply);
+    rpc ApiGetUsers(ApiGetUsersRequest ) returns (ApiGetUsersReply );
+	rpc ApiGetLastMessage(ApiGetLastMessageRequest) returns (ApiGetLastMessagesReply);
+
+	//NotificationService
+	rpc ApiSendMessage(ApiSendMessageRequest) returns (ApiSendMessageReply);
+}
+
+// UserRepoService
+message ApiAddUserRequest {
+  string guid = 1;
+  string name = 2;
+  string token = 3;
+}
+message ApiAddUserReply {
+  bool isAdded = 1;
+}
+
+message ApiGetUserRequest {
+  string guid = 1;
+}
+message ApiGetUserReply {
+  string name = 1;
+  string guid = 2;
+}
+
+message ApiGetUsersRequest {
+  string restriction = 1;
+}
+message ApiGetUsersReply {
+  repeated string names = 1;
+}
+
+message ApiGetLastMessageRequest{
+	string guid  = 1;
+}
+message ApiGetLastMessagesReply{
+	string forGuid = 1;
+	string msg = 2;
+}
+
+//NotificationService
+message ApiSendMessageRequest{
+	string forGuid = 1;
+	string fromGuid = 2;
+	string msg = 3;
+}
+message ApiSendMessageReply{
+	bool status = 1;
+}

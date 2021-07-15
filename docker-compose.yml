@@ -1,0 +1,49 @@
+version: '3.4'
+
+services:
+  mobiapigetway:
+    image: ${DOCKER_REGISTRY-}mobileapigetway
+    build:
+      context: .
+      dockerfile: MobileApiGetway/Dockerfile
+    ports:
+    - "8080:80"
+    networks:
+      - some-net
+  userreposervice:
+    image: ${DOCKER_REGISTRY-}userreposervice
+    build:
+      context: .
+      dockerfile: UserRepoService/Dockerfile
+    networks:
+      - some-net
+    ports:
+      - "8081:80"
+  notificationservice:
+    image: ${DOCKER_REGISTRY-}notificationservice
+    build:
+      context: .
+      dockerfile: NotificationService/Dockerfile
+    depends_on:
+      - "rabbitmq"
+    networks:
+      - some-net
+    ports:
+        - "8084:80"
+  rabbitmq: # login guest:guest
+    image: rabbitmq:3-management
+    hostname: "rabbitmq"
+    labels:
+      NAME: "rabbitmq"
+    ports:
+    - "4369:4369"
+    - "5671:5671"
+    - "5672:5672"
+    - "25672:25672"
+    - "15671:15671"
+    - "15672:15672"
+    networks:
+        - some-net
+networks:
+  some-net:
+    driver: bridge

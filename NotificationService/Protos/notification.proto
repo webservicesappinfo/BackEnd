@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option csharp_namespace = "NotificationService";
+
+package notification;
+
+service Notification{
+	rpc SendNotification(SendNotificationRequest) returns (SendNotificationReply);
+}
+
+message SendNotificationRequest{
+	string forGuid = 1;
+	string fromGuid = 2;
+	string msg = 3;
+}
+
+message SendNotificationReply{
+	bool status = 1;
+}

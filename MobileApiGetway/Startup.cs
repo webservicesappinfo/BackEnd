@@ -18,6 +18,8 @@ namespace MobileApiGetway
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddGrpc();
+            services.AddGrpcClient<Notification.NotificationClient>(o => o.Address = new Uri("http://notificationservice"));
+            services.AddGrpcClient<UserRepo.UserRepoClient>(o => o.Address = new Uri("http://userreposervice"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

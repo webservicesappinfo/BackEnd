@@ -1,5 +1,6 @@
 ﻿using Grpc.Core;
 using Grpc.Net.Client;
+using Grpc.Net.ClientFactory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,28 +8,31 @@ using System.Threading.Tasks;
 
 namespace MobileApiGetway.Services
 {
-    public class MobileApiService: MobileApi.MobileApiBase
+    public class MobileApiService : MobileApi.MobileApiBase
     {
+        private readonly Notification.NotificationClient _notificationClient;
+        private readonly UserRepo.UserRepoClient _userRepoClient;
+
+        public MobileApiService(Notification.NotificationClient notificationClient, UserRepo.UserRepoClient userRepoClient)
+        {
+            _notificationClient = notificationClient;
+            _userRepoClient = userRepoClient;
+        }
+
         public override Task<ApiAddUserReply> ApiAddUser(ApiAddUserRequest request, ServerCallContext context)
         {
-            using var channel = GrpcChannel.ForAddress("http://userreposervice", new GrpcChannelOptions() { Credentials = ChannelCredentials.Insecure });
-            var client = new UserRepo.UserRepoClient(channel);
-            var reply = client.AddUser(new AddUserRequest() 
-            { 
-                Name = request.Name, 
-                Guid = request.Guid, 
+            var reply = _userRepoClient.AddUser(new AddUserRequest()
+            {
+                Name = request.Name,
+                Guid = request.Guid,
                 Token = request.Token
             });
-
-            return Task.FromResult(new ApiAddUserReply() {IsAdded = reply .IsAdded});
+            return Task.FromResult(new ApiAddUserReply() { IsAdded = reply.IsAdded });
         }
 
         public override Task<ApiGetUserReply> ApiGetUser(ApiGetUserRequest request, ServerCallContext context)
         {
-            using var channel = GrpcChannel.ForAddress("http://userreposervice", new GrpcChannelOptions() { Credentials = ChannelCredentials.Insecure });
-            var client = new UserRepo.UserRepoClient(channel);
-            var reply = client.GetUser(new GetUserRequest() { Guid = request.Guid });
-
+            var reply = _userRepoClient.GetUser(new GetUserRequest() { Guid = request.Guid });
             return Task.FromResult(new ApiGetUserReply()
             {
                 Guid = reply.Guid,
@@ -38,41 +42,31 @@ namespace MobileApiGetway.Services
 
         public override Task<ApiGetUsersReply> ApiGetUsers(ApiGetUsersRequest request, ServerCallContext context)
         {
-            using var channel = GrpcChannel.ForAddress("http://userreposervice", new GrpcChannelOptions() { Credentials = ChannelCredentials.Insecure });
-            var client = new UserRepo.UserRepoClient(channel);
-            var reply = client.GetUsers(new GetUsersRequest());
-
+            var reply = _userRepoClient.GetUsers(new GetUsersRequest());
             var apiReply = new ApiGetUsersReply();
             foreach (var n in reply.Names)
                 apiReply.Names.Add(n);
-
             return Task.FromResult(apiReply);
         }
 
         public override Task<ApiGetLastMessagesReply> ApiGetLastMessage(ApiGetLastMessageRequest request, ServerCallContext context)
         {
-            using var channel = GrpcChannel.ForAddress("http://userreposervice", new GrpcChannelOptions() { Credentials = ChannelCredentials.Insecure });
-            var client = new UserRepo.UserRepoClient(channel);
-            var reply = client.GetLastMessage(new GetLastMessageRequest() { Guid = request.Guid });
-
-            return Task.FromResult(new ApiGetLastMessagesReply() 
-            { 
-                ForGuid = reply.ForGuid, 
+            var reply = _userRepoClient.GetLastMessage(new GetLastMessageRequest() { Guid = request.Guid });
+            return Task.FromResult(new ApiGetLastMessagesReply()
+            {
+                ForGuid = reply.ForGuid,
                 Msg = reply.Msg
             });
         }
 
         public override Task<ApiSendMessageReply> ApiSendMessage(ApiSendMessageRequest request, ServerCallContext context)
         {
-            using var channel = GrpcChannel.ForAddress("http://notificationservice", new GrpcChannelOptions() { Credentials = ChannelCredentials.Insecure });
-            var client = new Notification.NotificationClient(channel);
-            var reply = client.SendNotification(new SendNotificationRequest() 
-            { 
-                ForGuid = request.ForGuid, 
-                FromGuid = request.FromGuid, 
-                Msg = request.Msg 
+            var reply = _notificationClient.SendNotification(new SendNotificationRequest()
+            {
+                ForGuid = request.ForGuid,
+                FromGuid = request.FromGuid,
+                Msg = request.Msg
             });
-
             return Task.FromResult(new ApiSendMessageReply() { Status = reply.Status });
         }
     }

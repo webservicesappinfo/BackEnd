@@ -3,6 +3,7 @@ using Autofac.Extensions.DependencyInjection;
 using EventBus;
 using EventBus.Abstractions;
 using EventBus.EventBusRabbitMQ;
+using EventBus.Events.ServicesEvents.UserRepoEvents;
 using EventBus.ServicesEvents.MobileClientEvents;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NotificationService.Autofac;
 using NotificationService.Handlers;
+using NotificationService.Abstractions;
 using NotificationService.Services;
 using RabbitMQ.Client;
 using System;
@@ -28,14 +30,16 @@ namespace NotificationService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddGrpc();
+            services.AddSingleton<IMobileMessagingService, MobileMessagingService>();
+            services.AddScoped<INotificationRepoService, NotificationRepoService>();
 
-            //EventBusRabbitMQ.AddEventBus(services);
+            EventBusRabbitMQ.AddEventBus(services);
         }
 
         //Autofac registry types
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            builder.RegisterModule(new EventcModule());
+            builder.RegisterModule(new EventsModule());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,6 +64,8 @@ namespace NotificationService
 
             /*var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
             eventBus.Subscribe<TestBusEvent, TestBusEventHandler>();*/
+            var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
+            eventBus.Subscribe<AddUserEvent, AddUserEH>();
         }
     }
 }

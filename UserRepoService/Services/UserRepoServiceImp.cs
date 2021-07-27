@@ -1,4 +1,5 @@
 ﻿using EventBus.Abstractions;
+using EventBus.Events.ServicesEvents.UserRepoEvents;
 using EventBus.ServicesEvents.MobileClientEvents;
 using Grpc.Core;
 using Microsoft.Extensions.Logging;
@@ -28,21 +29,24 @@ namespace UserRepoService
 
         public override Task<AddUserReply> AddUser(AddUserRequest request, ServerCallContext context)
         {
-            using (var db = new ApplicationContext())
+            var isAdd = false;
+            using (var db = new UserRepoContext())
             {
                 if (!db.Users.Any(x => x.Guid == request.Guid))
                 {
                     var user = new User { Guid = request.Guid, Name = request.Name, Token = request.Token };
                     db.Users.Add(user);
                     db.SaveChanges();
+                    isAdd = true;
+                    _eventBus.Publish(new AddUserEvent(user.Name, user.Guid, user.Token));
                 }
             }
-            return Task.FromResult(new AddUserReply { IsAdded = true });
+            return Task.FromResult(new AddUserReply { IsAdded = isAdd });
         }
         public override Task<GetUsersReply> GetUsers(GetUsersRequest request, ServerCallContext context)
         {
             var reply = new GetUsersReply();
-            using (var db = new ApplicationContext())
+            using (var db = new UserRepoContext())
                 foreach (var user in db.Users)
                     reply.Names.Add($"{user.Guid}:{user.Name}");
             return Task.FromResult(reply);
@@ -50,7 +54,7 @@ namespace UserRepoService
 
         public override Task<GetLastMessagesReply> GetLastMessage(GetLastMessageRequest request, ServerCallContext context)
         {
-            using (var db = new ApplicationContext())
+            /*using (var db = new UserRepoContext())
             {
                 var reply = new GetLastMessagesReply();
                 var findUser = db.Users.FirstOrDefault(x => x.Guid == request.Guid);
@@ -60,7 +64,9 @@ namespace UserRepoService
                 reply.ForGuid = msgParts[0];
                 reply.Msg = msgParts[1];
                 return Task.FromResult(reply);
-            }
+            }*/
+            var reply = new GetLastMessagesReply();
+            return Task.FromResult(reply);
         }
 
         /*public override Task<SendMessageReply> SendMessage(SendMessageRequest request, ServerCallContext context)

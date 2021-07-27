@@ -26,7 +26,7 @@ namespace NotificationService
             .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>());
 
-        private static void SubscribeToEvents()
+        /*private static void SubscribeToEvents()
         {
             var factory = new ConnectionFactory() { HostName = "rabbitmq", Port = 5672, UserName = "guest", Password = "guest" };
             var conn = factory.CreateConnection();
@@ -41,6 +41,6 @@ namespace NotificationService
                 Console.WriteLine(" [x] Received from Rabbit: {0}", message);
             };
             channel.BasicConsume(queue: "hello", autoAck: true, consumer: consumer);
-        }
+        }*/
     }
 }

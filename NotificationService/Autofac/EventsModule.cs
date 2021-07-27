@@ -10,11 +10,12 @@ using Module = Autofac.Module;
 
 namespace NotificationService.Autofac
 {
-    public class EventcModule : Module
+    public class EventsModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterAssemblyTypes(typeof(TestBusEventHandler).GetTypeInfo().Assembly).AsClosedTypesOf(typeof(IIntegrationEventHandler<>));
+            builder.RegisterAssemblyTypes(typeof(AddUserEH).GetTypeInfo().Assembly).AsClosedTypesOf(typeof(IIntegrationEventHandler<>));
         }
     }
 }

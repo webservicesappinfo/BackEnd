@@ -19,4 +19,8 @@ RUN dotnet publish "UserRepoService.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+
+ENV ASPNETCORE_URLS http://+:6001
+EXPOSE 6001
+
 ENTRYPOINT ["dotnet", "UserRepoService.dll"]

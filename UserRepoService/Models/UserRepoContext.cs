@@ -6,17 +6,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace UserRepoService.Models
 {
-    public class ApplicationContext:DbContext
+    public class UserRepoContext : DbContext
     {
         public DbSet<User> Users { get; set; }
 
-        public ApplicationContext()
-        {
-            Database.EnsureCreated();
-        }
+        public UserRepoContext() => Database.EnsureCreated();
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseNpgsql("Host=91.219.60.8;Port=5432;Database=usersdb;Username=root;Password=root");
-        }
+            => optionsBuilder.UseNpgsql("Host=91.219.60.8;Port=5432;Database=usersdb;Username=root;Password=root");
     }
 }

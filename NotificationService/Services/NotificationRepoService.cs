@@ -14,7 +14,6 @@ namespace NotificationService.Services
         private readonly ILogger<NotificationRepoService> _logger;
         private readonly IEventBus _eventBus;
 
-
         public NotificationRepoService(ILogger<NotificationRepoService> logger, IEventBus eventBus)
         {
             _logger = logger;

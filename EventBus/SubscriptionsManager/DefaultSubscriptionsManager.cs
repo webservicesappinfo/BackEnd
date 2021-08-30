@@ -12,6 +12,7 @@ namespace EventBus
     {
         private readonly Dictionary<string, List<SubscriptionInfo>> _handlers;
         private readonly List<Type> _eventTypes;
+        private Guid _Guid;
 
         public event EventHandler<string> OnEventRemoved;
 
@@ -19,6 +20,7 @@ namespace EventBus
         {
             _handlers = new Dictionary<string, List<SubscriptionInfo>>();
             _eventTypes = new List<Type>();
+            _Guid = Guid.NewGuid();
         }
 
         public bool IsEmpty => !_handlers.Keys.Any();

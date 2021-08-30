@@ -24,6 +24,7 @@ namespace UserRepoService
 
         public override Task<GetUserReply> GetUser(GetUserRequest request, ServerCallContext context)
         {
+            _eventBus.Publish(new TestBusEvent() { Msg = "Test"}); 
             return Task.FromResult(new GetUserReply { Guid = "Hello " + request.Guid });
         }
 

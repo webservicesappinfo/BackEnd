@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserRepoService", "UserRepo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MobileApiGetway", "MobileApiGetway\MobileApiGetway.csproj", "{32CBF9BB-ED26-439B-9802-21B343AFED34}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LocationService", "LocationService\LocationService.csproj", "{D5FA5C99-D88D-4711-8509-ABA92298F1EA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{32CBF9BB-ED26-439B-9802-21B343AFED34}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32CBF9BB-ED26-439B-9802-21B343AFED34}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32CBF9BB-ED26-439B-9802-21B343AFED34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5FA5C99-D88D-4711-8509-ABA92298F1EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5FA5C99-D88D-4711-8509-ABA92298F1EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5FA5C99-D88D-4711-8509-ABA92298F1EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5FA5C99-D88D-4711-8509-ABA92298F1EA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

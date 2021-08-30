@@ -13,6 +13,10 @@ service MobileApi{
 
 	//NotificationService
 	rpc ApiSendMessage(ApiSendMessageRequest) returns (ApiSendMessageReply);
+
+	//LocationService
+	rpc ApiGetUserLocation(ApiGetUserLocationRequest) returns (ApiGetUserLocationReply);
+	rpc ApiSetUserLocation(ApiSetUserLocationRequest) returns (ApiSetUserLocationReply);
 }
 
 // UserRepoService
@@ -56,4 +60,25 @@ message ApiSendMessageRequest{
 }
 message ApiSendMessageReply{
 	bool status = 1;
+}
+
+//LocationService
+message ApiGetUserLocationRequest{
+	string guid  = 1;
+}
+
+message ApiGetUserLocationReply{
+	string forGuid = 1;
+	string lat = 2;
+	string lng = 3;
+}
+
+message ApiSetUserLocationRequest{
+	string forGuid = 1;
+	string lat = 2;
+	string lng = 3;
+}
+
+message ApiSetUserLocationReply{
+	bool isSet = 1;
 }

@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+option csharp_namespace = "MobileApiGetway";
+
+package locationrepo;
+
+service LocationRepo {
+  rpc GetUserLocation(GetUserLocationRequest) returns (GetUserLocationReply);
+  rpc SetUserLocation(SetUserLocationRequest) returns (SetUserLocationReply);
+}
+
+message GetUserLocationRequest{
+	string guid  = 1;
+}
+
+message GetUserLocationReply{
+	string forGuid = 1;
+	string lat = 2;
+	string lng = 3;
+}
+
+message SetUserLocationRequest{
+	string forGuid = 1;
+	string lat = 2;
+	string lng = 3;
+}
+
+message SetUserLocationReply{
+	bool isSet = 1;
+}

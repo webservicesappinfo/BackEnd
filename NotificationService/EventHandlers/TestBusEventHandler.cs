@@ -5,14 +5,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace NotificationService.Handlers
+namespace NotificationService.EventHandlers
 {
     public class TestBusEventHandler : IIntegrationEventHandler<TestBusEvent>
     {
         public Task Handle(TestBusEvent @event)
         {
             Console.WriteLine(@event.Msg);
-            @event.ResponseReceivedEvent.Set();
+            //@event.ResponseReceivedEvent.Set();
             return Task.FromResult(0);
         }
     }

@@ -30,6 +30,17 @@ services:
       - some-net
     ports:
         - "8084:80"
+  locationservice:
+    image: ${DOCKER_REGISTRY-}locationservice
+    build:
+      context: .
+      dockerfile: LocationService/Dockerfile
+    depends_on:
+      - "rabbitmq"
+    networks:
+      - some-net
+    ports:
+        - "8085:80"
   rabbitmq: # login guest:guest
     image: rabbitmq:3-management
     hostname: "rabbitmq"

@@ -17,7 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
+      
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
+      
     <PackageReference Include="FirebaseAdmin" Version="2.2.0" />
     <PackageReference Include="Google.Protobuf" Version="3.17.3" />
     <PackageReference Include="Grpc.AspNetCore" Version="2.38.0" />

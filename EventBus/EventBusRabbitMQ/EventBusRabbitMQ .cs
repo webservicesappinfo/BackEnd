@@ -18,7 +18,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EventBus.EventBusRabbitMQ
+namespace EventBus.RabbitMQ
 {
     public class EventBusRabbitMQ : IEventBus, IDisposable
     {
@@ -36,7 +36,7 @@ namespace EventBus.EventBusRabbitMQ
 
         public EventBusRabbitMQ(IRabbitMQPersistentConnection persistentConnection, ILogger<EventBusRabbitMQ> logger,
             ILifetimeScope autofac, IEventBusSubscriptionsManager subsManager, string queueName = null, int retryCount = 5)
-        {
+        {            
             _persistentConnection = persistentConnection ?? throw new ArgumentNullException(nameof(persistentConnection));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _subsManager = subsManager ?? new DefaultSubscriptionsManager();
@@ -45,40 +45,6 @@ namespace EventBus.EventBusRabbitMQ
             _autofac = autofac;
             _retryCount = retryCount;
             _subsManager.OnEventRemoved += SubsManager_OnEventRemoved;
-        }
-
-        public static void AddEventBus(IServiceCollection services)
-        {
-            services.AddSingleton<IRabbitMQPersistentConnection>(sp =>
-            {
-                var logger = sp.GetRequiredService<ILogger<DefaultRabbitMQPersistentConnection>>();
-
-                var factory = new ConnectionFactory()
-                {
-                    HostName = "rabbitmq",
-                    DispatchConsumersAsync = true,
-                    Port = 5672,
-                    UserName = "guest",
-                    Password = "guest"
-                };
-                var retryCount = 5;
-                return new DefaultRabbitMQPersistentConnection(factory, logger, retryCount);
-            });
-
-            services.AddSingleton<IEventBusSubscriptionsManager, DefaultSubscriptionsManager>();
-
-            services.AddSingleton<IEventBus, EventBusRabbitMQ>(sp =>
-            {
-                var rabbitMQPersistentConnection = sp.GetRequiredService<IRabbitMQPersistentConnection>();
-                var iLifetimeScope = sp.GetRequiredService<ILifetimeScope>();
-                var logger = sp.GetRequiredService<ILogger<EventBusRabbitMQ>>();
-                var eventBusSubcriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
-
-                var retryCount = 5;
-
-                return new EventBusRabbitMQ(rabbitMQPersistentConnection, logger, iLifetimeScope, eventBusSubcriptionsManager, "TestBus", retryCount);
-            });
-
         }
 
         private void SubsManager_OnEventRemoved(object sender, string eventName)
@@ -105,9 +71,7 @@ namespace EventBus.EventBusRabbitMQ
         public bool Publish(IntegrationEvent @event)
         {
             if (!_persistentConnection.IsConnected)
-            {
                 _persistentConnection.TryConnect();
-            }
 
             var policy = RetryPolicy.Handle<BrokerUnreachableException>()
                 .Or<SocketException>()
@@ -201,19 +165,14 @@ namespace EventBus.EventBusRabbitMQ
             _subsManager.RemoveSubscription<T, TH>();
         }
 
-        public void UnsubscribeDynamic<TH>(string eventName)
-            where TH : IDynamicIntegrationEventHandler
-        {
-            _subsManager.RemoveDynamicSubscription<TH>(eventName);
-        }
+        public void UnsubscribeDynamic<TH>(string eventName) 
+            where TH : IDynamicIntegrationEventHandler 
+            => _subsManager.RemoveDynamicSubscription<TH>(eventName);
 
         public void Dispose()
         {
             if (_consumerChannel != null)
-            {
                 _consumerChannel.Dispose();
-            }
-
             _subsManager.Clear();
         }
 
@@ -233,9 +192,7 @@ namespace EventBus.EventBusRabbitMQ
                     consumer: consumer);
             }
             else
-            {
                 _logger.LogError("StartBasicConsume can't call on _consumerChannel == null");
-            }
         }
 
         private async Task Consumer_Received(object sender, BasicDeliverEventArgs eventArgs)
@@ -263,10 +220,8 @@ namespace EventBus.EventBusRabbitMQ
 
         private IModel CreateConsumerChannel()
         {
-            if (!_persistentConnection.IsConnected)
-            {
+            if (!_persistentConnection.IsConnected)            
                 _persistentConnection.TryConnect();
-            }
 
             _logger.LogTrace("Creating RabbitMQ consumer channel");
 
@@ -328,9 +283,7 @@ namespace EventBus.EventBusRabbitMQ
                 }
             }
             else
-            {
                 _logger.LogWarning("No subscription for RabbitMQ event: {EventName}", eventName);
-            }
         }
     }
 }

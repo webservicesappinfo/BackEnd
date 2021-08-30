@@ -12,13 +12,16 @@ namespace MobileApiGetway.Services
     {
         private readonly Notification.NotificationClient _notificationClient;
         private readonly UserRepo.UserRepoClient _userRepoClient;
+        private readonly LocationRepo.LocationRepoClient _locationClient;
 
-        public MobileApiService(Notification.NotificationClient notificationClient, UserRepo.UserRepoClient userRepoClient)
+        public MobileApiService(Notification.NotificationClient notificationClient, UserRepo.UserRepoClient userRepoClient, LocationRepo.LocationRepoClient locationClient)
         {
             _notificationClient = notificationClient;
             _userRepoClient = userRepoClient;
+            _locationClient = locationClient;
         }
 
+        #region UserRepoService
         public override Task<ApiAddUserReply> ApiAddUser(ApiAddUserRequest request, ServerCallContext context)
         {
             var reply = _userRepoClient.AddUser(new AddUserRequest()
@@ -58,7 +61,9 @@ namespace MobileApiGetway.Services
                 Msg = reply.Msg
             });
         }
+        #endregion
 
+        #region NotificationService
         public override Task<ApiSendMessageReply> ApiSendMessage(ApiSendMessageRequest request, ServerCallContext context)
         {
             var reply = _notificationClient.SendNotification(new SendNotificationRequest()
@@ -69,5 +74,25 @@ namespace MobileApiGetway.Services
             });
             return Task.FromResult(new ApiSendMessageReply() { Status = reply.Status });
         }
+        #endregion
+
+        #region LocationService
+        public override Task<ApiGetUserLocationReply> ApiGetUserLocation(ApiGetUserLocationRequest request, ServerCallContext context)
+        {
+            var reply = _locationClient.GetUserLocation(new GetUserLocationRequest() { Guid = request.Guid });
+            return Task.FromResult(new ApiGetUserLocationReply() { ForGuid = reply.ForGuid, Lat = reply.Lat, Lng = reply.Lng});
+        }
+
+        public override Task<ApiSetUserLocationReply> ApiSetUserLocation(ApiSetUserLocationRequest request, ServerCallContext context)
+        {
+            var reply = _locationClient.SetUserLocation(new SetUserLocationRequest() 
+            { 
+                ForGuid = request.ForGuid, 
+                Lat = request.Lat, 
+                Lng = request.Lng
+            });
+            return Task.FromResult(new ApiSetUserLocationReply() { IsSet = reply.IsSet});
+        }
+        #endregion
     }
 }

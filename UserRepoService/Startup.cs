@@ -1,4 +1,4 @@
-﻿using EventBus.EventBusRabbitMQ;
+﻿using EventBus;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -19,7 +19,7 @@ namespace UserRepoService
         {
             services.AddGrpc();
 
-            EventBusRabbitMQ.AddEventBus(services);
+            EventBusService.AddEventBus(services, "UserRepoService");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

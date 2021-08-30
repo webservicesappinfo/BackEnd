@@ -2,7 +2,7 @@
 using Autofac.Extensions.DependencyInjection;
 using EventBus;
 using EventBus.Abstractions;
-using EventBus.EventBusRabbitMQ;
+using EventBus.RabbitMQ;
 using EventBus.Events.ServicesEvents.UserRepoEvents;
 using EventBus.ServicesEvents.MobileClientEvents;
 using Microsoft.AspNetCore.Builder;
@@ -12,10 +12,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NotificationService.Autofac;
-using NotificationService.Handlers;
+using NotificationService.EventHandlers;
 using NotificationService.Abstractions;
 using NotificationService.Services;
-using RabbitMQ.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,11 +28,13 @@ namespace NotificationService
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            EventBusService.AddEventBus(services, "NotificationService");
+
             services.AddGrpc();
             services.AddSingleton<IMobileMessagingService, MobileMessagingService>();
             services.AddScoped<INotificationRepoService, NotificationRepoService>();
 
-            EventBusRabbitMQ.AddEventBus(services);
+            //EventBusService.AddEventBus(services);
         }
 
         //Autofac registry types
@@ -62,10 +63,10 @@ namespace NotificationService
                 });
             });
 
-            /*var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
-            eventBus.Subscribe<TestBusEvent, TestBusEventHandler>();*/
+
             var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
             eventBus.Subscribe<AddUserEvent, AddUserEH>();
+            eventBus.Subscribe<TestBusEvent, TestBusEventHandler>();
         }
     }
 }

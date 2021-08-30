@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace NotificationService.Handlers
+namespace NotificationService.EventHandlers
 {
     public class AddUserEH : IIntegrationEventHandler<AddUserEvent>
     {
@@ -24,7 +24,7 @@ namespace NotificationService.Handlers
         public Task Handle(AddUserEvent @event)
         {
             Console.WriteLine(@event.Name);
-            @event.ResponseReceivedEvent.Set();
+            //@event.ResponseReceivedEvent.Set();
             _notificationRepoService.AddUser(new NotificationUser()
             {
                 Name = @event.Name,

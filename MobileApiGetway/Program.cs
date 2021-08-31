@@ -22,10 +22,10 @@ namespace MobileApiGetway
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.ConfigureKestrel(options =>
+                    /*webBuilder.ConfigureKestrel(options =>
                     {
                         options.ListenAnyIP(80, listenOptions => { listenOptions.Protocols = HttpProtocols.Http2; });
-                    });
+                    });*/
                     webBuilder.UseStartup<Startup>();
                 });
     }

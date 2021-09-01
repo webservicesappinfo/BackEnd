@@ -80,7 +80,12 @@ namespace MobileApiGetway.Services
         public override Task<ApiGetUserLocationReply> ApiGetUserLocation(ApiGetUserLocationRequest request, ServerCallContext context)
         {
             var reply = _locationClient.GetUserLocation(new GetUserLocationRequest() { Guid = request.Guid });
-            return Task.FromResult(new ApiGetUserLocationReply() { ForGuid = reply.ForGuid, Lat = reply.Lat, Lng = reply.Lng});
+            return Task.FromResult(new ApiGetUserLocationReply() 
+            { 
+                ForGuid = reply.ForGuid, 
+                Lat = reply.Lat, 
+                Lng = reply.Lng
+            });
         }
 
         public override Task<ApiSetUserLocationReply> ApiSetUserLocation(ApiSetUserLocationRequest request, ServerCallContext context)

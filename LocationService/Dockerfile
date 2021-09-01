@@ -19,4 +19,8 @@ RUN dotnet publish "LocationService.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+
+ENV ASPNETCORE_URLS http://+:6003
+EXPOSE 6003
+
 ENTRYPOINT ["dotnet", "LocationService.dll"]

@@ -8,16 +8,6 @@ service UserRepo {
   rpc GetUser (GetUserRequest) returns (GetUserReply);
   rpc GetUsers(GetUsersRequest ) returns (GetUsersReply );
   rpc AddUser(AddUserRequest ) returns (AddUserReply);
-  rpc GetLastMessage(GetLastMessageRequest) returns (GetLastMessagesReply);
-}
-
-message GetLastMessageRequest{
-	string guid  = 1;
-}
-
-message GetLastMessagesReply{
-	string forGuid = 1;
-	string msg = 2;
 }
 
 message GetUserRequest {

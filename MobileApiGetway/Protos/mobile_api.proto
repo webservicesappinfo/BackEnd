@@ -9,10 +9,10 @@ service MobileApi{
 	rpc ApiAddUser(ApiAddUserRequest) returns (ApiAddUserReply);
 	rpc ApiGetUser (ApiGetUserRequest) returns (ApiGetUserReply);
     rpc ApiGetUsers(ApiGetUsersRequest ) returns (ApiGetUsersReply );
-	rpc ApiGetLastMessage(ApiGetLastMessageRequest) returns (ApiGetLastMessagesReply);
 
 	//NotificationService
 	rpc ApiSendMessage(ApiSendMessageRequest) returns (ApiSendMessageReply);
+	rpc ApiFindLastMessage(ApiFindLastMessageRequest) returns (ApiFindLastMessagesReply);
 
 	//LocationService
 	rpc ApiGetUserLocation(ApiGetUserLocationRequest) returns (ApiGetUserLocationReply);
@@ -44,15 +44,14 @@ message ApiGetUsersReply {
   repeated string names = 1;
 }
 
-message ApiGetLastMessageRequest{
-	string guid  = 1;
-}
-message ApiGetLastMessagesReply{
-	string forGuid = 1;
-	string msg = 2;
-}
-
 //NotificationService
+message ApiFindLastMessageRequest{
+	string fromGuid  = 1;
+	string forGuid  = 2;
+}
+message ApiFindLastMessagesReply{
+	string msg = 1;
+}
 message ApiSendMessageRequest{
 	string forGuid = 1;
 	string fromGuid = 2;

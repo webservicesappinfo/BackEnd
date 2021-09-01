@@ -6,6 +6,15 @@ package notification;
 
 service Notification{
 	rpc SendNotification(SendNotificationRequest) returns (SendNotificationReply);
+	rpc FindLastGetMessage(FindLastGetMessageRequest) returns (FindLastGetMessageReply);
+}
+
+message FindLastGetMessageRequest{
+	string fromGuid  = 1;
+	string forGuid  = 2;
+}
+message FindLastGetMessageReply{
+	string msg = 1;
 }
 
 message SendNotificationRequest{
@@ -17,3 +26,5 @@ message SendNotificationRequest{
 message SendNotificationReply{
 	bool status = 1;
 }
+
+

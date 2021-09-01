@@ -52,47 +52,5 @@ namespace UserRepoService
                     reply.Names.Add($"{user.Guid}:{user.Name}");
             return Task.FromResult(reply);
         }
-
-        public override Task<GetLastMessagesReply> GetLastMessage(GetLastMessageRequest request, ServerCallContext context)
-        {
-            /*using (var db = new UserRepoContext())
-            {
-                var reply = new GetLastMessagesReply();
-                var findUser = db.Users.FirstOrDefault(x => x.Guid == request.Guid);
-                if (findUser?.LastGetMessage == null) return Task.FromResult(reply);
-                var msgParts = findUser.LastGetMessage.Split(':').ToList();
-                if (msgParts.Count < 2) return Task.FromResult(reply);
-                reply.ForGuid = msgParts[0];
-                reply.Msg = msgParts[1];
-                return Task.FromResult(reply);
-            }*/
-            var reply = new GetLastMessagesReply();
-            return Task.FromResult(reply);
-        }
-
-        /*public override Task<SendMessageReply> SendMessage(SendMessageRequest request, ServerCallContext context)
-        {
-            //_eventService.Enqueue("NewMsg");
-            var testEvent = new TestBusEvent() { Msg = "test" };
-            if (_eventBus.Publish(testEvent))
-            {
-
-            }
-
-            using (var db = new ApplicationContext())
-            {
-                var reply = new SendMessageReply() { Status = false };
-                var forUser = db.Users.FirstOrDefault(x => x.Guid == request.ForGuid);
-                var fromUser = db.Users.FirstOrDefault(x => x.Guid == request.FromGuid);
-                if (forUser == null || fromUser == null) return Task.FromResult(reply);
-                forUser.LastGetMessage = $"{fromUser}:{request.Msg}";
-                db.SaveChanges();
-                reply.Status = true;
-
-                //_messaging.SendNotification(forUser.Token, "NewMsg", request.Msg);
-
-                return Task.FromResult(reply);
-            }
-        }*/
     }
 }

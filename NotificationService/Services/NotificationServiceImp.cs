@@ -26,6 +26,11 @@ namespace NotificationService.Services
             _notificationRepoService = notificationRepoService;
         }
 
+        public override Task<FindLastGetMessageReply> FindLastGetMessage(FindLastGetMessageRequest request, ServerCallContext context)
+        {
+            return Task.FromResult(new FindLastGetMessageReply());
+        }
+
         public override Task<SendNotificationReply> SendNotification(SendNotificationRequest request, ServerCallContext context)
         {
             var reply = new SendNotificationReply() { Status = false };

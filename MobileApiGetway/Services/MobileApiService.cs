@@ -52,19 +52,14 @@ namespace MobileApiGetway.Services
                 apiReply.Names.Add(n);
             return Task.FromResult(apiReply);
         }
-
-        public override Task<ApiGetLastMessagesReply> ApiGetLastMessage(ApiGetLastMessageRequest request, ServerCallContext context)
-        {
-            var reply = _userRepoClient.GetLastMessage(new GetLastMessageRequest() { Guid = request.Guid });
-            return Task.FromResult(new ApiGetLastMessagesReply()
-            {
-                ForGuid = reply.ForGuid,
-                Msg = reply.Msg
-            });
-        }
         #endregion
 
         #region NotificationService
+        public override Task<ApiFindLastMessagesReply> ApiFindLastMessage(ApiFindLastMessageRequest request, ServerCallContext context)
+        {
+            var reply = _notificationClient.FindLastGetMessage(new FindLastGetMessageRequest() { ForGuid = request.ForGuid, FromGuid = request.FromGuid });
+            return Task.FromResult(new ApiFindLastMessagesReply() { Msg = reply.Msg });
+        }
         public override Task<ApiSendMessageReply> ApiSendMessage(ApiSendMessageRequest request, ServerCallContext context)
         {
             var reply = _notificationClient.SendNotification(new SendNotificationRequest()

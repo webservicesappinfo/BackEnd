@@ -22,5 +22,4 @@ COPY --from=publish /app/publish .
 
 ENV ASPNETCORE_URLS http://+:6001
 EXPOSE 6001
-
 ENTRYPOINT ["dotnet", "UserRepoService.dll"]

@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace Globals.Models
 {
-    public class CompanyRef : EntityBase { }
+    public class MasterRef : EntityBase { }
 }

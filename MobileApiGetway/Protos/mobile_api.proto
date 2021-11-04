@@ -10,6 +10,11 @@ service MobileApi{
 	rpc ApiGetUser (ApiGetUserRequest) returns (ApiGetUserReply);
     rpc ApiGetUsers(ApiGetUsersRequest ) returns (ApiGetUsersReply );
 
+	// CompanyService
+	rpc ApiAddCompany(ApiAddCompanyRequest) returns (ApiAddCompanyReply);
+	rpc ApiGetCompany (ApiGetCompanyRequest) returns (ApiGetCompanyReply);
+    rpc ApiGetCompanies(ApiGetCompaniesRequest ) returns (ApiGetCompaniesReply );
+
 	//NotificationService
 	rpc ApiSendMessage(ApiSendMessageRequest) returns (ApiSendMessageReply);
 	rpc ApiFindLastMessage(ApiFindLastMessageRequest) returns (ApiFindLastMessagesReply);
@@ -41,6 +46,31 @@ message ApiGetUsersRequest {
   string restriction = 1;
 }
 message ApiGetUsersReply {
+  repeated string names = 1;
+}
+
+// CompanyService
+message ApiAddCompanyRequest {
+  string guid = 1;
+  string name = 2;
+  string token = 3;
+}
+message ApiAddCompanyReply {
+  bool result = 1;
+}
+
+message ApiGetCompanyRequest {
+  string guid = 1;
+}
+message ApiGetCompanyReply {
+  string name = 1;
+  string guid = 2;
+}
+
+message ApiGetCompaniesRequest {
+  string restriction = 1;
+}
+message ApiGetCompaniesReply {
   repeated string names = 1;
 }
 

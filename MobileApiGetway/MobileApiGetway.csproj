@@ -15,8 +15,8 @@
   <ItemGroup>
     <Protobuf Include="ClientProtos\location_repo.proto" GrpcServices="Client" />
     <Protobuf Include="ClientProtos\notification.proto" GrpcServices="Client" />
-    <!--<Protobuf Include="ClientProtos\user_repo.proto" GrpcServices="Client" />-->
     <Protobuf Include="..\UserService\Protos\user.proto" GrpcServices="Client" />
+    <Protobuf Include="..\CompanyService\Protos\company.proto" GrpcServices="Client" />
     <Protobuf Include="Protos\greet.proto" GrpcServices="Server" />
     <Protobuf Include="Protos\mobile_api.proto" GrpcServices="Server" />
   </ItemGroup>

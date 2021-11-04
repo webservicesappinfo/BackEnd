@@ -1,4 +1,5 @@
-﻿using Grpc.Core;
+﻿using CompanyService.Protos;
+using Grpc.Core;
 using Grpc.Net.Client;
 using Grpc.Net.ClientFactory;
 using System;
@@ -13,14 +14,16 @@ namespace MobileApiGetway.Services
     public class MobileApiService : MobileApi.MobileApiBase
     {
         private readonly User.UserClient _userClient;
+        private readonly Company.CompanyClient _companyClient;
 
         private readonly Notification.NotificationClient _notificationClient;
         //private readonly UserRepo.UserRepoClient _userRepoClient;
         private readonly LocationRepo.LocationRepoClient _locationClient;
 
-        public MobileApiService(User.UserClient userClient, Notification.NotificationClient notificationClient, /*UserRepo.UserRepoClient userRepoClient,*/ LocationRepo.LocationRepoClient locationClient)
+        public MobileApiService(User.UserClient userClient, Company.CompanyClient companyClient, Notification.NotificationClient notificationClient, /*UserRepo.UserRepoClient userRepoClient,*/ LocationRepo.LocationRepoClient locationClient)
         {
             _userClient = userClient;
+            _companyClient = companyClient;
 
             _notificationClient = notificationClient;
             //_userRepoClient = userRepoClient;
@@ -73,6 +76,38 @@ namespace MobileApiGetway.Services
 
             var reply = _userClient.GetUsers(new GetUsersRequest());
             var apiReply = new ApiGetUsersReply();
+            foreach (var n in reply.Names)
+                apiReply.Names.Add(n);
+            return Task.FromResult(apiReply);
+        }
+        #endregion
+
+        #region CompanyService
+        public override Task<ApiAddCompanyReply> ApiAddCompany(ApiAddCompanyRequest request, ServerCallContext context)
+        {
+            var reply = _companyClient.AddCompany(new AddCompanyRequest()
+            {
+                Name = request.Name,
+                Guid = request.Guid,
+                Token = request.Token
+            });
+            return Task.FromResult(new ApiAddCompanyReply() { Result = reply.Result });
+        }
+
+        public override Task<ApiGetCompanyReply> ApiGetCompany(ApiGetCompanyRequest request, ServerCallContext context)
+        {
+            var reply = _companyClient.GetCompany(new GetCompanyRequest() { Guid = request.Guid });
+            return Task.FromResult(new ApiGetCompanyReply()
+            {
+                Guid = reply.Guid,
+                Name = reply.Name
+            });
+        }
+
+        public override Task<ApiGetCompaniesReply> ApiGetCompanies(ApiGetCompaniesRequest request, ServerCallContext context)
+        {
+            var reply = _companyClient.GetCompanies(new GetCompaniesRequest());
+            var apiReply = new ApiGetCompaniesReply();
             foreach (var n in reply.Names)
                 apiReply.Names.Add(n);
             return Task.FromResult(apiReply);

@@ -23,13 +23,14 @@ namespace UserService.Services
         public override Task<AddUserReply> AddUser(AddUserRequest request, ServerCallContext context)
         {
             var result = false;
-            using (var db = new UserContext())
+            using (var users = new UserContext())
             {
-                if (!db.Users.Any(x => x.Guid == request.Guid))
+                var requestGuid = new Guid(request.Guid);
+                if (!users.Values.Any(x => x.Guid == requestGuid))
                 {
-                    var user = new Models.User { Guid = request.Guid, Name = request.Name, Token = request.Token };
-                    db.Users.Add(user);
-                    db.SaveChanges();
+                    var user = new Models.User { Guid = requestGuid, Name = request.Name, Token = request.Token };
+                    users.Values.Add(user);
+                    users.SaveChanges();
                     result = true;
                     //_eventBus.Publish(new AddUserEvent(user.Name, user.Guid, user.Token));
                 }
@@ -40,8 +41,8 @@ namespace UserService.Services
         public override Task<GetUsersReply> GetUsers(GetUsersRequest request, ServerCallContext context)
         {
             var reply = new GetUsersReply();
-            using (var db = new UserContext())
-                foreach (var user in db.Users)
+            using (var users = new UserContext())
+                foreach (var user in users.Values)
                     reply.Names.Add($"{user.Guid}:{user.Name}");
             return Task.FromResult(reply);
         }

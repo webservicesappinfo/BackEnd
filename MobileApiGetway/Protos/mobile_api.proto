@@ -26,7 +26,7 @@ message ApiAddUserRequest {
   string token = 3;
 }
 message ApiAddUserReply {
-  bool isAdded = 1;
+  bool result = 1;
 }
 
 message ApiGetUserRequest {
@@ -79,5 +79,5 @@ message ApiSetUserLocationRequest{
 }
 
 message ApiSetUserLocationReply{
-	bool isSet = 1;
+	bool result = 1;
 }

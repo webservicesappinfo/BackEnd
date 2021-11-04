@@ -6,7 +6,7 @@ package userrepo;
 
 service UserRepo {
   rpc GetUser (GetUserRequest) returns (GetUserReply);
-  rpc GetUsers(GetUsersRequest ) returns (GetUsersReply );
+  rpc GetUsers(GetUsersRequest ) returns (GetUsersReply);
   rpc AddUser(AddUserRequest ) returns (AddUserReply);
 }
 

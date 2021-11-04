@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using EventBus;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UserService.Services;
 
 namespace UserService
 {
@@ -17,6 +19,8 @@ namespace UserService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddGrpc();
+
+            EventBusService.AddEventBus(services, "UserService");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -31,7 +35,7 @@ namespace UserService
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGrpcService<GreeterService>();
+                endpoints.MapGrpcService<UserServiceImp>();
 
                 endpoints.MapGet("/", async context =>
                 {

@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+option csharp_namespace = "UserService.Protos";
+
+package user;
+
+service User {
+  rpc GetUser (GetUserRequest) returns (GetUserReply);
+  rpc AddUser(AddUserRequest ) returns (AddUserReply);
+  rpc GetUsers(GetUsersRequest ) returns (GetUsersReply);
+  rpc UpdateUser(UpdateUserRequest ) returns (UpdateUserReply);
+  rpc RemoveUser(RemoveUserRequest ) returns (RemoveUserReply);
+}
+
+message GetUserRequest {
+  string guid = 1;
+}
+message GetUserReply {
+  string name = 1;
+  string guid = 2;
+}
+
+message GetUsersRequest {
+  string restriction = 1;
+}
+message GetUsersReply {
+  repeated string names = 1;
+}
+
+message AddUserRequest {
+  string guid = 1;
+  string name = 2;
+  string token = 3;
+}
+message AddUserReply {
+  bool result  = 1;
+}
+
+message UpdateUserRequest {
+  string guid = 1;
+  string name = 2;
+  string token = 3;
+}
+message UpdateUserReply {
+  bool result = 1;
+}
+
+message RemoveUserRequest {
+  string guid = 1;
+}
+message RemoveUserReply {
+  bool result = 1;
+}

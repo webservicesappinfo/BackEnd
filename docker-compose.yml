@@ -10,37 +10,46 @@ services:
     - "6000:80"
     networks:
       - some-net
-  userreposervice:
-    image: ${DOCKER_REGISTRY-}userreposervice
+  userservice:
+    image: ${DOCKER_REGISTRY-}userservice
     build:
       context: .
-      dockerfile: UserRepoService/Dockerfile
+      dockerfile: UserService/Dockerfile
     networks:
       - some-net
     ports:
       - "6001:80"
-  notificationservice:
-    image: ${DOCKER_REGISTRY-}notificationservice
-    build:
-      context: .
-      dockerfile: NotificationService/Dockerfile
-    depends_on:
-      - "rabbitmq"
-    networks:
-      - some-net
-    ports:
-        - "6002:80"
-  locationservice:
-    image: ${DOCKER_REGISTRY-}locationservice
-    build:
-      context: .
-      dockerfile: LocationService/Dockerfile
-    depends_on:
-      - "rabbitmq"
-    networks:
-      - some-net
-    ports:
-        - "6003:80"
+  #userreposervice:
+  #  image: ${DOCKER_REGISTRY-}userreposervice
+  #  build:
+  #    context: .
+  #    dockerfile: UserRepoService/Dockerfile
+  #  networks:
+  #    - some-net
+  #  ports:
+  #    - "6001:80"
+  #notificationservice:
+  #  image: ${DOCKER_REGISTRY-}notificationservice
+  #  build:
+  #    context: .
+  #    dockerfile: NotificationService/Dockerfile
+  #  depends_on:
+  #    - "rabbitmq"
+  #  networks:
+  #    - some-net
+  #  ports:
+  #      - "6002:80"
+  #locationservice:
+  #  image: ${DOCKER_REGISTRY-}locationservice
+  #  build:
+  #    context: .
+  #    dockerfile: LocationService/Dockerfile
+  #  depends_on:
+  #    - "rabbitmq"
+  #  networks:
+  #    - some-net
+  #  ports:
+  #      - "6003:80"
   rabbitmq: # login guest:guest
     image: rabbitmq:3-management
     hostname: "rabbitmq"

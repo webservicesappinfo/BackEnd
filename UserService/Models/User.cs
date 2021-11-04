@@ -14,7 +14,7 @@ namespace UserService.Models
         public String Name { get; set; }
         public String LastName { get; set; }
         public String Email { get; set; }
-        public List<Ref> Companies { get; set; }
+        public List<CompanyRef> Companies { get; set; }
         public List<Ref> Offers { get; set; }
     }
 }

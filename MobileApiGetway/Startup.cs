@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using UserService.Protos;
 
 namespace MobileApiGetway
 {
@@ -23,7 +24,8 @@ namespace MobileApiGetway
 
             services.AddGrpc();
             services.AddGrpcClient<Notification.NotificationClient>(o => o.Address = new Uri("http://notificationservice"));
-            services.AddGrpcClient<UserRepo.UserRepoClient>(o => o.Address = new Uri("http://userreposervice"));
+            //services.AddGrpcClient<UserRepo.UserRepoClient>(o => o.Address = new Uri("http://userreposervice"));
+            services.AddGrpcClient<User.UserClient>(o => o.Address = new Uri("http://userservice"));
             services.AddGrpcClient<LocationRepo.LocationRepoClient>(o => o.Address = new Uri("http://locationservice"));
         }
 

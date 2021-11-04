@@ -6,37 +6,56 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using UserService.Protos;
 
 namespace MobileApiGetway.Services
 {
     public class MobileApiService : MobileApi.MobileApiBase
     {
+        private readonly User.UserClient _userClient;
+
         private readonly Notification.NotificationClient _notificationClient;
-        private readonly UserRepo.UserRepoClient _userRepoClient;
+        //private readonly UserRepo.UserRepoClient _userRepoClient;
         private readonly LocationRepo.LocationRepoClient _locationClient;
 
-        public MobileApiService(Notification.NotificationClient notificationClient, UserRepo.UserRepoClient userRepoClient, LocationRepo.LocationRepoClient locationClient)
+        public MobileApiService(User.UserClient userClient, Notification.NotificationClient notificationClient, /*UserRepo.UserRepoClient userRepoClient,*/ LocationRepo.LocationRepoClient locationClient)
         {
+            _userClient = userClient;
+
             _notificationClient = notificationClient;
-            _userRepoClient = userRepoClient;
+            //_userRepoClient = userRepoClient;
             _locationClient = locationClient;
         }
 
         #region UserRepoService
         public override Task<ApiAddUserReply> ApiAddUser(ApiAddUserRequest request, ServerCallContext context)
         {
-            var reply = _userRepoClient.AddUser(new AddUserRequest()
+            /*var reply = _userRepoClient.AddUser(new AddUserRequest()
+            {
+                Name = request.Name,
+                Guid = request.Guid,
+                Token = request.Token
+            });*/
+
+            var reply = _userClient.AddUser(new AddUserRequest()
             {
                 Name = request.Name,
                 Guid = request.Guid,
                 Token = request.Token
             });
-            return Task.FromResult(new ApiAddUserReply() { IsAdded = reply.IsAdded });
+            return Task.FromResult(new ApiAddUserReply() { Result = reply.Result});
         }
 
         public override Task<ApiGetUserReply> ApiGetUser(ApiGetUserRequest request, ServerCallContext context)
         {
-            var reply = _userRepoClient.GetUser(new GetUserRequest() { Guid = request.Guid });
+            /*var reply = _userRepoClient.GetUser(new GetUserRequest() { Guid = request.Guid });
+            return Task.FromResult(new ApiGetUserReply()
+            {
+                Guid = reply.Guid,
+                Name = reply.Name
+            });*/
+
+            var reply = _userClient.GetUser(new GetUserRequest() { Guid = request.Guid });
             return Task.FromResult(new ApiGetUserReply()
             {
                 Guid = reply.Guid,
@@ -46,7 +65,13 @@ namespace MobileApiGetway.Services
 
         public override Task<ApiGetUsersReply> ApiGetUsers(ApiGetUsersRequest request, ServerCallContext context)
         {
-            var reply = _userRepoClient.GetUsers(new GetUsersRequest());
+            /*var reply = _userRepoClient.GetUsers(new GetUsersRequest());
+            var apiReply = new ApiGetUsersReply();
+            foreach (var n in reply.Names)
+                apiReply.Names.Add(n);
+            return Task.FromResult(apiReply);*/
+
+            var reply = _userClient.GetUsers(new GetUsersRequest());
             var apiReply = new ApiGetUsersReply();
             foreach (var n in reply.Names)
                 apiReply.Names.Add(n);
@@ -92,7 +117,7 @@ namespace MobileApiGetway.Services
                 Lat = request.Lat, 
                 Lng = request.Lng
             });
-            return Task.FromResult(new ApiSetUserLocationReply() { IsSet = reply.IsSet});
+            return Task.FromResult(new ApiSetUserLocationReply() { Result = reply.IsSet});
         }
         #endregion
     }

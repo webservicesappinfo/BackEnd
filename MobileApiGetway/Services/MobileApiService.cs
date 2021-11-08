@@ -27,6 +27,11 @@ namespace MobileApiGetway.Services
             _locationClient = locationClient;
         }
 
+        /*public override Task<HelloReply> SayHello(HelloRequest request, ServerCallContext context)
+        {
+            return base.SayHello(request, context);
+        }*/
+
         #region UserRepoService
         public override Task<ApiAddUserReply> ApiAddUser(ApiAddUserRequest request, ServerCallContext context)
         {

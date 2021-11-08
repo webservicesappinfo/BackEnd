@@ -50,6 +50,7 @@ services:
   #    - some-net
   #  ports:
   #      - "6003:80"
+
   rabbitmq: # login guest:guest
     image: rabbitmq:3-management
     hostname: "rabbitmq"

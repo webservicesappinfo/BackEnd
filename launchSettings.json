@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "Docker Compose": {
+      "commandName": "DockerCompose",
+      "serviceActions": {
+        "mobiapigetway": "StartDebugging"
+      },
+      "commandVersion": "1.0"
+    }
+  }
+}

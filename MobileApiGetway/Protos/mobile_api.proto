@@ -1,10 +1,14 @@
 syntax = "proto3";
 
+//import "Protos/greet.proto";
+
 option csharp_namespace = "MobileApiGetway";
 
 package mobileApi;
 
 service MobileApi{
+   //rpc SayHello (greet.HelloRequest) returns (greet.HelloReply);
+   
   // UserRepoService
 	rpc ApiAddUser(ApiAddUserRequest) returns (ApiAddUserReply);
 	rpc ApiGetUser (ApiGetUserRequest) returns (ApiGetUserReply);

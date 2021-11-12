@@ -19,6 +19,15 @@ services:
       - some-net
     ports:
       - "6001:80"
+  companyservice:
+    image: ${DOCKER_REGISTRY-}companyservice
+    build:
+      context: .
+      dockerfile: CompanyService/Dockerfile
+    networks:
+      - some-net
+    ports:
+      - "6002:80"
   #userreposervice:
   #  image: ${DOCKER_REGISTRY-}userreposervice
   #  build:

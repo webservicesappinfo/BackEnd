@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace UserService.Models
 {
-    public class User
+    public class User:EntityBase
     {
-        public int Id { get; set; }
-        public string Guid { get; set; }
         public string Token { get; set; }
         public String Name { get; set; }
         public String LastName { get; set; }
         public String Email { get; set; }
         public List<CompanyRef> Companies { get; set; }
-        public List<Ref> Offers { get; set; }
+        public List<OfferRef> Offers { get; set; }
     }
+
+    public class UserContext : ContextBase<User> {}
 }

@@ -1,4 +1,5 @@
-﻿using Grpc.Net.ClientFactory;
+﻿using CompanyService.Protos;
+using Grpc.Net.ClientFactory;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -26,6 +27,7 @@ namespace MobileApiGetway
             services.AddGrpcClient<Notification.NotificationClient>(o => o.Address = new Uri("http://notificationservice"));
             //services.AddGrpcClient<UserRepo.UserRepoClient>(o => o.Address = new Uri("http://userreposervice"));
             services.AddGrpcClient<User.UserClient>(o => o.Address = new Uri("http://userservice"));
+            services.AddGrpcClient<Company.CompanyClient>(o => o.Address = new Uri("http://companyservice"));
             services.AddGrpcClient<LocationRepo.LocationRepoClient>(o => o.Address = new Uri("http://locationservice"));
         }
 

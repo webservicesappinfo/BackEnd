@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Protobuf Include="Protos\user.proto" GrpcServices="Server" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
     <PackageReference Include="Google.Protobuf" Version="3.19.1" />
     <PackageReference Include="Grpc.AspNetCore" Version="2.40.0" />
@@ -27,6 +23,16 @@
   <ItemGroup>
     <ProjectReference Include="..\EventBus\EventBus.csproj" />
     <ProjectReference Include="..\Globals\Globals.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Protos\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="..\..\Protos\user.proto">
+      <Link>Protos\user.proto</Link>
+    </Protobuf>
   </ItemGroup>
 
 </Project>

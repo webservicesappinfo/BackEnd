@@ -19,4 +19,7 @@ RUN dotnet publish "CompanyService.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+
+ENV ASPNETCORE_URLS http://+:6002
+EXPOSE 6002
 ENTRYPOINT ["dotnet", "CompanyService.dll"]

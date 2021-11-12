@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using CompanyService.Services;
+using EventBus;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,6 +19,8 @@ namespace CompanyService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddGrpc();
+
+            EventBusService.AddEventBus(services, "CompanyService");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -31,7 +35,7 @@ namespace CompanyService
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGrpcService<GreeterService>();
+                endpoints.MapGrpcService<CompanyServiceImp>();
 
                 endpoints.MapGet("/", async context =>
                 {

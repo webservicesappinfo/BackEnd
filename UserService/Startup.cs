@@ -1,4 +1,7 @@
-﻿using EventBus;
+﻿using Autofac;
+using EventBus;
+using EventBus.Abstractions;
+using EventBus.Events.ServicesEvents.CompanyEvents;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -8,6 +11,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UserService.Abstractions;
+using UserService.Autofac;
+using UserService.EventHendlers;
 using UserService.Services;
 
 namespace UserService
@@ -19,8 +25,15 @@ namespace UserService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddGrpc();
+            services.AddScoped<IUserRepoService, UserRepoService>();
 
             EventBusService.AddEventBus(services, "UserService");
+        }
+
+        //Autofac registry types
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            builder.RegisterModule(new EventsModule());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,6 +55,9 @@ namespace UserService
                     await context.Response.WriteAsync("Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
                 });
             });
+
+            var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
+            eventBus.Subscribe<AddCompanyEvent, AddCompanyEH>();
         }
     }
 }

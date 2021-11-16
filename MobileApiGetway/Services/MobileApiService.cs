@@ -40,12 +40,7 @@ namespace MobileApiGetway.Services
                 Token = request.Token
             });*/
 
-            var reply = _userClient.AddUser(new AddUserRequest()
-            {
-                Name = request.Name,
-                Guid = request.Guid,
-                Token = request.Token
-            });
+            var reply = _userClient.AddUser(request);
             return Task.FromResult(new AddUserReply() { Result = reply.Result});
         }
 
@@ -58,7 +53,7 @@ namespace MobileApiGetway.Services
                 Name = reply.Name
             });*/
 
-            var reply = _userClient.GetUser(new GetUserRequest() { Guid = request.Guid });
+            var reply = _userClient.GetUser(request);
             return Task.FromResult(new GetUserReply()
             {
                 Guid = reply.Guid,
@@ -74,7 +69,7 @@ namespace MobileApiGetway.Services
                 apiReply.Names.Add(n);
             return Task.FromResult(apiReply);*/
 
-            var reply = _userClient.GetUsers(new GetUsersRequest());
+            var reply = _userClient.GetUsers(request);
             var apiReply = new GetUsersReply();
             foreach (var n in reply.Names)
                 apiReply.Names.Add(n);
@@ -83,34 +78,26 @@ namespace MobileApiGetway.Services
         #endregion
 
         #region CompanyService
-        public override Task<ApiAddCompanyReply> ApiAddCompany(ApiAddCompanyRequest request, ServerCallContext context)
+        public override Task<AddCompanyReply> ApiAddCompany(AddCompanyRequest request, ServerCallContext context)
         {
-            var reply = _companyClient.AddCompany(new AddCompanyRequest()
-            {
-                Name = request.Name,
-                Guid = request.Guid,
-                Token = request.Token
-            });
-            return Task.FromResult(new ApiAddCompanyReply() { Result = reply.Result });
+            var reply = _companyClient.AddCompany(request);
+            return Task.FromResult(new AddCompanyReply() { Result = reply.Result });
         }
 
-        public override Task<ApiGetCompanyReply> ApiGetCompany(ApiGetCompanyRequest request, ServerCallContext context)
+        public override Task<GetCompanyReply> ApiGetCompany(GetCompanyRequest request, ServerCallContext context)
         {
-            var reply = _companyClient.GetCompany(new GetCompanyRequest() { Guid = request.Guid });
-            return Task.FromResult(new ApiGetCompanyReply()
+            var reply = _companyClient.GetCompany(request);
+            return Task.FromResult(new GetCompanyReply()
             {
                 Guid = reply.Guid,
                 Name = reply.Name
             });
         }
 
-        public override Task<ApiGetCompaniesReply> ApiGetCompanies(ApiGetCompaniesRequest request, ServerCallContext context)
+        public override Task<GetCompaniesReply> ApiGetCompanies(GetCompaniesRequest request, ServerCallContext context)
         {
-            var reply = _companyClient.GetCompanies(new GetCompaniesRequest());
-            var apiReply = new ApiGetCompaniesReply();
-            foreach (var n in reply.Names)
-                apiReply.Names.Add(n);
-            return Task.FromResult(apiReply);
+            var reply = _companyClient.GetCompanies(request);
+            return Task.FromResult(reply);
         }
         #endregion
 

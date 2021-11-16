@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CompanyService.Models
 {
-    public class Company:EntityBase
+    public class Company : EntityBase
     {
         public string Name { get; set; }
         public Guid User { get; set; }

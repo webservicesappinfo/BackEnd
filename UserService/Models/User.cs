@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace UserService.Models
 {
-    public class User:EntityBase
+    public class User : EntityBase
     {
         public string Token { get; set; }
         public String Name { get; set; }
@@ -14,6 +14,12 @@ namespace UserService.Models
         public String Email { get; set; }
         public List<CompanyRef> Companies { get; set; }
         public List<OfferRef> Offers { get; set; }
+
+        public User()
+        {
+            Companies = new List<CompanyRef>();
+            Offers = new List<OfferRef>();
+        }
     }
 
     public class UserContext : ContextBase<User> {}

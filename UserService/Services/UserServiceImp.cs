@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UserService.Abstractions;
 using UserService.Models;
 using UserService.Protos;
 
@@ -14,27 +15,17 @@ namespace UserService.Services
     {
         private readonly ILogger<UserServiceImp> _logger;
         private readonly IEventBus _eventBus;
+        private readonly IUserRepoService _userRepoService;
 
-        public UserServiceImp(ILogger<UserServiceImp> logger, IEventBus eventBus)
+        public UserServiceImp(ILogger<UserServiceImp> logger, IEventBus eventBus, IUserRepoService userRepoService)
         {
             _logger = logger;
             _eventBus = eventBus;
+            _userRepoService = userRepoService;
         }
         public override Task<AddUserReply> AddUser(AddUserRequest request, ServerCallContext context)
         {
-            var result = false;
-            using (var users = new UserContext())
-            {
-                var requestGuid = new Guid(request.Guid);
-                if (!users.Values.Any(x => x.Guid == requestGuid))
-                {
-                    var user = new Models.User { Guid = requestGuid, Name = request.Name, Token = request.Token };
-                    users.Values.Add(user);
-                    users.SaveChanges();
-                    result = true;
-                    //_eventBus.Publish(new AddUserEvent(user.Name, user.Guid, user.Token));
-                }
-            }
+            var result = _userRepoService.AddUser(request.Token, request.Name);
             return Task.FromResult(new AddUserReply { Result = result });
         }
 

@@ -10,7 +10,6 @@ namespace Globals.Models
 {
     public abstract class EntityBase
     {
-        //public int Id { get; set; }
         [Key]
         public Guid Guid { get; set; }
     }

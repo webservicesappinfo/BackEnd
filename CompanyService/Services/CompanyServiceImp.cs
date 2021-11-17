@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CompanyService.Abstractions;
 using CompanyService.Models;
 using CompanyService.Protos;
 using EventBus.Abstractions;
@@ -16,11 +17,13 @@ namespace CompanyService.Services
     {
         private readonly ILogger<CompanyServiceImp> _logger;
         private readonly IEventBus _eventBus;
+        private readonly ICompanyRepoService _companyRepoService;
 
-        public CompanyServiceImp(ILogger<CompanyServiceImp> logger, IEventBus eventBus)
+        public CompanyServiceImp(ILogger<CompanyServiceImp> logger, IEventBus eventBus, ICompanyRepoService companyRepoService)
         {
             _logger = logger;
             _eventBus = eventBus;
+            _companyRepoService = companyRepoService;
         }
 
         public override Task<GetCompanyReply> GetCompany(GetCompanyRequest request, ServerCallContext context)
@@ -44,15 +47,7 @@ namespace CompanyService.Services
         }
         public override Task<AddCompanyReply> AddCompany(AddCompanyRequest request, ServerCallContext context)
         {
-            var result = false;
-            using (var companies = new CompanyContext())
-            {
-                var company = new Models.Company { Name = request.Name, User = new Guid(request.UserGuid) };
-                companies.Values.Add(company);
-                companies.SaveChanges();
-                result = true;
-                _eventBus.Publish(new AddCompanyEvent(company.Name, company.Guid, company.User));
-            }
+            var result = _companyRepoService.AddCompany(request.Name, request.UserGuid);
             return Task.FromResult(new AddCompanyReply { Result = result });
         }
         public override Task<UpdateCompanyReply> UpdateCompany(UpdateCompanyRequest request, ServerCallContext context)

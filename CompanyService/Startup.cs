@@ -1,4 +1,5 @@
-﻿using CompanyService.Services;
+﻿using CompanyService.Abstractions;
+using CompanyService.Services;
 using EventBus;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -19,6 +20,7 @@ namespace CompanyService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddGrpc();
+            services.AddScoped<ICompanyRepoService, CompanyRepoService>();
 
             EventBusService.AddEventBus(services, "CompanyService");
         }

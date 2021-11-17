@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Abstractions\" />
+    <Folder Include="Autofac\" />
     <Folder Include="Protos\" />
   </ItemGroup>
 

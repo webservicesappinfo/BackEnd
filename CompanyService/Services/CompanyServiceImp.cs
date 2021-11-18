@@ -47,7 +47,10 @@ namespace CompanyService.Services
         }
         public override Task<AddCompanyReply> AddCompany(AddCompanyRequest request, ServerCallContext context)
         {
-            var result = _companyRepoService.AddCompany(request.Name, request.UserGuid);
+            var company = new Models.Company() { Name = request.Name, User = new Guid(request.UserGuid) };
+            var result = _companyRepoService.AddCompany(company);
+            if(result)
+                _eventBus.Publish(new AddCompanyEvent(company.Name, company.Guid, company.User));
             return Task.FromResult(new AddCompanyReply { Result = result });
         }
         public override Task<UpdateCompanyReply> UpdateCompany(UpdateCompanyRequest request, ServerCallContext context)

@@ -1,4 +1,5 @@
 ﻿using EventBus.Abstractions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,20 @@ namespace UserService.Services
         {
             _logger = logger;
             _eventBus = eventBus;
+        }
+
+        public bool AddUser(User user)
+        {
+            using (var db = new UserContext())
+            {
+                if (!db.Values.Any(x => x.UIDFB == user.UIDFB))
+                {
+                    db.Values.Add(user);
+                    db.SaveChanges();
+                    return true;
+                }
+            }
+            return false;
         }
 
         public User GetUser(Guid guid)
@@ -41,14 +56,25 @@ namespace UserService.Services
 
         public Boolean DelUser(User user)
         {
-            return false;
+            using (var db = new UserContext())
+            {
+                var findUser = db.Values.Include(x=>x.Companies).FirstOrDefault(x => x.UIDFB == user.UIDFB);
+                if (findUser == null) return false;
+
+                findUser.Companies.Clear();
+                db.SaveChanges();
+
+                db.Values.Remove(findUser);
+                db.SaveChanges();
+            }
+            return true;
         }
 
         public bool AddCompany(Guid user, Guid company)
         {
             using (var db = new UserContext())
             {
-                var findUser = db.Values.FirstOrDefault(x => x.Guid == user);
+                var findUser = db.Values.FirstOrDefault(x => x.UIDFB == user);
                 if (findUser == null) return false;
                 if (findUser.Companies.Any(x => x.Guid == company)) return false;
                 findUser.Companies.Add(new Globals.Models.CompanyRef() { RefGuid = company });
@@ -57,16 +83,26 @@ namespace UserService.Services
             return true;
         }
 
-        public bool AddUser(String uidFB, String name)
+        public bool DelCompany(Guid user, Guid company)
         {
             using (var db = new UserContext())
-                if (!db.Values.Any(x => x.Token == uidFB.ToString()))
-                {
-                    db.Values.Add(new User() { Token = uidFB, Name = name });
-                    db.SaveChanges();
-                    return true;
-                }
-            return false;
+            {
+                var findUser = db.Values.FirstOrDefault(x => x.UIDFB == user);
+                if (findUser == null) return false;
+                var findCompany = findUser.Companies.FirstOrDefault(x => x.Guid == company);
+                if (findCompany == null) return false;
+                findUser.Companies.Remove(findCompany);
+                db.SaveChanges();
+            }
+            return true;
+        }
+
+        public User GetUserByUIDFB(Guid uidfb)
+        {
+            User user = null;
+            using (var db = new UserContext())
+                user = db.Values.FirstOrDefault(x => x.UIDFB == uidfb);
+            return user;
         }
     }
 }

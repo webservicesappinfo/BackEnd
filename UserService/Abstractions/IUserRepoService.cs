@@ -8,9 +8,9 @@ namespace UserService.Abstractions
 {
     public interface IUserRepoService
     {
-        public Boolean AddUser(String uidFB, String name);
+        public Boolean AddUser(User user);
 
-        public User GetUser(Guid guid);        
+        public User GetUser(Guid guid);
 
         public List<User> GetAllUsers();
 
@@ -18,6 +18,10 @@ namespace UserService.Abstractions
 
         public Boolean DelUser(User user);
 
+        public User GetUserByUIDFB(Guid uidfb);
+
         public Boolean AddCompany(Guid user, Guid company);
+
+        public Boolean DelCompany(Guid user, Guid company);
     }
 }

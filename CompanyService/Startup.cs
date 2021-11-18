@@ -1,4 +1,6 @@
-﻿using CompanyService.Abstractions;
+﻿using Autofac;
+using CompanyService.Abstractions;
+using CompanyService.Autofac;
 using CompanyService.Services;
 using EventBus;
 using Microsoft.AspNetCore.Builder;
@@ -23,6 +25,12 @@ namespace CompanyService
             services.AddScoped<ICompanyRepoService, CompanyRepoService>();
 
             EventBusService.AddEventBus(services, "CompanyService");
+        }
+
+        //Autofac registry types
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            builder.RegisterModule(new CompanyEventsModule());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

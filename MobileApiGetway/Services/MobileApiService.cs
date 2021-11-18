@@ -43,6 +43,11 @@ namespace MobileApiGetway.Services
             var reply = _userClient.AddUser(request);
             return Task.FromResult(new AddUserReply() { Result = reply.Result});
         }
+        public override Task<DelUserReply> ApiDelUser(DelUserRequest request, ServerCallContext context)
+        {
+            var reply = _userClient.DelUser(request);
+            return Task.FromResult(new DelUserReply() { Result = reply.Result });
+        }
 
         public override Task<GetUserReply> ApiGetUser(GetUserRequest request, ServerCallContext context)
         {
@@ -56,7 +61,7 @@ namespace MobileApiGetway.Services
             var reply = _userClient.GetUser(request);
             return Task.FromResult(new GetUserReply()
             {
-                Guid = reply.Guid,
+                UidFB = reply.UidFB,
                 Name = reply.Name
             });
         }

@@ -5,6 +5,7 @@ using EventBus.Events.ServicesEvents.CompanyEvents;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CompanyService.Services
 {
@@ -19,28 +20,40 @@ namespace CompanyService.Services
             _eventBus = eventBus;
         }
 
-        public bool AddCompany(string name, string ownerGuid)
+        public bool AddCompany(Company company)
         {
             var result = false;
             using (var companies = new CompanyContext())
             {
-                var company = new Models.Company { Name = name, User = new Guid(ownerGuid) };
                 companies.Values.Add(company);
                 companies.SaveChanges();
                 result = true;
-                _eventBus.Publish(new AddCompanyEvent(company.Name, company.Guid, company.User));
             }
             return result;
         }
 
         public bool DelCompany(Company company)
         {
-            throw new NotImplementedException();
+            using (var db = new CompanyContext())
+            {
+                var findCompany = db.Values.FirstOrDefault(x => x.Guid == company.Guid);
+                if (findCompany == null) return false;
+                db.Values.Remove(findCompany);
+                db.SaveChanges();
+            }
+            return true;
         }
 
-        public List<Company> GetAllCompany()
+        public List<Company> GetCompanies()
         {
-            throw new NotImplementedException();
+            using (var db = new CompanyContext())
+                return db.Values.ToList();
+        }
+
+        public List<Company> GetCompaniesByOwner(Guid owner)
+        {
+            using (var db = new CompanyContext())
+                return db.Values.Where(x=>x.User == owner).ToList();
         }
 
         public Company GetCompany(Guid guid)

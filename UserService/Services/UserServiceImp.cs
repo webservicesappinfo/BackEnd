@@ -1,4 +1,5 @@
 ﻿using EventBus.Abstractions;
+using EventBus.Events.ServicesEvents.UserRepoEvents;
 using Grpc.Core;
 using Microsoft.Extensions.Logging;
 using System;
@@ -25,7 +26,15 @@ namespace UserService.Services
         }
         public override Task<AddUserReply> AddUser(AddUserRequest request, ServerCallContext context)
         {
-            var result = _userRepoService.AddUser(request.Token, request.Name);
+            var user = new Models.User() 
+            { 
+                Name = request.Name, 
+                UIDFB = new Guid(request.UidFB), 
+                Token = request.Token 
+            };
+            var result = _userRepoService.AddUser(user);
+            if(result)
+                _eventBus.Publish(new AddUserEvent(user.Name, user.Guid.ToString(), user.Token));
             return Task.FromResult(new AddUserReply { Result = result });
         }
 
@@ -34,7 +43,7 @@ namespace UserService.Services
             var reply = new GetUsersReply();
             using (var users = new UserContext())
                 foreach (var user in users.Values)
-                    reply.Names.Add($"{user.Guid}:{user.Name}");
+                    reply.Names.Add($"{user.UIDFB}:{user.Name}");
             return Task.FromResult(reply);
         }
 
@@ -48,9 +57,17 @@ namespace UserService.Services
             return base.UpdateUser(request, context);
         }
 
-        public override Task<RemoveUserReply> RemoveUser(RemoveUserRequest request, ServerCallContext context)
+        public override Task<DelUserReply> DelUser(DelUserRequest request, ServerCallContext context)
         {
-            return base.RemoveUser(request, context);
+            var user = _userRepoService.GetUserByUIDFB(new Guid(request.UidFB));
+            var reply = new DelUserReply();
+            if (user == null) return Task.FromResult(reply);
+
+            var result = _userRepoService.DelUser(user);
+            if(result)
+                _eventBus.Publish(new DelUserEvent(user.Name, user.Guid.ToString(), user.Token));
+
+            return Task.FromResult(reply);
         }
     }
 }

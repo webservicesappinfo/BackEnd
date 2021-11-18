@@ -8,6 +8,7 @@ namespace UserService.Models
 {
     public class User : EntityBase
     {
+        public Guid UIDFB { get; set; }
         public string Token { get; set; }
         public String Name { get; set; }
         public String LastName { get; set; }

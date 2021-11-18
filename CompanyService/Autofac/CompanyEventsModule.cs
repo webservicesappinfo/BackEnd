@@ -1,20 +1,20 @@
 ﻿using Autofac;
+using CompanyService.EventHendlers;
 using EventBus.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using UserService.EventHendlers;
 using Module = Autofac.Module;
 
-namespace UserService.Autofac
+namespace CompanyService.Autofac
 {
-    public class EventsModule : Module
+    public class CompanyEventsModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterAssemblyTypes(typeof(AddCompanyEH).GetTypeInfo().Assembly).AsClosedTypesOf(typeof(IIntegrationEventHandler<>));
+            builder.RegisterAssemblyTypes(typeof(DelUserEH).GetTypeInfo().Assembly).AsClosedTypesOf(typeof(IIntegrationEventHandler<>));
         }
     }
 }

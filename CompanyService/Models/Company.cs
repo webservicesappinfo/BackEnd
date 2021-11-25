@@ -1,4 +1,5 @@
 ﻿using Globals.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +11,13 @@ namespace CompanyService.Models
     {
         public string Name { get; set; }
         public Guid User { get; set; }
-        public List<MasterRef> Masters { get; set; }
-        public List<OfferRef> Offers { get; set; }
+        public List<MasterRef> Masters { get; } = new List<MasterRef>();
+        public List<OfferRef> Offers { get; } = new List<OfferRef>(); 
     }
 
-    public class CompanyContext : ContextBase<Company> { }
+    public class CompanyContext : ContextBase<Company> 
+    {
+        public DbSet<MasterRef> Masters{ get; set; }
+        public DbSet<OfferRef> Offers { get; set; }
+    }
 }

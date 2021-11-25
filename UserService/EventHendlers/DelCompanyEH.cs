@@ -22,9 +22,11 @@ namespace UserService.EventHendlers
 
         public Task Handle(DelCompanyEvent @event)
         {
-            Console.WriteLine(@event.Name);
+            Console.WriteLine(@event.Guid);
             //@event.ResponseReceivedEvent.Set();
-            _userRepoService.AddCompany(@event.Owner, @event.Guid);
+            var usersWithCompany = _userRepoService.GetAllUsers().Where(x => x.Companies.Any(x => x.RefGuid == @event.Guid)).ToList();
+            foreach (var user in usersWithCompany)
+                _userRepoService.DelCompany(user.UIDFB, @event.Guid);
             return Task.FromResult(0);
         }
     }

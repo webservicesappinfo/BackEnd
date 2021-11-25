@@ -25,9 +25,16 @@ namespace CompanyService.EventHendlers
             Console.WriteLine(@event.Name);
             //@event.ResponseReceivedEvent.Set();
 
-            var companies = _companyRepoService.GetCompaniesByOwner(new Guid(@event.Guid));
-            foreach (var c in companies)
-                _companyRepoService.DelCompany(c);
+            var user = new Guid(@event.Guid);
+
+            var ownerCompanies = _companyRepoService.GetCompaniesByOwner(user);
+            foreach (var c in ownerCompanies)
+                _companyRepoService.DelCompany(c.Guid);
+
+            var masterCompanies = _companyRepoService.GetCompaniesByMaster(user);
+            foreach (var c in masterCompanies)
+                _companyRepoService.DelMaster(c.Guid, user);
+
             return Task.FromResult(0);
         }
     }

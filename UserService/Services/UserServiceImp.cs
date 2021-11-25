@@ -65,7 +65,7 @@ namespace UserService.Services
 
             var result = _userRepoService.DelUser(user);
             if(result)
-                _eventBus.Publish(new DelUserEvent(user.Name, user.Guid.ToString(), user.Token));
+                _eventBus.Publish(new DelUserEvent(user.Name, user.UIDFB.ToString(), user.Token));
 
             return Task.FromResult(reply);
         }

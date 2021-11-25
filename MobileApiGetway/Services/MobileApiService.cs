@@ -89,6 +89,12 @@ namespace MobileApiGetway.Services
             return Task.FromResult(new AddCompanyReply() { Result = reply.Result });
         }
 
+        public override Task<JoinToCompanyReply> ApiJoinToCompany(JoinToCompanyRequest request, ServerCallContext context)
+        {
+            var reply = _companyClient.JoinToCompany(request);
+            return Task.FromResult(new JoinToCompanyReply() { Result = reply.Result });
+        }
+
         public override Task<GetCompanyReply> ApiGetCompany(GetCompanyRequest request, ServerCallContext context)
         {
             var reply = _companyClient.GetCompany(request);
@@ -102,6 +108,12 @@ namespace MobileApiGetway.Services
         public override Task<GetCompaniesReply> ApiGetCompanies(GetCompaniesRequest request, ServerCallContext context)
         {
             var reply = _companyClient.GetCompanies(request);
+            return Task.FromResult(reply);
+        }
+
+        public override Task<DelCompanyReply> ApiDelCompany(DelCompanyRequest request, ServerCallContext context)
+        {
+            var reply = _companyClient.DelCompany(request);
             return Task.FromResult(reply);
         }
         #endregion

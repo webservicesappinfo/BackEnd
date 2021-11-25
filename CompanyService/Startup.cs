@@ -1,8 +1,11 @@
 ﻿using Autofac;
 using CompanyService.Abstractions;
 using CompanyService.Autofac;
+using CompanyService.EventHendlers;
 using CompanyService.Services;
 using EventBus;
+using EventBus.Abstractions;
+using EventBus.Events.ServicesEvents.UserRepoEvents;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -52,6 +55,9 @@ namespace CompanyService
                     await context.Response.WriteAsync("Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
                 });
             });
+
+            var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
+            eventBus.Subscribe<DelUserEvent, DelUserEH>();
         }
     }
 }

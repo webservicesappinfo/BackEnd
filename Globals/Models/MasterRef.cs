@@ -6,5 +6,8 @@ using System.Threading.Tasks;
 
 namespace Globals.Models
 {
-    public class MasterRef : EntityBase { }
+    public class MasterRef : EntityBase 
+    {
+        public Guid User { get; set; }
+    }
 }

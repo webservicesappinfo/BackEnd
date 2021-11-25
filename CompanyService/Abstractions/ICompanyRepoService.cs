@@ -14,8 +14,14 @@ namespace CompanyService.Abstractions
 
         public List<Company> GetCompaniesByOwner(Guid owner);
 
+        public List<Company> GetCompaniesByMaster(Guid master);
+
         public Boolean UpdateCompany(Company company);
 
-        public Boolean DelCompany(Company company);
+        public bool JoinToCompany(Guid guid, Guid masterGuid);
+
+        public Boolean DelCompany(Guid guid);
+
+        public Boolean DelMaster(Guid company, Guid master);
     }
 }

@@ -20,8 +20,8 @@ namespace UserService.Abstractions
 
         public User GetUserByUIDFB(Guid uidfb);
 
-        public Boolean AddCompany(Guid user, Guid company);
+        public Boolean AddCompany(Guid uidfb, Guid company);
 
-        public Boolean DelCompany(Guid user, Guid company);
+        public Boolean DelCompany(Guid uidfb, Guid company);
     }
 }

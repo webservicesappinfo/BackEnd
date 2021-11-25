@@ -39,14 +39,14 @@ namespace UserService.Services
         {
             User user = null;
             using (var db = new UserContext())
-                user = db.Values.FirstOrDefault(x => x.Guid == guid);
+                user = db.Values.Include(x => x.Companies).Include(x => x.Offers).FirstOrDefault(x => x.Guid == guid);
             return user;
         }
 
         public List<User> GetAllUsers()
         {
             using (var db = new UserContext())
-            return db.Values.ToList();
+            return db.Values.Include(x=>x.Companies).Include(x=>x.Offers).ToList();
         }
 
         public Boolean UpdateUser(User user)
@@ -58,23 +58,29 @@ namespace UserService.Services
         {
             using (var db = new UserContext())
             {
+                
                 var findUser = db.Values.Include(x=>x.Companies).FirstOrDefault(x => x.UIDFB == user.UIDFB);
                 if (findUser == null) return false;
 
-                findUser.Companies.Clear();
+                foreach (var c in findUser.Companies)
+                    db.Companies.Remove(c);
                 db.SaveChanges();
 
-                db.Values.Remove(findUser);
+                foreach (var o in findUser.Offers)
+                    db.Offers.Remove(o);
+                db.SaveChanges();
+
+                db.Remove(findUser);
                 db.SaveChanges();
             }
             return true;
         }
 
-        public bool AddCompany(Guid user, Guid company)
+        public bool AddCompany(Guid uidfb, Guid company)
         {
             using (var db = new UserContext())
             {
-                var findUser = db.Values.FirstOrDefault(x => x.UIDFB == user);
+                var findUser = db.Values.FirstOrDefault(x => x.UIDFB == uidfb);
                 if (findUser == null) return false;
                 if (findUser.Companies.Any(x => x.Guid == company)) return false;
                 findUser.Companies.Add(new Globals.Models.CompanyRef() { RefGuid = company });
@@ -83,11 +89,11 @@ namespace UserService.Services
             return true;
         }
 
-        public bool DelCompany(Guid user, Guid company)
+        public bool DelCompany(Guid uidfb, Guid company)
         {
             using (var db = new UserContext())
             {
-                var findUser = db.Values.FirstOrDefault(x => x.UIDFB == user);
+                var findUser = db.Values.FirstOrDefault(x => x.UIDFB == uidfb);
                 if (findUser == null) return false;
                 var findCompany = findUser.Companies.FirstOrDefault(x => x.Guid == company);
                 if (findCompany == null) return false;

@@ -2,6 +2,7 @@
 using CompanyService.Models;
 using EventBus.Abstractions;
 using EventBus.Events.ServicesEvents.CompanyEvents;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -32,12 +33,21 @@ namespace CompanyService.Services
             return result;
         }
 
-        public bool DelCompany(Company company)
+        public bool DelCompany(Guid guid)
         {
             using (var db = new CompanyContext())
             {
-                var findCompany = db.Values.FirstOrDefault(x => x.Guid == company.Guid);
+                var findCompany = db.Values.Include(x=>x.Masters).Include(x=>x.Offers).FirstOrDefault(x => x.Guid == guid);
                 if (findCompany == null) return false;
+
+                foreach (var m in findCompany.Masters)
+                    db.Masters.Remove(m);
+                db.SaveChanges();
+
+                foreach (var o in findCompany.Offers)
+                    db.Offers.Remove(o);
+                db.SaveChanges();
+
                 db.Values.Remove(findCompany);
                 db.SaveChanges();
             }
@@ -47,23 +57,57 @@ namespace CompanyService.Services
         public List<Company> GetCompanies()
         {
             using (var db = new CompanyContext())
-                return db.Values.ToList();
+                return db.Values.Include(x=>x.Masters).Include(x=>x.Offers).ToList();
         }
 
         public List<Company> GetCompaniesByOwner(Guid owner)
         {
             using (var db = new CompanyContext())
-                return db.Values.Where(x=>x.User == owner).ToList();
+                return db.Values.Where(x=>x.User == owner).Include(x => x.Masters).Include(x => x.Offers).ToList();
         }
 
         public Company GetCompany(Guid guid)
         {
-            throw new NotImplementedException();
+            using (var db = new CompanyContext())
+                return db.Values.Include(x => x.Masters).Include(x => x.Offers).FirstOrDefault(x => x.Guid == guid);
         }
 
         public bool UpdateCompany(Company company)
         {
             throw new NotImplementedException();
+        }
+
+        public bool JoinToCompany(Guid guid, Guid masterGuid)
+        {
+            using (var db = new CompanyContext())
+            {
+                var fitCompany = db.Values.Include(x=>x.Masters).FirstOrDefault(x=>x.Guid == guid);
+                if (fitCompany == null) return false;
+                if (fitCompany.Masters.Any(x => x.Guid == masterGuid)) return false;
+                fitCompany.Masters.Add(new Globals.Models.MasterRef() { User = masterGuid });
+                db.SaveChanges();
+            }
+            return true;
+        }
+
+        public List<Company> GetCompaniesByMaster(Guid master)
+        {
+            using (var db = new CompanyContext())
+                return db.Values.Include(x => x.Masters).Include(x => x.Offers).Where(x => x.Masters.Any(m=>m.User == master)).ToList();
+        }
+
+        public bool DelMaster(Guid company, Guid master)
+        {
+            using (var db = new CompanyContext())
+            {
+                var fitCompany = db.Values.Include(x => x.Masters).FirstOrDefault(x => x.Guid == company);
+                if (fitCompany == null) return false;
+                var fitMaster = fitCompany.Masters.FirstOrDefault(x => x.User == master);
+                if (fitMaster == null) return false;
+                db.Masters.Remove(fitMaster);
+                db.SaveChanges();
+            }
+            return true;
         }
     }
 }

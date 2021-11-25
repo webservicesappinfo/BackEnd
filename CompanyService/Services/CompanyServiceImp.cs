@@ -32,35 +32,52 @@ namespace CompanyService.Services
         }
         public override Task<GetCompaniesReply> GetCompanies(GetCompaniesRequest request, ServerCallContext context)
         {
-            var fitCompanyNames = new List<String>();
-            using (var companies = new CompanyContext())
+            var fitCompanies = new List<Models.Company>();
+            var guid = new Guid(request.UserGuid);
+            var totalCompanies = _companyRepoService.GetCompanies();
+            switch (request.Type.ToLower())
             {
-                var guid = new Guid(request.UserGuid);
-                if (request.Owner)
-                    fitCompanyNames = companies.Values.Where(x => x.User == guid).Select(x => x.Name).ToList();
-                else
-                    fitCompanyNames = companies.Values.Where(x => x.Masters.Any(m => m.Guid == guid)).Select(x => x.Name).ToList();
+                case "owner":
+                    fitCompanies = totalCompanies.Where(x => x.User == guid).ToList(); break;
+                case "contains":
+                    fitCompanies = totalCompanies.Where(x => x.Masters.Any(m => m.User == guid)).ToList(); break;
+                case "canbecontains":
+                    fitCompanies = totalCompanies.Where(x => x.User != guid && !x.Masters.Any(x => x.User == guid)).ToList(); break;
             }
             var reply = new GetCompaniesReply();
-            reply.Names.AddRange(fitCompanyNames);
+            reply.Guids.AddRange(fitCompanies.Select(x => x.Guid.ToString()));
+            reply.Names.AddRange(fitCompanies.Select(x => x.Name));
             return Task.FromResult(reply);
         }
         public override Task<AddCompanyReply> AddCompany(AddCompanyRequest request, ServerCallContext context)
         {
             var company = new Models.Company() { Name = request.Name, User = new Guid(request.UserGuid) };
             var result = _companyRepoService.AddCompany(company);
-            if(result)
+            if (result)
                 _eventBus.Publish(new AddCompanyEvent(company.Name, company.Guid, company.User));
             return Task.FromResult(new AddCompanyReply { Result = result });
+        }
+        public override Task<JoinToCompanyReply> JoinToCompany(JoinToCompanyRequest request, ServerCallContext context)
+        {
+            var reply = new JoinToCompanyReply();
+            var companyGuid = new Guid(request.CompanyGuid);
+            var masterGuid = new Guid(request.UserGuid);
+            reply.Result = _companyRepoService.JoinToCompany(companyGuid, masterGuid);
+            if(reply.Result)
+                _eventBus.Publish(new JoinToCompanyEvent(companyGuid, masterGuid));
+            return Task.FromResult(reply);
         }
         public override Task<UpdateCompanyReply> UpdateCompany(UpdateCompanyRequest request, ServerCallContext context)
         {
             return base.UpdateCompany(request, context);
         }
-        public override Task<RemoveCompanyReply> RemoveCompany(RemoveCompanyRequest request, ServerCallContext context)
+        public override Task<DelCompanyReply> DelCompany(DelCompanyRequest request, ServerCallContext context)
         {
-            return base.RemoveCompany(request, context);
+            var companyGuid = new Guid(request.Guid);
+            var result = _companyRepoService.DelCompany(companyGuid);
+            if (result)
+                _eventBus.Publish(new DelCompanyEvent(companyGuid));
+            return Task.FromResult(new DelCompanyReply { Result = result });
         }
-
     }
 }

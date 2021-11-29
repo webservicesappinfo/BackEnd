@@ -1,4 +1,5 @@
 ﻿using EventBus.Abstractions;
+using Globals.Sevices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
@@ -10,80 +11,16 @@ using UserService.Models;
 
 namespace UserService.Services
 {
-    public class UserRepoService : IUserRepoService
+    public class UserRepoService : RepoServiceBase<User, UserContext>, IUserRepoService
     {
         private readonly ILogger<UserRepoService> _logger;
         private readonly IEventBus _eventBus;
 
-        public UserRepoService(ILogger<UserRepoService> logger, IEventBus eventBus)
+        public UserRepoService(ILogger<UserRepoService> logger, IEventBus eventBus) : base(logger)
         {
             _logger = logger;
             _eventBus = eventBus;
-        }
-
-        public bool AddUser(User user)
-        {
-            using (var db = new UserContext())
-            {
-                if (!db.Values.Any(x => x.UIDFB == user.UIDFB))
-                {
-                    db.Values.Add(user);
-                    db.SaveChanges();
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public User GetUser(Guid guid)
-        {
-            User user = null;
-            using (var db = new UserContext())
-                user = db.Values.Include(x => x.Companies).Include(x => x.Offers).FirstOrDefault(x => x.Guid == guid);
-            return user;
-        }
-
-        public List<User> GetAllUsers()
-        {
-            using (var db = new UserContext())
-            {
-                var users = db.Values.ToList();
-                return users;
-                //return db.Values.Include(x => x.Companies).Include(x => x.Offers).ToList();
-            }
-        }
-
-        public Boolean UpdateUser(User user)
-        {
-            return false;
-        }
-
-        public Boolean DelUser(User user)
-        {
-            using (var db = new UserContext())
-            {
-                var findUser = db.Values.FirstOrDefault(x => x.UIDFB == user.UIDFB);
-
-                if (findUser == null) return false;
-                db.Remove(findUser);
-                db.SaveChanges();
-
-                /*var findUser = db.Values.Include(x=>x.Companies).FirstOrDefault(x => x.UIDFB == user.UIDFB);
-                if (findUser == null) return false;
-
-                foreach (var c in findUser.Companies)
-                    db.Companies.Remove(c);
-                db.SaveChanges();
-
-                foreach (var o in findUser.Offers)
-                    db.Offers.Remove(o);
-                db.SaveChanges();
-
-                db.Remove(findUser);
-                db.SaveChanges();*/
-            }
-            return true;
-        }
+        }        
 
         public bool AddCompany(Guid uidfb, Guid company)
         {

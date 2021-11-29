@@ -32,7 +32,7 @@ namespace UserService.Services
                 UIDFB = new Guid(request.UidFB), 
                 Token = request.Token 
             };
-            var result = _userRepoService.AddUser(user);
+            var result = _userRepoService.AddEntity(user);
             if(result)
                 _eventBus.Publish(new AddUserEvent(user.Name, user.Guid.ToString(), user.Token));
             return Task.FromResult(new AddUserReply { Result = result });
@@ -41,7 +41,7 @@ namespace UserService.Services
         public override Task<GetUsersReply> GetUsers(GetUsersRequest request, ServerCallContext context)
         {
             var reply = new GetUsersReply();
-            var users = _userRepoService.GetAllUsers();
+            var users = _userRepoService.GetEntities();
             foreach (var user in users)
                 reply.Names.Add($"{user.UIDFB}:{user.Name}");
             return Task.FromResult(reply);
@@ -63,7 +63,7 @@ namespace UserService.Services
             var reply = new DelUserReply();
             if (user == null) return Task.FromResult(reply);
 
-            var result = _userRepoService.DelUser(user);
+            var result = _userRepoService.DelEntity(user.Guid);
             if(result)
                 _eventBus.Publish(new DelUserEvent(user.Name, user.UIDFB.ToString(), user.Token));
 

@@ -11,9 +11,9 @@ namespace Globals.Abstractions
     {
         public Boolean AddEntity(T entity);
 
-        public T GetEntity(Guid guid);
+        public T GetEntity(Guid guid, params string[] includeProperties);
 
-        public List<T> GetEntities();
+        public List<T> GetEntities(params string[] includeProperties);
 
         public Boolean UpdateEntity(T entity);
 

@@ -7,7 +7,6 @@ namespace CompanyService.Abstractions
 {
     public interface ICompanyRepoService: IRepoServiceBase<Company>
     {
-
         public List<Company> GetCompaniesByOwner(Guid owner);
 
         public List<Company> GetCompaniesByMaster(Guid master);

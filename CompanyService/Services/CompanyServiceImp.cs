@@ -34,15 +34,15 @@ namespace CompanyService.Services
         {
             var fitCompanies = new List<Models.Company>();
             var guid = new Guid(request.UserGuid);
-            var totalCompanies = _companyRepoService.GetEntities();
+            var totalCompanies = _companyRepoService.GetEntities(nameof(Models.Company.Masters));
             switch (request.Type.ToLower())
             {
                 case "owner":
                     fitCompanies = totalCompanies.Where(x => x.User == guid).ToList(); break;
                 case "contains":
-                    fitCompanies = totalCompanies.Where(x => x.Masters.Any(m => m.User == guid)).ToList(); break;
+                    fitCompanies = totalCompanies.Where(x => x.Masters.Any(m => m.RefGuid == guid)).ToList(); break;
                 case "canbecontains":
-                    fitCompanies = totalCompanies.Where(x => x.User != guid && !x.Masters.Any(x => x.User == guid)).ToList(); break;
+                    fitCompanies = totalCompanies.Where(x => x.User != guid && !x.Masters.Any(x => x.RefGuid == guid)).ToList(); break;
             }
             var reply = new GetCompaniesReply();
             reply.Guids.AddRange(fitCompanies.Select(x => x.Guid.ToString()));

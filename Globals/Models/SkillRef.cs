@@ -6,5 +6,10 @@ using System.Threading.Tasks;
 
 namespace Globals.Models
 {
-    public class SkillRef:EntityBase { }
+    public class SkillRef<T>:EntityBase where T : EntityBase 
+    {
+        public Guid RefGuid { get; set; }
+
+        public T Parent { get; set; }
+    }
 }

@@ -1,5 +1,6 @@
 ﻿using Globals.Abstractions;
 using Globals.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -40,21 +41,39 @@ namespace Globals.Sevices
             return true;
         }
 
-        public virtual List<T> GetEntities()
+        public virtual List<T> GetEntities(params string[] includeProperties)
         {
             using (var db = (V)Activator.CreateInstance(typeof(V)))
-                return db.Values.ToList();
+            {
+                var query = Include(db, includeProperties);
+                return query.ToList();
+            }
         }
 
-        public virtual T GetEntity(Guid guid)
+        public virtual T GetEntity(Guid guid, params string[] includeProperties)
         {
             using (var db = (V)Activator.CreateInstance(typeof(V)))
-                return db.Values.FirstOrDefault(x => x.Guid == guid);
+            {
+                var query = Include(db, includeProperties);
+                return query.FirstOrDefault(x => x.Guid == guid);
+            }
         }
 
         public virtual bool UpdateEntity(T entity)
         {
             throw new NotImplementedException();
+        }
+
+        private IQueryable<T> Include(V db, params string[] includeProperties)
+        {
+            var query = db.Set<T>().AsQueryable();
+            var navigations = db.Model.FindEntityType(typeof(T)).GetDerivedTypesInclusive().SelectMany(type => type.GetNavigations()).Distinct();
+            foreach (var property in navigations)
+            {
+                if (includeProperties.Length > 0 && !includeProperties.Contains(property.Name)) continue;
+                query = query.Include(property.Name);
+            }
+            return query;
         }
     }
 }

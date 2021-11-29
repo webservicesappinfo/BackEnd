@@ -41,9 +41,9 @@ namespace UserService.Services
         public override Task<GetUsersReply> GetUsers(GetUsersRequest request, ServerCallContext context)
         {
             var reply = new GetUsersReply();
-            using (var users = new UserContext())
-                foreach (var user in users.Values)
-                    reply.Names.Add($"{user.UIDFB}:{user.Name}");
+            var users = _userRepoService.GetAllUsers();
+            foreach (var user in users)
+                reply.Names.Add($"{user.UIDFB}:{user.Name}");
             return Task.FromResult(reply);
         }
 

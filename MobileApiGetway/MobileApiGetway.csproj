@@ -17,6 +17,7 @@
     <Protobuf Include="ClientProtos\notification.proto" GrpcServices="Client" />
     <Protobuf Include="..\..\Protos\user.proto" GrpcServices="Client" />
     <Protobuf Include="..\..\Protos\company.proto" GrpcServices="Client" />
+	<Protobuf Include="..\..\Protos\skill.proto" GrpcServices="Client" />
     <Protobuf Include="..\..\Protos\mobile_api.proto" GrpcServices="Server">
       <Link>Protos\mobile_api.proto</Link>
     </Protobuf>

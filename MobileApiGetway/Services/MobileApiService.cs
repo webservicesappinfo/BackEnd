@@ -2,6 +2,7 @@
 using Grpc.Core;
 using Grpc.Net.Client;
 using Grpc.Net.ClientFactory;
+using SkillService.Protos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,15 +16,25 @@ namespace MobileApiGetway.Services
     {
         private readonly User.UserClient _userClient;
         private readonly Company.CompanyClient _companyClient;
+        private readonly Skill.SkillClient _skillClient;
 
         private readonly Notification.NotificationClient _notificationClient;
         //private readonly UserRepo.UserRepoClient _userRepoClient;
         private readonly LocationRepo.LocationRepoClient _locationClient;
 
-        public MobileApiService(User.UserClient userClient, Company.CompanyClient companyClient, Notification.NotificationClient notificationClient, /*UserRepo.UserRepoClient userRepoClient,*/ LocationRepo.LocationRepoClient locationClient)
+        public MobileApiService
+            (
+            User.UserClient userClient,
+            Company.CompanyClient companyClient,
+            Notification.NotificationClient notificationClient,
+            Skill.SkillClient skillClient,
+            /*UserRepo.UserRepoClient userRepoClient,*/
+            LocationRepo.LocationRepoClient locationClient
+            )
         {
             _userClient = userClient;
             _companyClient = companyClient;
+            _skillClient = skillClient;
 
             _notificationClient = notificationClient;
             //_userRepoClient = userRepoClient;
@@ -114,6 +125,24 @@ namespace MobileApiGetway.Services
         public override Task<DelCompanyReply> ApiDelCompany(DelCompanyRequest request, ServerCallContext context)
         {
             var reply = _companyClient.DelCompany(request);
+            return Task.FromResult(reply);
+        }
+        #endregion
+
+        #region SkillService
+        public override Task<AddSkillReply> ApiAddSkill(AddSkillRequest request, ServerCallContext context)
+        {
+            var reply = _skillClient.AddSkill(request);
+            return Task.FromResult(reply);
+        }
+        public override Task<GetSkillsReply> ApiGetSkills(GetSkillsRequest request, ServerCallContext context)
+        {
+            var reply = _skillClient.GetSkills(request);
+            return Task.FromResult(reply);
+        }
+        public override Task<DelSkillReply> ApiDelSkill(DelSkillRequest request, ServerCallContext context)
+        {
+            var reply = _skillClient.DelSkill(request);
             return Task.FromResult(reply);
         }
         #endregion

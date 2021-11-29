@@ -28,6 +28,15 @@ services:
       - some-net
     ports:
       - "6002:80"
+  skillservice:
+    image: ${DOCKER_REGISTRY-}skillservice
+    build:
+      context: .
+      dockerfile: SkillService/Dockerfile
+    networks:
+      - some-net
+    ports:
+      - "6003:80"
   #userreposervice:
   #  image: ${DOCKER_REGISTRY-}userreposervice
   #  build:

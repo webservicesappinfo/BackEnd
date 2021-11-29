@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Globals.Models
 {
-    public class CompanyRef : EntityBase 
+    public class CompanyRef<T> : EntityBase where T : EntityBase
     {
         public Guid RefGuid { get; set; }
+
+        public T Parent { get; set; }
     }
 }

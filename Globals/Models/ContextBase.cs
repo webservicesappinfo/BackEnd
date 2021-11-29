@@ -36,6 +36,10 @@ namespace Globals.Models
         {
             builder.Ignore<EntityBase>();
             builder.Entity<T>().ToTable(TypeName);
+
+            ModelBuilderConfigure(builder);
         }
+
+        protected virtual void ModelBuilderConfigure(ModelBuilder builder) { }
     }
 }

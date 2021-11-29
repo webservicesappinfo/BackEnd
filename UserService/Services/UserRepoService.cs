@@ -46,7 +46,11 @@ namespace UserService.Services
         public List<User> GetAllUsers()
         {
             using (var db = new UserContext())
-            return db.Values.Include(x=>x.Companies).Include(x=>x.Offers).ToList();
+            {
+                var users = db.Values.ToList();
+                return users;
+                //return db.Values.Include(x => x.Companies).Include(x => x.Offers).ToList();
+            }
         }
 
         public Boolean UpdateUser(User user)
@@ -58,8 +62,13 @@ namespace UserService.Services
         {
             using (var db = new UserContext())
             {
-                
-                var findUser = db.Values.Include(x=>x.Companies).FirstOrDefault(x => x.UIDFB == user.UIDFB);
+                var findUser = db.Values.FirstOrDefault(x => x.UIDFB == user.UIDFB);
+
+                if (findUser == null) return false;
+                db.Remove(findUser);
+                db.SaveChanges();
+
+                /*var findUser = db.Values.Include(x=>x.Companies).FirstOrDefault(x => x.UIDFB == user.UIDFB);
                 if (findUser == null) return false;
 
                 foreach (var c in findUser.Companies)
@@ -71,7 +80,7 @@ namespace UserService.Services
                 db.SaveChanges();
 
                 db.Remove(findUser);
-                db.SaveChanges();
+                db.SaveChanges();*/
             }
             return true;
         }
@@ -83,7 +92,7 @@ namespace UserService.Services
                 var findUser = db.Values.FirstOrDefault(x => x.UIDFB == uidfb);
                 if (findUser == null) return false;
                 if (findUser.Companies.Any(x => x.Guid == company)) return false;
-                findUser.Companies.Add(new Globals.Models.CompanyRef() { RefGuid = company });
+                findUser.Companies.Add(new Globals.Models.CompanyRef<User>() { RefGuid = company });
                 db.SaveChanges();
             }
             return true;

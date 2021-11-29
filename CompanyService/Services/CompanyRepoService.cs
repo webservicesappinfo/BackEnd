@@ -21,23 +21,23 @@ namespace CompanyService.Services
             _eventBus = eventBus;
         }
 
-        public bool AddCompany(Company company)
+        public bool AddEntity(Company entity)
         {
             var result = false;
             using (var companies = new CompanyContext())
             {
-                companies.Values.Add(company);
+                companies.Values.Add(entity);
                 companies.SaveChanges();
                 result = true;
             }
             return result;
         }
 
-        public bool DelCompany(Guid guid)
+        public bool DelEntity(Guid guid)
         {
             using (var db = new CompanyContext())
             {
-                var findCompany = db.Values.Include(x=>x.Masters).Include(x=>x.Offers).FirstOrDefault(x => x.Guid == guid);
+                var findCompany = db.Values.Include(x => x.Masters).Include(x => x.Offers).FirstOrDefault(x => x.Guid == guid);
                 if (findCompany == null) return false;
 
                 foreach (var m in findCompany.Masters)
@@ -54,27 +54,27 @@ namespace CompanyService.Services
             return true;
         }
 
-        public List<Company> GetCompanies()
+        public List<Company> GetEntities()
         {
             using (var db = new CompanyContext())
-                return db.Values.Include(x=>x.Masters).Include(x=>x.Offers).ToList();
+                return db.Values.Include(x => x.Masters).Include(x => x.Offers).ToList();
+        }
+
+        public Company GetEntity(Guid guid)
+        {
+            using (var db = new CompanyContext())
+                return db.Values.Include(x => x.Masters).Include(x => x.Offers).FirstOrDefault(x => x.Guid == guid);
+        }
+
+        public bool UpdateEntity(Company company)
+        {
+            throw new NotImplementedException();
         }
 
         public List<Company> GetCompaniesByOwner(Guid owner)
         {
             using (var db = new CompanyContext())
                 return db.Values.Where(x=>x.User == owner).Include(x => x.Masters).Include(x => x.Offers).ToList();
-        }
-
-        public Company GetCompany(Guid guid)
-        {
-            using (var db = new CompanyContext())
-                return db.Values.Include(x => x.Masters).Include(x => x.Offers).FirstOrDefault(x => x.Guid == guid);
-        }
-
-        public bool UpdateCompany(Company company)
-        {
-            throw new NotImplementedException();
         }
 
         public bool JoinToCompany(Guid guid, Guid masterGuid)

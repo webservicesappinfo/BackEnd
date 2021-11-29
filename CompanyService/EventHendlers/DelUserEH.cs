@@ -29,7 +29,7 @@ namespace CompanyService.EventHendlers
 
             var ownerCompanies = _companyRepoService.GetCompaniesByOwner(user);
             foreach (var c in ownerCompanies)
-                _companyRepoService.DelCompany(c.Guid);
+                _companyRepoService.DelEntity(c.Guid);
 
             var masterCompanies = _companyRepoService.GetCompaniesByMaster(user);
             foreach (var c in masterCompanies)

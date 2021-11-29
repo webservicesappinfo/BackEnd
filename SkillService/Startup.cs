@@ -1,8 +1,13 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Autofac;
+using EventBus;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SkillService.Abstractions;
+using SkillService.Autofac;
+using SkillService.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +22,15 @@ namespace SkillService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddGrpc();
+            services.AddScoped<ISkillRepoService, SkillRepoService>();
+
+            EventBusService.AddEventBus(services, "SkillService");
+        }
+
+        //Autofac registry types
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            builder.RegisterModule(new SkillEventsModule());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -31,7 +45,7 @@ namespace SkillService
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGrpcService<GreeterService>();
+                endpoints.MapGrpcService<SkillServiceImp>();
 
                 endpoints.MapGet("/", async context =>
                 {

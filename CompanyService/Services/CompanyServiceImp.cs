@@ -34,7 +34,7 @@ namespace CompanyService.Services
         {
             var fitCompanies = new List<Models.Company>();
             var guid = new Guid(request.UserGuid);
-            var totalCompanies = _companyRepoService.GetCompanies();
+            var totalCompanies = _companyRepoService.GetEntities();
             switch (request.Type.ToLower())
             {
                 case "owner":
@@ -52,7 +52,7 @@ namespace CompanyService.Services
         public override Task<AddCompanyReply> AddCompany(AddCompanyRequest request, ServerCallContext context)
         {
             var company = new Models.Company() { Name = request.Name, User = new Guid(request.UserGuid) };
-            var result = _companyRepoService.AddCompany(company);
+            var result = _companyRepoService.AddEntity(company);
             if (result)
                 _eventBus.Publish(new AddCompanyEvent(company.Name, company.Guid, company.User));
             return Task.FromResult(new AddCompanyReply { Result = result });
@@ -74,7 +74,7 @@ namespace CompanyService.Services
         public override Task<DelCompanyReply> DelCompany(DelCompanyRequest request, ServerCallContext context)
         {
             var companyGuid = new Guid(request.Guid);
-            var result = _companyRepoService.DelCompany(companyGuid);
+            var result = _companyRepoService.DelEntity(companyGuid);
             if (result)
                 _eventBus.Publish(new DelCompanyEvent(companyGuid));
             return Task.FromResult(new DelCompanyReply { Result = result });

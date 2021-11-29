@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MobileApiGetway.Services;
+using SkillService.Protos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +29,7 @@ namespace MobileApiGetway
             //services.AddGrpcClient<UserRepo.UserRepoClient>(o => o.Address = new Uri("http://userreposervice"));
             services.AddGrpcClient<User.UserClient>(o => o.Address = new Uri("http://userservice"));
             services.AddGrpcClient<Company.CompanyClient>(o => o.Address = new Uri("http://companyservice"));
+            services.AddGrpcClient<Skill.SkillClient>(o => o.Address = new Uri("http://skillservice"));
             services.AddGrpcClient<LocationRepo.LocationRepoClient>(o => o.Address = new Uri("http://locationservice"));
         }
 

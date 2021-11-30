@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OfferService.Services
 {
-    public class OfferServiceImp:Offer.OfferBase
+    public class OfferServiceImp : Offer.OfferBase
     {
         private readonly ILogger<OfferServiceImp> _logger;
         private readonly IEventBus _eventBus;
@@ -23,7 +23,7 @@ namespace OfferService.Services
 
         public override Task<AddOfferReply> AddOffer(AddOfferRequest request, ServerCallContext context)
         {
-            var offer = new Models.Offer() { Name = request.Name, MasterName = request.MasterName, SkillName = request.SkillName};
+            var offer = new Models.Offer() { Name = request.Name, MasterName = request.MasterName, SkillName = request.SkillName };
             var result = _offerRepoService.AddEntity(offer);
             /*if (result)
                 _eventBus.Publish(new AddSkillEvent(company.Name, company.Guid, company.User));*/

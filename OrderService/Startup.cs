@@ -1,8 +1,13 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Autofac;
+using EventBus;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using OrderService.Abstractions;
+using OrderService.Autofac;
+using OrderService.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +22,15 @@ namespace OrderService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddGrpc();
+            services.AddScoped<IOrderRepoService, OrderRepoService>();
+
+            EventBusService.AddEventBus(services, "OrderService");
+        }
+
+        //Autofac registry types
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            builder.RegisterModule(new OrderEventsModule());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -31,7 +45,7 @@ namespace OrderService
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGrpcService<GreeterService>();
+                endpoints.MapGrpcService<OrderServiceImp>();
 
                 endpoints.MapGet("/", async context =>
                 {

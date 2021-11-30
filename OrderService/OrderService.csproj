@@ -7,12 +7,32 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Protobuf Include="Protos\greet.proto" GrpcServices="Server" />
+	  <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
+	  <PackageReference Include="Google.Protobuf" Version="3.19.1" />
+	  <PackageReference Include="Grpc.AspNetCore" Version="2.40.0" />
+	  <PackageReference Include="Grpc.Net.Client" Version="2.40.0" />
+	  <PackageReference Include="Grpc.Tools" Version="2.41.1">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+	  <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.11.1" />
+	  <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.10" />
+	  <PackageReference Include="RabbitMQ.Client" Version="6.2.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Grpc.AspNetCore" Version="2.34.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.11.1" />
+    <ProjectReference Include="..\EventBus\EventBus.csproj" />
+    <ProjectReference Include="..\Globals\Globals.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Protos\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="..\..\Protos\order.proto">
+      <Link>Protos\order.proto</Link>
+    </Protobuf>
   </ItemGroup>
 
 </Project>

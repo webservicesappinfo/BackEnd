@@ -1,17 +1,32 @@
-﻿using System;
+﻿using Globals.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace OrderService.Models
 {
-    public class Order
+    public class Order : EntityBase
     {
-        public int Id { get; set; }
-        public String Guid { get; set; }
-        public String CompanyrGuid { get; set; }
-        public String MasterGuid { get; set; }
-        public String OfferGuid { get; set; }
-        public Double Price { get; set; }
+        public String Name { get; set; }
+
+        public String UserName { get; set; }
+
+        public String MasterName { get; set; }
+
+        public String SkillName { get; set; }
+
+        public OrderStatus Status { get; set; }
+    }
+
+    public class OrderContext : ContextBase<Order> { }
+
+    public enum OrderStatus
+    {
+        Submitted,
+        Accepted,
+        Executed,
+        UnExecuted,
+        Canceled
     }
 }

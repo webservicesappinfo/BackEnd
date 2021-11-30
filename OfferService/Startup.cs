@@ -22,7 +22,6 @@ namespace OfferService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddGrpc();
-
             services.AddScoped<IOfferRepoService, OfferRepoService>();
 
             EventBusService.AddEventBus(services, "OfferService");

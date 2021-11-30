@@ -37,6 +37,15 @@ services:
       - some-net
     ports:
       - "6003:80"
+  offerservice:
+    image: ${DOCKER_REGISTRY-}offerservice
+    build:
+      context: .
+      dockerfile: OfferService/Dockerfile
+    networks:
+      - some-net
+    ports:
+      - "6004:80"
   #userreposervice:
   #  image: ${DOCKER_REGISTRY-}userreposervice
   #  build:

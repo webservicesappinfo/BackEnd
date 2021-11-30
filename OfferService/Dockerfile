@@ -19,4 +19,7 @@ RUN dotnet publish "OfferService.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+
+ENV ASPNETCORE_URLS http://+:6004
+EXPOSE 6004
 ENTRYPOINT ["dotnet", "OfferService.dll"]

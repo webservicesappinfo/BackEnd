@@ -46,7 +46,7 @@ namespace Globals.Sevices
             using (var db = (V)Activator.CreateInstance(typeof(V)))
             {
                 var query = Include(db, includeProperties);
-                return query.ToList();
+                return query?.ToList();
             }
         }
 
@@ -55,7 +55,7 @@ namespace Globals.Sevices
             using (var db = (V)Activator.CreateInstance(typeof(V)))
             {
                 var query = Include(db, includeProperties);
-                return query.FirstOrDefault(x => x.Guid == guid);
+                return query?.FirstOrDefault(x => x.Guid == guid);
             }
         }
 

@@ -2,6 +2,8 @@
 using Grpc.Core;
 using Grpc.Net.Client;
 using Grpc.Net.ClientFactory;
+using OfferService.Protos;
+using OrderService.Protos;
 using SkillService.Protos;
 using System;
 using System.Collections.Generic;
@@ -17,6 +19,8 @@ namespace MobileApiGetway.Services
         private readonly User.UserClient _userClient;
         private readonly Company.CompanyClient _companyClient;
         private readonly Skill.SkillClient _skillClient;
+        private readonly Offer.OfferClient _offerClient;
+        private readonly Order.OrderClient _orderClient;
 
         private readonly Notification.NotificationClient _notificationClient;
         //private readonly UserRepo.UserRepoClient _userRepoClient;
@@ -28,6 +32,8 @@ namespace MobileApiGetway.Services
             Company.CompanyClient companyClient,
             Notification.NotificationClient notificationClient,
             Skill.SkillClient skillClient,
+            Offer.OfferClient offerClient,
+            Order.OrderClient orderClient,
             /*UserRepo.UserRepoClient userRepoClient,*/
             LocationRepo.LocationRepoClient locationClient
             )
@@ -35,6 +41,8 @@ namespace MobileApiGetway.Services
             _userClient = userClient;
             _companyClient = companyClient;
             _skillClient = skillClient;
+            _offerClient = offerClient;
+            _orderClient = orderClient;
 
             _notificationClient = notificationClient;
             //_userRepoClient = userRepoClient;
@@ -143,6 +151,42 @@ namespace MobileApiGetway.Services
         public override Task<DelSkillReply> ApiDelSkill(DelSkillRequest request, ServerCallContext context)
         {
             var reply = _skillClient.DelSkill(request);
+            return Task.FromResult(reply);
+        }
+        #endregion
+
+        #region OfferService
+        public override Task<AddOfferReply> ApiAddOffer(AddOfferRequest request, ServerCallContext context)
+        {
+            var reply = _offerClient.AddOffer(request);
+            return Task.FromResult(reply);
+        }
+        public override Task<GetOffersReply> ApiGetOffers(GetOffersRequest request, ServerCallContext context)
+        {
+            var reply = _offerClient.GetOffers(request);
+            return Task.FromResult(reply);
+        }
+        public override Task<DelOfferReply> ApiDelOffer(DelOfferRequest request, ServerCallContext context)
+        {
+            var reply = _offerClient.DelOffer(request);
+            return Task.FromResult(reply);
+        }
+        #endregion
+
+        #region OrderService
+        public override Task<AddOrderReply> ApiAddOrder(AddOrderRequest request, ServerCallContext context)
+        {
+            var reply = _orderClient.AddOrder(request);
+            return Task.FromResult(reply);
+        }
+        public override Task<GetOrdersReply> ApiGetOrders(GetOrdersRequest request, ServerCallContext context)
+        {
+            var reply = _orderClient.GetOrders(request);
+            return Task.FromResult(reply);
+        }
+        public override Task<DelOrderReply> ApiDelOrder(DelOrderRequest request, ServerCallContext context)
+        {
+            var reply = _orderClient.DelOrder(request);
             return Task.FromResult(reply);
         }
         #endregion

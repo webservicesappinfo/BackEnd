@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MobileApiGetway.Services;
+using OfferService.Protos;
+using OrderService.Protos;
 using SkillService.Protos;
 using System;
 using System.Collections.Generic;
@@ -25,11 +27,14 @@ namespace MobileApiGetway
             //AppContext.SetSwitch(" System.Net.Http . SocketsHttpHandler.Http2UnencryptedSupport ", true); // allow unencrypted http / 2 protocol
 
             services.AddGrpc();
-            services.AddGrpcClient<Notification.NotificationClient>(o => o.Address = new Uri("http://notificationservice"));
-            //services.AddGrpcClient<UserRepo.UserRepoClient>(o => o.Address = new Uri("http://userreposervice"));
             services.AddGrpcClient<User.UserClient>(o => o.Address = new Uri("http://userservice"));
             services.AddGrpcClient<Company.CompanyClient>(o => o.Address = new Uri("http://companyservice"));
             services.AddGrpcClient<Skill.SkillClient>(o => o.Address = new Uri("http://skillservice"));
+            services.AddGrpcClient<Offer.OfferClient>(o => o.Address = new Uri("http://offerservice"));
+            services.AddGrpcClient<Order.OrderClient>(o => o.Address = new Uri("http://orderservice"));
+
+            //services.AddGrpcClient<UserRepo.UserRepoClient>(o => o.Address = new Uri("http://userreposervice"));
+            services.AddGrpcClient<Notification.NotificationClient>(o => o.Address = new Uri("http://notificationservice"));
             services.AddGrpcClient<LocationRepo.LocationRepoClient>(o => o.Address = new Uri("http://locationservice"));
         }
 

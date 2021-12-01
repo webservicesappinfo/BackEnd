@@ -1,4 +1,5 @@
 ﻿using EventBus.Abstractions;
+using EventBus.Events.ServicesEvents.SkillEvents;
 using Grpc.Core;
 using Microsoft.Extensions.Logging;
 using SkillService.Abstractions;
@@ -24,10 +25,10 @@ namespace SkillService.Services
 
         public override Task<AddSkillReply> AddSkill(AddSkillRequest request, ServerCallContext context)
         {
-            var skill = new Models.Skill() { Name = request.Name, Description = request.Desc};
+            var skill = new Models.Skill() { Name = request.Name, Description = request.Desc };
             var result = _skillRepoService.AddEntity(skill);
-            /*if (result)
-                _eventBus.Publish(new AddSkillEvent(company.Name, company.Guid, company.User));*/
+            if (result)
+                _eventBus.Publish(new AddSkillEvent(skill.Name, skill.Guid));
             return Task.FromResult(new AddSkillReply { Result = result });
         }
 
@@ -57,7 +58,10 @@ namespace SkillService.Services
 
         public override Task<DelSkillReply> DelSkill(DelSkillRequest request, ServerCallContext context)
         {
-            var result = _skillRepoService.DelEntity(new Guid(request.Guid));
+            var skillGuid = new Guid(request.Guid);
+            var result = _skillRepoService.DelEntity(skillGuid);
+            if (result)
+                _eventBus.Publish(new DelSkillEvent(skillGuid));
             return Task.FromResult(new DelSkillReply { Result = result });
         }
     }

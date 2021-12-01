@@ -2,6 +2,7 @@
 using EventBus;
 using EventBus.Abstractions;
 using EventBus.Events.ServicesEvents.CompanyEvents;
+using EventBus.Events.ServicesEvents.OfferEvents;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -60,6 +61,9 @@ namespace UserService
             eventBus.Subscribe<AddCompanyEvent, AddCompanyEH>();
             eventBus.Subscribe<DelCompanyEvent, DelCompanyEH>();
             eventBus.Subscribe<JoinToCompanyEvent, JoinToCompanyEH>();
+
+            eventBus.Subscribe<AddOfferEvent, AddOfferEH>();
+            eventBus.Subscribe<DelOfferEvent, DelOfferEH>();
         }
     }
 }

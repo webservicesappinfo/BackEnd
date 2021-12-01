@@ -11,8 +11,12 @@ namespace UserService.Abstractions
     {
         public User GetUserByUIDFB(Guid uidfb);
 
-        public Boolean AddCompany(Guid uidfb, Guid company);
+        public Boolean AddCompany(Guid uidfb, Guid company, String name);
 
         public Boolean DelCompany(Guid uidfb, Guid company);
+
+        public Boolean AddOffer(Guid guid, String Name, Guid masterGuid);
+
+        public Boolean DelOffer(Guid guid, Guid masterGuid);
     }
 }

@@ -24,7 +24,7 @@ namespace UserService.EventHendlers
         {
             Console.WriteLine(@event.CompanyGuid);
             //@event.ResponseReceivedEvent.Set();
-            var user = _userRepoService.AddCompany(@event.MasterGuid, @event.CompanyGuid);
+            var user = _userRepoService.AddCompany(@event.MasterGuid, @event.CompanyGuid, @event.CompanyName);
             return Task.FromResult(0);
         }
     }

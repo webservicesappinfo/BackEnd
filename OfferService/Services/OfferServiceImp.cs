@@ -45,6 +45,7 @@ namespace OfferService.Services
                 reply.Guids.Add(offer.Guid.ToString());
                 reply.Names.Add(offer.Name);
                 reply.MasterNames.Add(offer.MasterName);
+                reply.SkillNames.Add(offer.SkillName);
             }
             return Task.FromResult(reply);
         }

@@ -22,14 +22,14 @@ namespace UserService.Services
             _eventBus = eventBus;
         }        
 
-        public bool AddCompany(Guid uidfb, Guid company)
+        public bool AddCompany(Guid uidfb, Guid company, String name)
         {
             using (var db = new UserContext())
             {
                 var findUser = db.Values.FirstOrDefault(x => x.UIDFB == uidfb);
                 if (findUser == null) return false;
                 if (findUser.Companies.Any(x => x.Guid == company)) return false;
-                findUser.Companies.Add(new Globals.Models.CompanyRef<User>() { RefGuid = company });
+                findUser.Companies.Add(new Globals.Models.CompanyRef<User>() { RefGuid = company, Name = name });
                 db.SaveChanges();
             }
             return true;
@@ -44,6 +44,33 @@ namespace UserService.Services
                 var findCompany = findUser.Companies.FirstOrDefault(x => x.Guid == company);
                 if (findCompany == null) return false;
                 findUser.Companies.Remove(findCompany);
+                db.SaveChanges();
+            }
+            return true;
+        }
+
+        public bool AddOffer(Guid guid, string name, Guid masterGuid)
+        {
+            using (var db = new UserContext())
+            {
+                var findUser = db.Values.FirstOrDefault(x => x.UIDFB == masterGuid);
+                if (findUser == null) return false;
+                if (findUser.Offers.Any(x => x.Guid == guid)) return false;
+                findUser.Offers.Add(new Globals.Models.OfferRef<User>() { RefGuid = guid, Name = name });
+                db.SaveChanges();
+            }
+            return true;
+        }
+
+        public bool DelOffer(Guid guid, Guid masterGuid)
+        {
+            using (var db = new UserContext())
+            {
+                var findUser = db.Values.FirstOrDefault(x => x.UIDFB == masterGuid);
+                if (findUser == null) return false;
+                var findoffer = findUser.Offers.FirstOrDefault(x => x.Guid == guid);
+                if (findoffer == null) return false;
+                findUser.Offers.Remove(findoffer);
                 db.SaveChanges();
             }
             return true;

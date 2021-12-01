@@ -64,7 +64,7 @@ namespace CompanyService.Services
             var masterGuid = new Guid(request.UserGuid);
             reply.Result = _companyRepoService.JoinToCompany(companyGuid, masterGuid);
             if(reply.Result)
-                _eventBus.Publish(new JoinToCompanyEvent(companyGuid, masterGuid));
+                _eventBus.Publish(new JoinToCompanyEvent(companyGuid, masterGuid, request.CompanyName));
             return Task.FromResult(reply);
         }
         public override Task<UpdateCompanyReply> UpdateCompany(UpdateCompanyRequest request, ServerCallContext context)

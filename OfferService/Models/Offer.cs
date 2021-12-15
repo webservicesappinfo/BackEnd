@@ -12,8 +12,10 @@ namespace OfferService.Models
 
         public String Description { get; set; }
 
+        public Guid MasterGuid { get; set; }
         public String MasterName { get; set; }
 
+        public Guid SkillGuid { get; set; }
         public String SkillName { get; set; }
 
     }

@@ -4,6 +4,8 @@ using Microsoft.Extensions.Logging;
 using OfferService.Abstractions;
 using OfferService.Protos;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace OfferService.Services
@@ -23,7 +25,14 @@ namespace OfferService.Services
 
         public override Task<AddOfferReply> AddOffer(AddOfferRequest request, ServerCallContext context)
         {
-            var offer = new Models.Offer() { Name = request.Name, MasterName = request.MasterName, SkillName = request.SkillName };
+            var offer = new Models.Offer() 
+            { 
+                Name = request.Name, 
+                MasterGuid = new Guid(request.MasterGuid),
+                MasterName = request.MasterName,
+                SkillGuid= new Guid(request.SkillGuid),
+                SkillName = request.SkillName 
+            };
             var result = _offerRepoService.AddEntity(offer);
             /*if (result)
                 _eventBus.Publish(new AddSkillEvent(company.Name, company.Guid, company.User));*/
@@ -38,15 +47,23 @@ namespace OfferService.Services
         public override Task<GetOffersReply> GetOffers(GetOffersRequest request, ServerCallContext context)
         {
             var offers = _offerRepoService.GetEntities();
-            var reply = new GetOffersReply();
+            var reply = ConvertOffersToReply(offers);
+            return Task.FromResult(reply);
+        }
 
-            foreach (var offer in offers)
-            {
-                reply.Guids.Add(offer.Guid.ToString());
-                reply.Names.Add(offer.Name);
-                reply.MasterNames.Add(offer.MasterName);
-                reply.SkillNames.Add(offer.SkillName);
-            }
+        public override Task<GetOffersReply> GetOffersByMaster(GetOffersByMasterRequest request, ServerCallContext context)
+        {
+            var masterGuid = new Guid(request.MasterGuid);
+            var offers = _offerRepoService.GetEntities();
+            var reply = ConvertOffersToReply(offers.Where(x=>x.MasterGuid == masterGuid).ToList());
+            return Task.FromResult(reply);
+        }
+
+        public override Task<GetOffersReply> GetOffersBySkill(GetOffersBySkillRequest request, ServerCallContext context)
+        {
+            var skillGuid = new Guid(request.SkillGuid);
+            var offers = _offerRepoService.GetEntities();
+            var reply = ConvertOffersToReply(offers.Where(x => x.SkillGuid == skillGuid).ToList());
             return Task.FromResult(reply);
         }
 
@@ -59,6 +76,21 @@ namespace OfferService.Services
         {
             var result = _offerRepoService.DelEntity(new Guid(request.Guid));
             return Task.FromResult(new DelOfferReply { Result = result });
+        }
+
+        private GetOffersReply ConvertOffersToReply(List<Models.Offer> offers)
+        {
+            var reply = new GetOffersReply();
+            foreach (var offer in offers)
+            {
+                reply.Guids.Add(offer.Guid.ToString());
+                reply.Names.Add(offer.Name);
+                reply.MasterGuids.Add(offer.MasterGuid.ToString());
+                reply.MasterNames.Add(offer.MasterName);
+                reply.SkillGuids.Add(offer.SkillGuid.ToString());
+                reply.SkillNames.Add(offer.SkillName);
+            }
+            return reply;
         }
     }
 }

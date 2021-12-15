@@ -60,7 +60,7 @@ namespace MobileApiGetway.Services
             });*/
 
             var reply = _userClient.AddUser(request);
-            return Task.FromResult(new AddUserReply() { Result = reply.Result});
+            return Task.FromResult(new AddUserReply() { Result = reply.Result });
         }
         public override Task<DelUserReply> ApiDelUser(DelUserRequest request, ServerCallContext context)
         {
@@ -157,20 +157,16 @@ namespace MobileApiGetway.Services
 
         #region OfferService
         public override Task<AddOfferReply> ApiAddOffer(AddOfferRequest request, ServerCallContext context)
-        {
-            var reply = _offerClient.AddOffer(request);
-            return Task.FromResult(reply);
-        }
-        public override Task<GetOffersReply> ApiGetOffers(GetOffersRequest request, ServerCallContext context)
-        {
-            var reply = _offerClient.GetOffers(request);
-            return Task.FromResult(reply);
-        }
+            => Task.FromResult(_offerClient.AddOffer(request));
+
+        public override Task<GetOffersReply> ApiGetOffersByMaster(GetOffersByMasterRequest request, ServerCallContext context)
+            => Task.FromResult(_offerClient.GetOffersByMaster(request));
+
+        public override Task<GetOffersReply> ApiGetOffersBySkill(GetOffersBySkillRequest request, ServerCallContext context)
+            => Task.FromResult(_offerClient.GetOffersBySkill(request));
+
         public override Task<DelOfferReply> ApiDelOffer(DelOfferRequest request, ServerCallContext context)
-        {
-            var reply = _offerClient.DelOffer(request);
-            return Task.FromResult(reply);
-        }
+            => Task.FromResult(_offerClient.DelOffer(request));
         #endregion
 
         #region OrderService
@@ -213,23 +209,23 @@ namespace MobileApiGetway.Services
         public override Task<ApiGetUserLocationReply> ApiGetUserLocation(ApiGetUserLocationRequest request, ServerCallContext context)
         {
             var reply = _locationClient.GetUserLocation(new GetUserLocationRequest() { Guid = request.Guid });
-            return Task.FromResult(new ApiGetUserLocationReply() 
-            { 
-                ForGuid = reply.ForGuid, 
-                Lat = reply.Lat, 
+            return Task.FromResult(new ApiGetUserLocationReply()
+            {
+                ForGuid = reply.ForGuid,
+                Lat = reply.Lat,
                 Lng = reply.Lng
             });
         }
 
         public override Task<ApiSetUserLocationReply> ApiSetUserLocation(ApiSetUserLocationRequest request, ServerCallContext context)
         {
-            var reply = _locationClient.SetUserLocation(new SetUserLocationRequest() 
-            { 
-                ForGuid = request.ForGuid, 
-                Lat = request.Lat, 
+            var reply = _locationClient.SetUserLocation(new SetUserLocationRequest()
+            {
+                ForGuid = request.ForGuid,
+                Lat = request.Lat,
                 Lng = request.Lng
             });
-            return Task.FromResult(new ApiSetUserLocationReply() { Result = reply.IsSet});
+            return Task.FromResult(new ApiSetUserLocationReply() { Result = reply.IsSet });
         }
         #endregion
     }

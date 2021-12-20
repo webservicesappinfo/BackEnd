@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using OrderService.Abstractions;
 using OrderService.Protos;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace OrderService.Services
@@ -26,8 +27,11 @@ namespace OrderService.Services
             var offer = new Models.Order()
             {
                 Name = request.Name,
+                UserGuid = new Guid(request.UserGuid),
                 UserName = request.UserName,
+                MasterGuid = new Guid(request.MasterGuid),
                 MasterName = request.MasterName,
+                SkillGuid = new Guid(request.SkillGuid),
                 SkillName = request.SkillName
             };
             var result = _orderRepoService.AddEntity(offer);
@@ -43,7 +47,10 @@ namespace OrderService.Services
 
         public override Task<GetOrdersReply> GetOrders(GetOrdersRequest request, ServerCallContext context)
         {
-            var orders = _orderRepoService.GetEntities();
+            var userGuid = new Guid(request.UserGuid);
+            var orders = request.IsMaster ? _orderRepoService.GetEntities().Where(x => x.MasterGuid == userGuid)
+                : _orderRepoService.GetEntities().Where(x => x.UserGuid == userGuid);
+
             var reply = new GetOrdersReply();
 
             foreach (var order in orders)
@@ -51,7 +58,11 @@ namespace OrderService.Services
                 reply.Guids.Add(order.Guid.ToString());
                 reply.Names.Add(order.Name);
                 reply.UserNames.Add(order.UserName);
+                reply.UserGuids.Add(order.UserGuid.ToString());
                 reply.MasterNames.Add(order.MasterName);
+                reply.MasterGuids.Add(order.MasterGuid.ToString());
+                reply.SkillNames.Add(order.SkillName);
+                reply.SkillGuids.Add(order.SkillGuid.ToString());
             }
             return Task.FromResult(reply);
         }

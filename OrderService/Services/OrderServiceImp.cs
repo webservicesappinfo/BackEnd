@@ -59,6 +59,7 @@ namespace OrderService.Services
             {
                 reply.Guids.Add(order.Guid.ToString());
                 reply.Names.Add(order.Name);
+                reply.OfferGuids.Add(order.OfferGuid.ToString());
                 reply.UserNames.Add(order.UserName);
                 reply.UserGuids.Add(order.UserGuid.ToString());
                 reply.MasterNames.Add(order.MasterName);

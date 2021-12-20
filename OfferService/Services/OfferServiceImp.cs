@@ -54,8 +54,11 @@ namespace OfferService.Services
         public override Task<GetOffersReply> GetOffersByMaster(GetOffersByMasterRequest request, ServerCallContext context)
         {
             var masterGuid = new Guid(request.MasterGuid);
-            var offers = _offerRepoService.GetEntities();
-            var reply = ConvertOffersToReply(offers.Where(x=> x.Status == Models.OfferStatus.Actived && x.MasterGuid == masterGuid ).ToList());
+            var offers = _offerRepoService.GetEntities().Where(x => x.MasterGuid == masterGuid).ToList();
+            if (!request.ForMaster)
+                offers = offers.Where(x => x.Status == Models.OfferStatus.Actived).ToList();
+
+            var reply = ConvertOffersToReply(offers);
             return Task.FromResult(reply);
         }
 

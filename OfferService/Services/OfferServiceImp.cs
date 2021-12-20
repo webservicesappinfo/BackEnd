@@ -55,7 +55,7 @@ namespace OfferService.Services
         {
             var masterGuid = new Guid(request.MasterGuid);
             var offers = _offerRepoService.GetEntities();
-            var reply = ConvertOffersToReply(offers.Where(x=>x.MasterGuid == masterGuid).ToList());
+            var reply = ConvertOffersToReply(offers.Where(x=> x.Status == Models.OfferStatus.Actived && x.MasterGuid == masterGuid ).ToList());
             return Task.FromResult(reply);
         }
 
@@ -63,7 +63,7 @@ namespace OfferService.Services
         {
             var skillGuid = new Guid(request.SkillGuid);
             var offers = _offerRepoService.GetEntities();
-            var reply = ConvertOffersToReply(offers.Where(x => x.SkillGuid == skillGuid).ToList());
+            var reply = ConvertOffersToReply(offers.Where(x => x.Status == Models.OfferStatus.Actived && x.SkillGuid == skillGuid).ToList());
             return Task.FromResult(reply);
         }
 
@@ -89,6 +89,7 @@ namespace OfferService.Services
                 reply.MasterNames.Add(offer.MasterName);
                 reply.SkillGuids.Add(offer.SkillGuid.ToString());
                 reply.SkillNames.Add(offer.SkillName);
+                reply.Statuses.Add(offer.Status.ToString());
             }
             return reply;
         }

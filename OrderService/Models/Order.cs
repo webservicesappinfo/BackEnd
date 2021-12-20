@@ -9,6 +9,7 @@ namespace OrderService.Models
     public class Order : EntityBase
     {
         public String Name { get; set; }
+        public Guid OfferGuid { get; set; }
         public Guid UserGuid { get; set; }
         public String UserName { get; set; }
         public Guid MasterGuid { get; set; }

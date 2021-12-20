@@ -1,4 +1,5 @@
 ﻿using EventBus.Abstractions;
+using EventBus.Events.ServicesEvents.OrderEvents;
 using Grpc.Core;
 using Microsoft.Extensions.Logging;
 using OrderService.Abstractions;
@@ -24,9 +25,10 @@ namespace OrderService.Services
 
         public override Task<AddOrderReply> AddOrder(AddOrderRequest request, ServerCallContext context)
         {
-            var offer = new Models.Order()
+            var order = new Models.Order()
             {
                 Name = request.Name,
+                OfferGuid = new Guid(request.OfferGuid),
                 UserGuid = new Guid(request.UserGuid),
                 UserName = request.UserName,
                 MasterGuid = new Guid(request.MasterGuid),
@@ -34,9 +36,9 @@ namespace OrderService.Services
                 SkillGuid = new Guid(request.SkillGuid),
                 SkillName = request.SkillName
             };
-            var result = _orderRepoService.AddEntity(offer);
-            /*if (result)
-                _eventBus.Publish(new AddSkillEvent(company.Name, company.Guid, company.User));*/
+            var result = _orderRepoService.AddEntity(order);
+            if (result)
+                _eventBus.Publish(new AddOrderEvent(order.Name, order.Guid, order.OfferGuid));
             return Task.FromResult(new AddOrderReply { Result = result });
         }
 
@@ -63,6 +65,7 @@ namespace OrderService.Services
                 reply.MasterGuids.Add(order.MasterGuid.ToString());
                 reply.SkillNames.Add(order.SkillName);
                 reply.SkillGuids.Add(order.SkillGuid.ToString());
+                reply.Statuses.Add(order.Status.ToString());
             }
             return Task.FromResult(reply);
         }

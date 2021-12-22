@@ -58,6 +58,7 @@ namespace OfferService
 
             var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
             eventBus.Subscribe<AddOrderEvent, AddOrderEH>();
+            eventBus.Subscribe<DelOrderEvent, DelOrderEH>();
         }
     }
 }

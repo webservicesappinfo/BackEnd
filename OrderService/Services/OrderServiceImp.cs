@@ -78,7 +78,11 @@ namespace OrderService.Services
 
         public override Task<DelOrderReply> DelOrder(DelOrderRequest request, ServerCallContext context)
         {
-            var result = _orderRepoService.DelEntity(new Guid(request.Guid));
+            var orderGuid = new Guid(request.Guid);
+            var delOrder = _orderRepoService.GetEntity(orderGuid);
+            var result = _orderRepoService.DelEntity(orderGuid);
+            if (delOrder  != null && result)
+                _eventBus.Publish(new DelOrderEvent(delOrder.Name, delOrder.Guid, delOrder.OfferGuid));
             return Task.FromResult(new DelOrderReply { Result = result });
         }
     }

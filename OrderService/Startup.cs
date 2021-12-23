@@ -2,6 +2,7 @@
 using EventBus;
 using EventBus.Abstractions;
 using EventBus.Events.ServicesEvents.OfferEvents;
+using EventBus.Events.ServicesEvents.UserRepoEvents;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -58,6 +59,7 @@ namespace OrderService
 
             var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
             eventBus.Subscribe<DelOfferEvent, DelOfferEH>();
+            eventBus.Subscribe<DelUserEvent, DelUserEH>();
         }
     }
 }

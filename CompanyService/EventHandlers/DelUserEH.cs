@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CompanyService.EventHendlers
+namespace CompanyService.EventHandlers
 {
     public class DelUserEH : IIntegrationEventHandler<DelUserEvent>
     {

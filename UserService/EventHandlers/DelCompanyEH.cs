@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using UserService.Abstractions;
 
-namespace UserService.EventHendlers
+namespace UserService.EventHandlers
 {
     public class DelCompanyEH : IIntegrationEventHandler<DelCompanyEvent>
     {

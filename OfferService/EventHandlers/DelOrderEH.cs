@@ -5,7 +5,7 @@ using OfferService.Abstractions;
 using System;
 using System.Threading.Tasks;
 
-namespace OfferService.EventHendlers
+namespace OfferService.EventHandlers
 {
     public class DelOrderEH : IIntegrationEventHandler<DelOrderEvent>
     {

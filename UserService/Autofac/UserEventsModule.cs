@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using UserService.EventHendlers;
+using UserService.EventHandlers;
 using Module = Autofac.Module;
 
 namespace UserService.Autofac

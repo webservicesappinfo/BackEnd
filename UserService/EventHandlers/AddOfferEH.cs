@@ -5,7 +5,7 @@ using System;
 using System.Threading.Tasks;
 using UserService.Abstractions;
 
-namespace UserService.EventHendlers
+namespace UserService.EventHandlers
 {
     public class AddOfferEH : IIntegrationEventHandler<AddOfferEvent>
     {

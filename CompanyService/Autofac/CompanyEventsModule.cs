@@ -1,5 +1,5 @@
 ﻿using Autofac;
-using CompanyService.EventHendlers;
+using CompanyService.EventHandlers;
 using EventBus.Abstractions;
 using System;
 using System.Collections.Generic;

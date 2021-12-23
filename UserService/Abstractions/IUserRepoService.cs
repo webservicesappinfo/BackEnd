@@ -17,6 +17,6 @@ namespace UserService.Abstractions
 
         public Boolean AddOffer(Guid guid, String Name, Guid masterGuid);
 
-        public Boolean DelOffer(Guid guid, Guid masterGuid);
+        public Boolean OnDelOffer(Guid guid, Guid masterGuid);
     }
 }

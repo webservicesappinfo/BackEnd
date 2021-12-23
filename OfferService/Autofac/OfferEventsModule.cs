@@ -1,6 +1,6 @@
 ﻿using Autofac;
 using EventBus.Abstractions;
-using OfferService.EventHendlers;
+using OfferService.EventHandlers;
 using System.Reflection;
 using Module = Autofac.Module;
 

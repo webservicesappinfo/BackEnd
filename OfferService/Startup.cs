@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using OfferService.Abstractions;
 using OfferService.Autofac;
-using OfferService.EventHendlers;
+using OfferService.EventHandlers;
 using OfferService.Services;
 using System;
 using System.Collections.Generic;
@@ -59,6 +59,7 @@ namespace OfferService
             var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
             eventBus.Subscribe<AddOrderEvent, AddOrderEH>();
             eventBus.Subscribe<DelOrderEvent, DelOrderEH>();
+
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using Autofac;
 using EventBus;
+using EventBus.Abstractions;
+using EventBus.Events.ServicesEvents.OfferEvents;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -7,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using OrderService.Abstractions;
 using OrderService.Autofac;
+using OrderService.EventHandlers;
 using OrderService.Services;
 using System;
 using System.Collections.Generic;
@@ -52,6 +55,9 @@ namespace OrderService
                     await context.Response.WriteAsync("Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
                 });
             });
+
+            var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
+            eventBus.Subscribe<DelOfferEvent, DelOfferEH>();
         }
     }
 }

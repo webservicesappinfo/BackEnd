@@ -1,7 +1,7 @@
 ﻿using Autofac;
 using CompanyService.Abstractions;
 using CompanyService.Autofac;
-using CompanyService.EventHendlers;
+using CompanyService.EventHandlers;
 using CompanyService.Services;
 using EventBus;
 using EventBus.Abstractions;

@@ -7,24 +7,24 @@ using System.Linq;
 using System.Threading.Tasks;
 using UserService.Abstractions;
 
-namespace UserService.EventHendlers
+namespace UserService.EventHandlers
 {
-    public class AddCompanyEH : IIntegrationEventHandler<AddCompanyEvent>
+    public class JoinToCompanyEH : IIntegrationEventHandler<JoinToCompanyEvent>
     {
-        private readonly ILogger<AddCompanyEvent> _logger;
+        private readonly ILogger<JoinToCompanyEvent> _logger;
         private readonly IUserRepoService _userRepoService;
 
-        public AddCompanyEH(ILogger<AddCompanyEvent> logger, IUserRepoService userRepoService)
+        public JoinToCompanyEH(ILogger<JoinToCompanyEvent> logger, IUserRepoService userRepoService)
         {
             _logger = logger;
             _userRepoService = userRepoService;
         }
 
-        public Task Handle(AddCompanyEvent @event)
+        public Task Handle(JoinToCompanyEvent @event)
         {
-            Console.WriteLine(@event.Name);
+            Console.WriteLine(@event.CompanyGuid);
             //@event.ResponseReceivedEvent.Set();
-            _userRepoService.AddCompany(@event.Owner, @event.Guid, @event.Name);
+            var user = _userRepoService.AddCompany(@event.MasterGuid, @event.CompanyGuid, @event.CompanyName);
             return Task.FromResult(0);
         }
     }

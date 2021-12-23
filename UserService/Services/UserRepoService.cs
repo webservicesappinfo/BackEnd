@@ -62,7 +62,7 @@ namespace UserService.Services
             return true;
         }
 
-        public bool DelOffer(Guid guid, Guid masterGuid)
+        public bool OnDelOffer(Guid guid, Guid masterGuid)
         {
             using (var db = new UserContext())
             {

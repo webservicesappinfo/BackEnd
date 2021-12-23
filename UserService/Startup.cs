@@ -14,7 +14,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using UserService.Abstractions;
 using UserService.Autofac;
-using UserService.EventHendlers;
+using UserService.EventHandlers;
 using UserService.Services;
 
 namespace UserService

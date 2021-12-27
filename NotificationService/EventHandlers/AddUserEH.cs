@@ -25,10 +25,10 @@ namespace NotificationService.EventHandlers
         {
             Console.WriteLine(@event.Name);
             //@event.ResponseReceivedEvent.Set();
-            _notificationRepoService.AddUser(new NotificationUser()
+            _notificationRepoService.AddEntity(new NotificationUser()
             {
                 Name = @event.Name,
-                Guid = @event.Guid,
+                UIDFB = new Guid(@event.Guid),
                 Token = @event.Token
             });
             return Task.FromResult(0);

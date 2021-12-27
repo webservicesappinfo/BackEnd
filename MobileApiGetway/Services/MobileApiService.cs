@@ -2,6 +2,7 @@
 using Grpc.Core;
 using Grpc.Net.Client;
 using Grpc.Net.ClientFactory;
+using NotificationService.Protos;
 using OfferService.Protos;
 using OrderService.Protos;
 using SkillService.Protos;
@@ -21,8 +22,8 @@ namespace MobileApiGetway.Services
         private readonly Skill.SkillClient _skillClient;
         private readonly Offer.OfferClient _offerClient;
         private readonly Order.OrderClient _orderClient;
-
         private readonly Notification.NotificationClient _notificationClient;
+
         //private readonly UserRepo.UserRepoClient _userRepoClient;
         private readonly LocationRepo.LocationRepoClient _locationClient;
 
@@ -43,8 +44,8 @@ namespace MobileApiGetway.Services
             _skillClient = skillClient;
             _offerClient = offerClient;
             _orderClient = orderClient;
-
             _notificationClient = notificationClient;
+
             //_userRepoClient = userRepoClient;
             _locationClient = locationClient;
         }
@@ -188,20 +189,15 @@ namespace MobileApiGetway.Services
         #endregion
 
         #region NotificationService
-        public override Task<ApiFindLastMessagesReply> ApiFindLastMessage(ApiFindLastMessageRequest request, ServerCallContext context)
+        public override Task<FindLastGetMessageReply> ApiFindLastMessage(FindLastGetMessageRequest request, ServerCallContext context)
         {
-            var reply = _notificationClient.FindLastGetMessage(new FindLastGetMessageRequest() { ForGuid = request.ForGuid, FromGuid = request.FromGuid });
-            return Task.FromResult(new ApiFindLastMessagesReply() { Msg = reply.Msg });
+            var reply = _notificationClient.FindLastGetMessage(request);
+            return Task.FromResult(reply);
         }
-        public override Task<ApiSendMessageReply> ApiSendMessage(ApiSendMessageRequest request, ServerCallContext context)
+        public override Task<SendNotificationReply> ApiSendMessage(SendNotificationRequest request, ServerCallContext context)
         {
-            var reply = _notificationClient.SendNotification(new SendNotificationRequest()
-            {
-                ForGuid = request.ForGuid,
-                FromGuid = request.FromGuid,
-                Msg = request.Msg
-            });
-            return Task.FromResult(new ApiSendMessageReply() { Status = reply.Status });
+            var reply = _notificationClient.SendNotification(request);
+            return Task.FromResult(reply);
         }
         #endregion
 

@@ -34,7 +34,7 @@ namespace UserService.Services
             };
             var result = _userRepoService.AddEntity(user);
             if(result)
-                _eventBus.Publish(new AddUserEvent(user.Name, user.Guid.ToString(), user.Token));
+                _eventBus.Publish(new AddUserEvent(user.Name, user.UIDFB.ToString(), user.Token));
             return Task.FromResult(new AddUserReply { Result = result });
         }
 

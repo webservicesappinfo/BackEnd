@@ -6,6 +6,8 @@ services:
     build:
       context: .
       dockerfile: MobileApiGetway/Dockerfile
+    depends_on:
+      - "rabbitmq"
     ports:
     - "6000:80"
     networks:
@@ -15,6 +17,8 @@ services:
     build:
       context: .
       dockerfile: UserService/Dockerfile
+    depends_on:
+      - "rabbitmq"
     networks:
       - some-net
     ports:
@@ -24,6 +28,8 @@ services:
     build:
       context: .
       dockerfile: CompanyService/Dockerfile
+    depends_on:
+      - "rabbitmq"
     networks:
       - some-net
     ports:
@@ -33,6 +39,8 @@ services:
     build:
       context: .
       dockerfile: SkillService/Dockerfile
+    depends_on:
+      - "rabbitmq"
     networks:
       - some-net
     ports:
@@ -42,6 +50,8 @@ services:
     build:
       context: .
       dockerfile: OfferService/Dockerfile
+    depends_on:
+      - "rabbitmq"
     networks:
       - some-net
     ports:
@@ -51,10 +61,23 @@ services:
     build:
       context: .
       dockerfile: OrderService/Dockerfile
+    depends_on:
+      - "rabbitmq"
     networks:
       - some-net
     ports:
       - "6005:80"
+  notificationservice:
+    image: ${DOCKER_REGISTRY-}notificationservice
+    build:
+      context: .
+      dockerfile: NotificationService/Dockerfile
+    depends_on:
+      - "rabbitmq"
+    networks:
+      - some-net
+    ports:
+        - "6006:80"
   #userreposervice:
   #  image: ${DOCKER_REGISTRY-}userreposervice
   #  build:
@@ -64,17 +87,6 @@ services:
   #    - some-net
   #  ports:
   #    - "6001:80"
-  #notificationservice:
-  #  image: ${DOCKER_REGISTRY-}notificationservice
-  #  build:
-  #    context: .
-  #    dockerfile: NotificationService/Dockerfile
-  #  depends_on:
-  #    - "rabbitmq"
-  #  networks:
-  #    - some-net
-  #  ports:
-  #      - "6002:80"
   #locationservice:
   #  image: ${DOCKER_REGISTRY-}locationservice
   #  build:

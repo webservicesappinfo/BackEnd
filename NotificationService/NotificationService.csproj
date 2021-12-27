@@ -11,30 +11,33 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Protobuf Include="ClientProtos\user_repo.proto" GrpcServices="Client" />
-    <Protobuf Include="Protos\greet.proto" GrpcServices="Server" />
-    <Protobuf Include="Protos\notification.proto" GrpcServices="Server" />
+    <Protobuf Include="..\..\Protos\notification.proto">
+      <Link>Protos\notification.proto</Link>
+    </Protobuf>
   </ItemGroup>
 
   <ItemGroup>
-      
-    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
-      
-    <PackageReference Include="FirebaseAdmin" Version="2.2.0" />
-    <PackageReference Include="Google.Protobuf" Version="3.17.3" />
-    <PackageReference Include="Grpc.AspNetCore" Version="2.38.0" />
-    <PackageReference Include="Grpc.Net.Client" Version="2.38.0" />
-    <PackageReference Include="Grpc.Tools" Version="2.38.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.14" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.7" />
-    <PackageReference Include="RabbitMQ.Client" Version="6.2.2" />
+	  <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
+	  <PackageReference Include="FirebaseAdmin" Version="2.2.0" />
+	  <PackageReference Include="Google.Protobuf" Version="3.19.1" />
+	  <PackageReference Include="Grpc.AspNetCore" Version="2.40.0" />
+	  <PackageReference Include="Grpc.Net.Client" Version="2.40.0" />
+	  <PackageReference Include="Grpc.Tools" Version="2.41.1">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+	  <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.11.1" />
+	  <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.10" />
+	  <PackageReference Include="RabbitMQ.Client" Version="6.2.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\EventBus\EventBus.csproj" />
+    <ProjectReference Include="..\Globals\Globals.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Protos\" />
   </ItemGroup>
 
 </Project>

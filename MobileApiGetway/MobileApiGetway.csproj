@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <Protobuf Include="ClientProtos\location_repo.proto" GrpcServices="Client" />
-    <Protobuf Include="ClientProtos\notification.proto" GrpcServices="Client" />
+    <Protobuf Include="..\..\Protos\notification.proto" GrpcServices="Client" />
     <Protobuf Include="..\..\Protos\user.proto" GrpcServices="Client" />
     <Protobuf Include="..\..\Protos\company.proto" GrpcServices="Client" />
 	<Protobuf Include="..\..\Protos\skill.proto" GrpcServices="Client" />

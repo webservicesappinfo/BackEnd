@@ -3,6 +3,7 @@ using Grpc.Net.Client;
 using Microsoft.Extensions.Logging;
 using NotificationService;
 using NotificationService.Abstractions;
+using NotificationService.Protos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace NotificationService.Services
 {
+    //public class NotificationServiceImp { }
     public class NotificationServiceImp : Notification.NotificationBase
     {
         private readonly ILogger<NotificationServiceImp> _logger;
@@ -31,7 +33,7 @@ namespace NotificationService.Services
             return Task.FromResult(new FindLastGetMessageReply());
         }
 
-        public override Task<SendNotificationReply> SendNotification(SendNotificationRequest request, ServerCallContext context)
+        /*public override Task<SendNotificationReply> SendNotification(SendNotificationRequest request, ServerCallContext context)
         {
             var reply = new SendNotificationReply() { Status = false };
             var forUser = _notificationRepoService.GetUser(request.ForGuid);
@@ -46,6 +48,6 @@ namespace NotificationService.Services
 
             reply.Status = true;
             return Task.FromResult(reply);
-        }
+        }*/
     }
 }

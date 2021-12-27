@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MobileApiGetway.Services;
+using NotificationService;
+using NotificationService.Protos;
 using OfferService.Protos;
 using OrderService.Protos;
 using SkillService.Protos;
@@ -32,9 +34,9 @@ namespace MobileApiGetway
             services.AddGrpcClient<Skill.SkillClient>(o => o.Address = new Uri("http://skillservice"));
             services.AddGrpcClient<Offer.OfferClient>(o => o.Address = new Uri("http://offerservice"));
             services.AddGrpcClient<Order.OrderClient>(o => o.Address = new Uri("http://orderservice"));
+            services.AddGrpcClient<Notification.NotificationClient>(o => o.Address = new Uri("http://notificationservice"));
 
             //services.AddGrpcClient<UserRepo.UserRepoClient>(o => o.Address = new Uri("http://userreposervice"));
-            services.AddGrpcClient<Notification.NotificationClient>(o => o.Address = new Uri("http://notificationservice"));
             services.AddGrpcClient<LocationRepo.LocationRepoClient>(o => o.Address = new Uri("http://locationservice"));
         }
 

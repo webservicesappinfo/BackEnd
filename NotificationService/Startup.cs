@@ -66,7 +66,7 @@ namespace NotificationService
 
             var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
             eventBus.Subscribe<AddUserEvent, AddUserEH>();
-            eventBus.Subscribe<TestBusEvent, TestBusEventHandler>();
+            eventBus.Subscribe<DelUserEvent, DelUserEH>();
         }
     }
 }

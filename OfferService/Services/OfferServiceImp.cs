@@ -1,4 +1,5 @@
 ﻿using EventBus.Abstractions;
+using EventBus.Events.ServicesEvents.OfferEvents;
 using Grpc.Core;
 using Microsoft.Extensions.Logging;
 using OfferService.Abstractions;
@@ -77,7 +78,13 @@ namespace OfferService.Services
 
         public override Task<DelOfferReply> DelOffer(DelOfferRequest request, ServerCallContext context)
         {
-            var result = _offerRepoService.DelEntity(new Guid(request.Guid));
+            var offerGuid = new Guid(request.Guid);
+            var offer = _offerRepoService.GetEntity(offerGuid);
+            if (offer == null)
+                return Task.FromResult(new DelOfferReply { Result = false });
+            var result = _offerRepoService.DelEntity(offerGuid);
+            if (result)
+                _eventBus.Publish(new DelOfferEvent(offer.Name, offer.Guid, offer.MasterGuid));
             return Task.FromResult(new DelOfferReply { Result = result });
         }
 

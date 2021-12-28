@@ -9,9 +9,10 @@ namespace NotificationService.Abstractions
 {
     public interface INotificationRepoService : IRepoServiceBase<NotificationUser>
     {
-        public string GetLastGetMessage(string userGuid);
-        public void SetLastGetMessage(string userGuid, string msg);
-        public string GetLastSendMessage(string userGuid);
-        public void SetLastSendMessage(string userGuid, string msg);
+        NotificationUser GetUserByUIDFB(Guid uidfb);
+        string GetLastGetMessage(string userGuid);
+        void SetLastGetMessage(string userGuid, string msg);
+        string GetLastSendMessage(string userGuid);
+        void SetLastSendMessage(string userGuid, string msg);
     }
 }

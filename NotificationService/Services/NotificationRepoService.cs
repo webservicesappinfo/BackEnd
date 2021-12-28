@@ -15,6 +15,12 @@ namespace NotificationService.Services
         private readonly ILogger<NotificationRepoService> _logger;
         public NotificationRepoService(ILogger<NotificationRepoService> logger) : base(logger) { _logger = logger; }
 
+        public NotificationUser GetUserByUIDFB(Guid uidfb)
+        {
+            using (var db = new NotificationContext())
+                return db.Values.FirstOrDefault(x => x.UIDFB == uidfb);
+        }
+
         public string GetLastGetMessage(string userGuid)
         {
             /*using (var db = new NotificationContext())

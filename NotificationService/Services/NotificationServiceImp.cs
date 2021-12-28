@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 
 namespace NotificationService.Services
 {
-    //public class NotificationServiceImp { }
     public class NotificationServiceImp : Notification.NotificationBase
     {
         private readonly ILogger<NotificationServiceImp> _logger;
@@ -33,21 +32,21 @@ namespace NotificationService.Services
             return Task.FromResult(new FindLastGetMessageReply());
         }
 
-        /*public override Task<SendNotificationReply> SendNotification(SendNotificationRequest request, ServerCallContext context)
+        public override Task<SendNotificationReply> SendNotification(SendNotificationRequest request, ServerCallContext context)
         {
             var reply = new SendNotificationReply() { Status = false };
-            var forUser = _notificationRepoService.GetUser(request.ForGuid);
-            var fromUser = _notificationRepoService.GetUser(request.FromGuid);
+            var forUser = _notificationRepoService.GetUserByUIDFB(new Guid(request.ForGuid));
+            var fromUser = _notificationRepoService.GetUserByUIDFB(new Guid(request.FromGuid));
 
             if (forUser == null || fromUser == null) return Task.FromResult(reply);
 
-            _notificationRepoService.SetLastSendMessage(fromUser.Guid, $"{forUser.Guid}:{request.Msg}");
-            _notificationRepoService.SetLastGetMessage(forUser.Guid, $"{fromUser.Guid}:{request.Msg}");
+            /*_notificationRepoService.SetLastSendMessage(fromUser.Guid, $"{forUser.Guid}:{request.Msg}");
+            _notificationRepoService.SetLastGetMessage(forUser.Guid, $"{fromUser.Guid}:{request.Msg}");*/
 
             _messaging.SendNotification(forUser.Token, "NewMsg", request.Msg);
 
             reply.Status = true;
             return Task.FromResult(reply);
-        }*/
+        }
     }
 }

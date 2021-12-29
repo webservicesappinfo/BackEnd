@@ -17,12 +17,12 @@
   </ItemGroup>
 
   <ItemGroup>
-	  <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
+	  <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.2.0" />
 	  <PackageReference Include="FirebaseAdmin" Version="2.2.0" />
 	  <PackageReference Include="Google.Protobuf" Version="3.19.1" />
-	  <PackageReference Include="Grpc.AspNetCore" Version="2.40.0" />
-	  <PackageReference Include="Grpc.Net.Client" Version="2.40.0" />
-	  <PackageReference Include="Grpc.Tools" Version="2.41.1">
+	  <PackageReference Include="Grpc.AspNetCore" Version="2.41.0" />
+	  <PackageReference Include="Grpc.Net.Client" Version="2.41.0" />
+	  <PackageReference Include="Grpc.Tools" Version="2.42.0">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	  </PackageReference>

@@ -17,7 +17,7 @@ namespace NotificationService.Services
         {
             var app = FirebaseApp.Create(new AppOptions()
             {
-                Credential = GoogleCredential.FromFile("serviceAccountKey.json")
+                Credential = GoogleCredential.FromFile("beautylinkKey.json")
                 .CreateScoped("https://www.googleapis.com/auth/firebase.messaging")
             });
             _messaging = FirebaseMessaging.GetMessaging(app);
@@ -35,7 +35,11 @@ namespace NotificationService.Services
 
         public async Task SendNotification(string token, string title, string body)
         {
-            var result = await _messaging.SendAsync(CreateNotification(title, body, token));
+            try
+            {
+                var result = await _messaging.SendAsync(CreateNotification(title, body, token));
+            }
+            catch (Exception ex) { }
         }
     }
 }

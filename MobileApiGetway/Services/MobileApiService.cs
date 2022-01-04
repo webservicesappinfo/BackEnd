@@ -160,6 +160,9 @@ namespace MobileApiGetway.Services
         public override Task<AddOfferReply> ApiAddOffer(AddOfferRequest request, ServerCallContext context)
             => Task.FromResult(_offerClient.AddOffer(request));
 
+        public override Task<GetOffersReply> ApiGetOffers(GetOffersRequest request, ServerCallContext context)
+            => Task.FromResult(_offerClient.GetOffers(request));
+
         public override Task<GetOffersReply> ApiGetOffersByMaster(GetOffersByMasterRequest request, ServerCallContext context)
             => Task.FromResult(_offerClient.GetOffersByMaster(request));
 

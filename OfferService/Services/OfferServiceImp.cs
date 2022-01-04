@@ -48,6 +48,24 @@ namespace OfferService.Services
         public override Task<GetOffersReply> GetOffers(GetOffersRequest request, ServerCallContext context)
         {
             var offers = _offerRepoService.GetEntities();
+            if (String.IsNullOrEmpty(request.MasterGuid))
+            {
+                var clientGuid = new Guid(request.ClientGuid);
+                offers = offers.Where(x => x.MasterGuid != clientGuid).ToList();
+            }
+            else
+            {
+                var masterGuid = new Guid(request.MasterGuid);
+                offers = offers.Where(x => x.MasterGuid == masterGuid).ToList();
+            }
+            if(!String.IsNullOrEmpty(request.SkillGuid))
+            {
+                var skillGuid = new Guid(request.SkillGuid);
+                offers = offers.Where(x => x.SkillGuid == skillGuid).ToList();
+            }
+            if (!request.ForMaster)
+                offers = offers.Where(x => x.Status == Models.OfferStatus.Actived).ToList();
+
             var reply = ConvertOffersToReply(offers);
             return Task.FromResult(reply);
         }

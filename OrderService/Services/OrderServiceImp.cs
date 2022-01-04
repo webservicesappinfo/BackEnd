@@ -81,9 +81,18 @@ namespace OrderService.Services
             var orderGuid = new Guid(request.Guid);
             var delOrder = _orderRepoService.GetEntity(orderGuid);
             var result = _orderRepoService.DelEntity(orderGuid);
-            if (delOrder  != null && result)
+            if (delOrder != null && result)
                 _eventBus.Publish(new DelOrderEvent(delOrder.Name, delOrder.Guid, delOrder.OfferGuid));
             return Task.FromResult(new DelOrderReply { Result = result });
         }
+
+        public override Task<AcceptedOrderReply> AcceptedOrder(AcceptedOrderRequest request, ServerCallContext context)
+        {
+            var order = _orderRepoService.SetOrderStatus(new Guid(request.Guid), Models.OrderStatus.Accepted);
+            return Task.FromResult(new AcceptedOrderReply { Result = order != null, Name = order.Name, ClientGuid = order?.UserGuid.ToString(), MasterGuid = order?.MasterGuid.ToString() });
+        }
+
+        public override Task<ExecutedOrderReply> ExecutedOrder(ExecutedOrderRequest request, ServerCallContext context)
+            => Task.FromResult(new ExecutedOrderReply { Result = _orderRepoService.SetOrderStatus(new Guid(request.Guid), Models.OrderStatus.Executed) != null });
     }
 }

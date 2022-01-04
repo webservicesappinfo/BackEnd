@@ -18,5 +18,18 @@ namespace OrderService.Services
                 DelEntity(order.Guid);
             return true;
         }
+
+        public Order SetOrderStatus(Guid orderGuid, OrderStatus status)
+        {
+            Order order = null;
+            using (var db = new OrderContext())
+            {
+                order = db.Values.FirstOrDefault(x => x.Guid == orderGuid);
+                if (order == null) return order;
+                order.Status = status;
+                db.SaveChanges();
+            }
+            return order;
+        }
     }
 }

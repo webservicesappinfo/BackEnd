@@ -189,6 +189,18 @@ namespace MobileApiGetway.Services
             var reply = _orderClient.DelOrder(request);
             return Task.FromResult(reply);
         }
+        public override Task<AcceptedOrderReply> ApiAcceptedOrder(AcceptedOrderRequest request, ServerCallContext context)
+        {
+            var reply = _orderClient.AcceptedOrder(request);
+            if (reply.Result)
+                _notificationClient.SendNotification(new SendNotificationRequest() { FromGuid = reply.MasterGuid, ForGuid = reply.ClientGuid, Msg = $"Odrer {reply.Name} accepted" });
+            return Task.FromResult(reply);
+        }
+        public override Task<ExecutedOrderReply> ApiExecutedOrder(ExecutedOrderRequest request, ServerCallContext context)
+        {
+            var reply = _orderClient.ExecutedOrder(request);
+            return Task.FromResult(reply);
+        }
         #endregion
 
         #region NotificationService

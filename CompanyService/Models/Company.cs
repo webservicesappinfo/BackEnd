@@ -10,7 +10,8 @@ namespace CompanyService.Models
     public class Company : EntityBase
     {
         public string Name { get; set; }
-        public Guid User { get; set; }
+        public Guid OwnerGuid { get; set; }
+        public String OwnerName { get; set; }
         public List<MasterRef<Company>> Masters { get; } = new List<MasterRef<Company>>();
         public List<OfferRef<Company>> Offers { get; } = new List<OfferRef<Company>>(); 
     }

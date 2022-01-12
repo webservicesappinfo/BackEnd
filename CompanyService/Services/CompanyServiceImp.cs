@@ -28,6 +28,17 @@ namespace CompanyService.Services
 
         public override Task<GetCompanyReply> GetCompany(GetCompanyRequest request, ServerCallContext context)
         {
+            var reply = new GetCompanyReply();
+            var company = _companyRepoService.GetEntity(new Guid(request.Guid), "Masters");
+            if (company == null) return Task.FromResult(reply);
+            reply.Guid = company.Guid.ToString();
+            reply.Name = company.Name;
+            reply.OwnerGuid = company.OwnerGuid.ToString();
+            reply.OwnerName = company.OwnerName;
+
+            foreach (var master in company.Masters)
+                reply.MasterGuids.Add(master.Guid.ToString());
+
             return base.GetCompany(request, context);
         }
         public override Task<GetCompaniesReply> GetCompanies(GetCompaniesRequest request, ServerCallContext context)
@@ -38,11 +49,11 @@ namespace CompanyService.Services
             switch (request.Type.ToLower())
             {
                 case "owner":
-                    fitCompanies = totalCompanies.Where(x => x.User == guid).ToList(); break;
+                    fitCompanies = totalCompanies.Where(x => x.OwnerGuid == guid).ToList(); break;
                 case "contains":
                     fitCompanies = totalCompanies.Where(x => x.Masters.Any(m => m.RefGuid == guid)).ToList(); break;
                 case "canbecontains":
-                    fitCompanies = totalCompanies.Where(x => x.User != guid && !x.Masters.Any(x => x.RefGuid == guid)).ToList(); break;
+                    fitCompanies = totalCompanies.Where(x => x.OwnerGuid != guid && !x.Masters.Any(x => x.RefGuid == guid)).ToList(); break;
             }
             var reply = new GetCompaniesReply();
             reply.Guids.AddRange(fitCompanies.Select(x => x.Guid.ToString()));
@@ -51,10 +62,10 @@ namespace CompanyService.Services
         }
         public override Task<AddCompanyReply> AddCompany(AddCompanyRequest request, ServerCallContext context)
         {
-            var company = new Models.Company() { Name = request.Name, User = new Guid(request.UserGuid) };
+            var company = new Models.Company() { Name = request.Name, OwnerGuid = new Guid(request.UserGuid) };
             var result = _companyRepoService.AddEntity(company);
             if (result)
-                _eventBus.Publish(new AddCompanyEvent(company.Name, company.Guid, company.User));
+                _eventBus.Publish(new AddCompanyEvent(company.Name, company.Guid, company.OwnerGuid));
             return Task.FromResult(new AddCompanyReply { Result = result });
         }
         public override Task<JoinToCompanyReply> JoinToCompany(JoinToCompanyRequest request, ServerCallContext context)

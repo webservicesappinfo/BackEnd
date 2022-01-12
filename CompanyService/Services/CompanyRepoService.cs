@@ -25,7 +25,7 @@ namespace CompanyService.Services
         public List<Company> GetCompaniesByOwner(Guid owner)
         {
             using (var db = new CompanyContext())
-                return db.Values.Where(x=>x.User == owner).Include(x => x.Masters).Include(x => x.Offers).ToList();
+                return db.Values.Where(x=>x.OwnerGuid == owner).Include(x => x.Masters).Include(x => x.Offers).ToList();
         }
 
         public bool JoinToCompany(Guid guid, Guid masterGuid)

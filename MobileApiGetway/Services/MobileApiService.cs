@@ -118,11 +118,17 @@ namespace MobileApiGetway.Services
         public override Task<GetCompanyReply> ApiGetCompany(GetCompanyRequest request, ServerCallContext context)
         {
             var reply = _companyClient.GetCompany(request);
-            return Task.FromResult(new GetCompanyReply()
+            for (var i = 0; i< reply.MasterGuids.Count; i++)
             {
-                Guid = reply.Guid,
-                Name = reply.Name
-            });
+                var user = _userClient.GetUser(new GetUserRequest() { UidFB = reply.MasterGuids[i]});
+                if (user == null)
+                {
+                    reply.MasterGuids[i] = String.Empty;
+                    continue;
+                }
+                reply.MasterNames[i] = user.Name;
+            }
+            return Task.FromResult(reply);
         }
 
         public override Task<GetCompaniesReply> ApiGetCompanies(GetCompaniesRequest request, ServerCallContext context)

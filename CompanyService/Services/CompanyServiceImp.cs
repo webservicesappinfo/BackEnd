@@ -29,7 +29,7 @@ namespace CompanyService.Services
         public override Task<GetCompanyReply> GetCompany(GetCompanyRequest request, ServerCallContext context)
         {
             var reply = new GetCompanyReply();
-            var company = _companyRepoService.GetEntity(new Guid(request.Guid), "Masters");
+            var company = _companyRepoService.GetEntity(new Guid(request.Guid), nameof(Models.Company.Masters));
             if (company == null) return Task.FromResult(reply);
             reply.Guid = company.Guid.ToString();
             reply.Name = company.Name;
@@ -39,7 +39,7 @@ namespace CompanyService.Services
             foreach (var master in company.Masters)
                 reply.MasterGuids.Add(master.Guid.ToString());
 
-            return base.GetCompany(request, context);
+            return Task.FromResult(reply);
         }
         public override Task<GetCompaniesReply> GetCompanies(GetCompaniesRequest request, ServerCallContext context)
         {
@@ -50,6 +50,8 @@ namespace CompanyService.Services
             {
                 case "owner":
                     fitCompanies = totalCompanies.Where(x => x.OwnerGuid == guid).ToList(); break;
+                case "forOffer":
+                    fitCompanies = totalCompanies.Where(x => x.OwnerGuid == guid || x.Masters.Any(m => m.RefGuid == guid)).ToList(); break;
                 case "contains":
                     fitCompanies = totalCompanies.Where(x => x.Masters.Any(m => m.RefGuid == guid)).ToList(); break;
                 case "canbecontains":
@@ -62,7 +64,7 @@ namespace CompanyService.Services
         }
         public override Task<AddCompanyReply> AddCompany(AddCompanyRequest request, ServerCallContext context)
         {
-            var company = new Models.Company() { Name = request.Name, OwnerGuid = new Guid(request.UserGuid) };
+            var company = new Models.Company() { Name = request.Name, OwnerGuid = new Guid(request.OwnerGuid), OwnerName = request.OwnerName };
             var result = _companyRepoService.AddEntity(company);
             if (result)
                 _eventBus.Publish(new AddCompanyEvent(company.Name, company.Guid, company.OwnerGuid));

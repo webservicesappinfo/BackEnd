@@ -2,6 +2,7 @@
 using CompanyService.Models;
 using EventBus.Abstractions;
 using EventBus.Events.ServicesEvents.CompanyEvents;
+using Globals.Models;
 using Globals.Sevices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -28,14 +29,14 @@ namespace CompanyService.Services
                 return db.Values.Where(x=>x.OwnerGuid == owner).Include(x => x.Masters).Include(x => x.Offers).ToList();
         }
 
-        public bool JoinToCompany(Guid guid, Guid masterGuid)
+        public bool JoinToCompany(Guid guid, Guid masterGuid, String masterName)
         {
             using (var db = new CompanyContext())
             {
                 var fitCompany = db.Values.Include(x=>x.Masters).FirstOrDefault(x=>x.Guid == guid);
                 if (fitCompany == null) return false;
                 if (fitCompany.Masters.Any(x => x.Guid == masterGuid)) return false;
-                fitCompany.Masters.Add(new Globals.Models.MasterRef<Company>() { RefGuid = masterGuid });
+                fitCompany.Masters.Add(new MasterRef<Company>() { RefGuid = masterGuid, Name = masterName });
                 db.SaveChanges();
             }
             return true;

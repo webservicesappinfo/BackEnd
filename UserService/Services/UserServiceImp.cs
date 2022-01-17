@@ -43,13 +43,23 @@ namespace UserService.Services
             var reply = new GetUsersReply();
             var users = _userRepoService.GetEntities();
             foreach (var user in users)
-                reply.Names.Add($"{user.UIDFB}:{user.Name}");
+            {
+                reply.Names.Add(user.Name);
+                reply.Uids.Add(user.UIDFB.ToString());
+            }
             return Task.FromResult(reply);
         }
 
         public override Task<GetUserReply> GetUser(GetUserRequest request, ServerCallContext context)
         {
-            return base.GetUser(request, context);
+            var user = _userRepoService.GetUserByUIDFB(new Guid(request.UidFB));
+            var reply = new GetUserReply();
+            if (user != null)
+            {
+                reply.UidFB = user.UIDFB.ToString();
+                reply.Name = user.Name;
+            }
+            return Task.FromResult(reply);
         }
 
         public override Task<UpdateUserReply> UpdateUser(UpdateUserRequest request, ServerCallContext context)

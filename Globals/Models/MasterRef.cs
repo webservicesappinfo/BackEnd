@@ -8,6 +8,8 @@ namespace Globals.Models
 {
     public class MasterRef<T> : EntityBase where T : EntityBase
     {
+        public String Name { get; set; }
+
         public Guid RefGuid { get; set; }
 
         public T Parent { get; set; }

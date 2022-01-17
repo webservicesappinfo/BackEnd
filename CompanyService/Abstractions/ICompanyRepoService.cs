@@ -11,7 +11,7 @@ namespace CompanyService.Abstractions
 
         public List<Company> GetCompaniesByMaster(Guid master);
 
-        public bool JoinToCompany(Guid guid, Guid masterGuid);
+        public bool JoinToCompany(Guid guid, Guid masterGuid, String masterName);
 
         public Boolean DelMaster(Guid company, Guid master);
     }

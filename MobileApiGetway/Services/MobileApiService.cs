@@ -50,56 +50,47 @@ namespace MobileApiGetway.Services
             _locationClient = locationClient;
         }
 
-        #region UserRepoService
-        public override Task<AddUserReply> ApiAddUser(AddUserRequest request, ServerCallContext context)
+        #region MobileApi
+        public override Task<GetFitForCompanyUsersReply> GetFitForCompanyUsers(GetFitForCompanyUsersRequest request, ServerCallContext context)
         {
-            /*var reply = _userRepoClient.AddUser(new AddUserRequest()
+            var reply = new GetFitForCompanyUsersReply();
+            var company = _companyClient.GetCompany(new GetCompanyRequest() { Guid = request.CompanyGuid });
+            if (company == null) return Task.FromResult(reply);
+            if (request.IsConsistIn)
             {
-                Name = request.Name,
-                Guid = request.Guid,
-                Token = request.Token
-            });*/
+                for (var i = 0; i < company.MasterGuids.Count; i++)
+                {
+                    reply.Guids.Add(company.MasterGuids[i]);
+                    reply.Names.Add(company.MasterNames[i]);
+                }
+            }
+            else
+            {
+                var users = _userClient.GetUsers(new GetUsersRequest());
+                for (var i = 0; i < users.Uids.Count; i++)
+                {
+                    if (company.MasterGuids.Any(x => x == users.Uids[i])) continue;
+                    reply.Guids.Add(users.Uids[i]);
+                    reply.Names.Add(users.Names[i]);
+                }
+            }
+            return Task.FromResult(reply);
+        }
 
-            var reply = _userClient.AddUser(request);
-            return Task.FromResult(new AddUserReply() { Result = reply.Result });
-        }
+        #endregion
+
+        #region UserRepoService
+        public override Task<AddUserReply> ApiAddUser(AddUserRequest request, ServerCallContext context) 
+            => Task.FromResult(_userClient.AddUser(request));
+
         public override Task<DelUserReply> ApiDelUser(DelUserRequest request, ServerCallContext context)
-        {
-            var reply = _userClient.DelUser(request);
-            return Task.FromResult(new DelUserReply() { Result = reply.Result });
-        }
+            => Task.FromResult(_userClient.DelUser(request));
 
         public override Task<GetUserReply> ApiGetUser(GetUserRequest request, ServerCallContext context)
-        {
-            /*var reply = _userRepoClient.GetUser(new GetUserRequest() { Guid = request.Guid });
-            return Task.FromResult(new ApiGetUserReply()
-            {
-                Guid = reply.Guid,
-                Name = reply.Name
-            });*/
-
-            var reply = _userClient.GetUser(request);
-            return Task.FromResult(new GetUserReply()
-            {
-                UidFB = reply.UidFB,
-                Name = reply.Name
-            });
-        }
+            => Task.FromResult(_userClient.GetUser(request));
 
         public override Task<GetUsersReply> ApiGetUsers(GetUsersRequest request, ServerCallContext context)
-        {
-            /*var reply = _userRepoClient.GetUsers(new GetUsersRequest());
-            var apiReply = new ApiGetUsersReply();
-            foreach (var n in reply.Names)
-                apiReply.Names.Add(n);
-            return Task.FromResult(apiReply);*/
-
-            var reply = _userClient.GetUsers(request);
-            var apiReply = new GetUsersReply();
-            foreach (var n in reply.Names)
-                apiReply.Names.Add(n);
-            return Task.FromResult(apiReply);
-        }
+            => Task.FromResult(_userClient.GetUsers(request));
         #endregion
 
         #region CompanyService

@@ -37,7 +37,10 @@ namespace CompanyService.Services
             reply.OwnerName = company.OwnerName;
 
             foreach (var master in company.Masters)
-                reply.MasterGuids.Add(master.Guid.ToString());
+            {
+                reply.MasterGuids.Add(master.RefGuid.ToString());
+                reply.MasterNames.Add(master.Name);
+            }
 
             return Task.FromResult(reply);
         }
@@ -75,7 +78,7 @@ namespace CompanyService.Services
             var reply = new JoinToCompanyReply();
             var companyGuid = new Guid(request.CompanyGuid);
             var masterGuid = new Guid(request.UserGuid);
-            reply.Result = _companyRepoService.JoinToCompany(companyGuid, masterGuid);
+            reply.Result = _companyRepoService.JoinToCompany(companyGuid, masterGuid, request.UserName);
             if(reply.Result)
                 _eventBus.Publish(new JoinToCompanyEvent(companyGuid, masterGuid, request.CompanyName));
             return Task.FromResult(reply);

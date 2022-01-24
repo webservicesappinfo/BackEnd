@@ -133,6 +133,12 @@ namespace MobileApiGetway.Services
             var reply = _companyClient.DelCompany(request);
             return Task.FromResult(reply);
         }
+
+        public override Task<SetCompanyLocationReply> apiSetCompanyLocation(SetCompanyLocationRequest request, ServerCallContext context)
+        {
+            var reply = _companyClient.SetCompanyLocation(request);
+            return Task.FromResult(reply);
+        }
         #endregion
 
         #region SkillService

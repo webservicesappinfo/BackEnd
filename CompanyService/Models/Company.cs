@@ -12,6 +12,8 @@ namespace CompanyService.Models
         public string Name { get; set; }
         public Guid OwnerGuid { get; set; }
         public String OwnerName { get; set; }
+        public double? Lat { get; set; }
+        public double? Lng { get; set; }
         public List<MasterRef<Company>> Masters { get; } = new List<MasterRef<Company>>();
         public List<OfferRef<Company>> Offers { get; } = new List<OfferRef<Company>>(); 
     }

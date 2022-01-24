@@ -48,7 +48,7 @@ namespace CompanyService.Services
                 return db.Values.Include(x => x.Masters).Include(x => x.Offers).Where(x => x.Masters.Any(m=>m.RefGuid == master)).ToList();
         }
 
-        public bool DelMaster(Guid company, Guid master)
+        public Boolean DelMaster(Guid company, Guid master)
         {
             using (var db = new CompanyContext())
             {
@@ -57,6 +57,19 @@ namespace CompanyService.Services
                 var fitMaster = fitCompany.Masters.FirstOrDefault(x => x.RefGuid == master);
                 if (fitMaster == null) return false;
                 db.Masters.Remove(fitMaster);
+                db.SaveChanges();
+            }
+            return true;
+        }
+
+        public Boolean SetCompanyLocation(Guid companyGuid, Double? lat, Double? lng)
+        {
+            using (var db = new CompanyContext())
+            {
+                var company = db.Values.FirstOrDefault(x => x.Guid == companyGuid);
+                if(company == null) return false;
+                company.Lat = lat;
+                company.Lng = lng;
                 db.SaveChanges();
             }
             return true;

@@ -7,12 +7,14 @@ namespace CompanyService.Abstractions
 {
     public interface ICompanyRepoService: IRepoServiceBase<Company>
     {
-        public List<Company> GetCompaniesByOwner(Guid owner);
+        List<Company> GetCompaniesByOwner(Guid owner);
 
-        public List<Company> GetCompaniesByMaster(Guid master);
+        List<Company> GetCompaniesByMaster(Guid master);
 
-        public bool JoinToCompany(Guid guid, Guid masterGuid, String masterName);
+        Boolean JoinToCompany(Guid guid, Guid masterGuid, String masterName);
 
-        public Boolean DelMaster(Guid company, Guid master);
+        Boolean DelMaster(Guid company, Guid master);
+
+        Boolean SetCompanyLocation(Guid companyGuid, Double? lat, Double? lng);
     }
 }

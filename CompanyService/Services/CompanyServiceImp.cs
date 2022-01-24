@@ -35,6 +35,8 @@ namespace CompanyService.Services
             reply.Name = company.Name;
             reply.OwnerGuid = company.OwnerGuid.ToString();
             reply.OwnerName = company.OwnerName;
+            reply.Lat = company.Lat?.ToString() ?? String.Empty;
+            reply.Lng = company.Lng?.ToString() ?? String.Empty;
 
             foreach (var master in company.Masters)
             {
@@ -94,6 +96,13 @@ namespace CompanyService.Services
             if (result)
                 _eventBus.Publish(new DelCompanyEvent(companyGuid));
             return Task.FromResult(new DelCompanyReply { Result = result });
+        }
+
+        public override Task<SetCompanyLocationReply> SetCompanyLocation(SetCompanyLocationRequest request, ServerCallContext context)
+        {
+            var ressult = _companyRepoService.SetCompanyLocation(new Guid(request.Guid), request.Lat, request.Lng);
+            return Task.FromResult(new SetCompanyLocationReply { Result = ressult });
+
         }
     }
 }

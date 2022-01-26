@@ -29,14 +29,18 @@ namespace OfferService.Services
             var offer = new Models.Offer() 
             { 
                 Name = request.Name, 
+                CompanyGuid = new Guid(request.CompanyGuid),
+                CompanyName = request.CompanyName,
                 MasterGuid = new Guid(request.MasterGuid),
                 MasterName = request.MasterName,
                 SkillGuid= new Guid(request.SkillGuid),
                 SkillName = request.SkillName 
             };
             var result = _offerRepoService.AddEntity(offer);
-            /*if (result)
-                _eventBus.Publish(new AddSkillEvent(company.Name, company.Guid, company.User));*/
+
+            if (result)
+                _eventBus.Publish(new AddOfferEvent(offer.Name,offer.Guid, offer.CompanyGuid, offer.MasterGuid));
+
             return Task.FromResult(new AddOfferReply { Result = result });
         }
 
@@ -122,6 +126,8 @@ namespace OfferService.Services
             {
                 reply.Guids.Add(offer.Guid.ToString());
                 reply.Names.Add(offer.Name);
+                reply.MasterGuids.Add(offer.CompanyGuid.ToString());
+                reply.MasterNames.Add(offer.CompanyName);
                 reply.MasterGuids.Add(offer.MasterGuid.ToString());
                 reply.MasterNames.Add(offer.MasterName);
                 reply.SkillGuids.Add(offer.SkillGuid.ToString());

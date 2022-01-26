@@ -5,6 +5,7 @@ using CompanyService.EventHandlers;
 using CompanyService.Services;
 using EventBus;
 using EventBus.Abstractions;
+using EventBus.Events.ServicesEvents.OfferEvents;
 using EventBus.Events.ServicesEvents.UserRepoEvents;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -58,6 +59,7 @@ namespace CompanyService
 
             var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
             eventBus.Subscribe<DelUserEvent, DelUserEH>();
+            eventBus.Subscribe<AddOfferEvent, AddOfferEH>();
         }
     }
 }

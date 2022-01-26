@@ -14,30 +14,40 @@ namespace CompanyService.Models
         public String OwnerName { get; set; }
         public double? Lat { get; set; }
         public double? Lng { get; set; }
-        public List<Worker> Masters { get; } = new List<Worker>();
-        public List<OfferRef<Company>> Offers { get; } = new List<OfferRef<Company>>(); 
+        public List<Worker> Workers { get; } = new List<Worker>();
+        //public List<OfferRef<Company>> Offers { get; } = new List<OfferRef<Company>>(); 
     }
 
     public class CompanyContext : ContextBase<Company> 
     {
-        public DbSet<Worker> Masters{ get; set; }
-        public DbSet<OfferRef<Company>> Offers { get; set; }
+        public DbSet<Worker> Workers { get; set; }
+        public DbSet<WorkerOffer> WorkerOffers { get; set; }
 
         protected override void ModelBuilderConfigure(ModelBuilder builder)
         {
             builder.Entity<Worker>()
                 .HasOne(j => j.Parent)
-                .WithMany(t => t.Masters)
+                .WithMany(t => t.Workers)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.Entity<OfferRef<Company>>()
+            builder.Entity<WorkerOffer>()
+                .HasOne(j => j.Parent)
+                .WithMany(t => t.WorkerOffers)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            /*builder.Entity<OfferRef<Company>>()
                 .HasOne(j => j.Parent)
                 .WithMany(t => t.Offers)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Cascade);*/
         }
     }
 
     public class Worker: UserRef<Company>
+    {
+        public List<WorkerOffer> WorkerOffers { get; } = new List<WorkerOffer>();
+    }
+
+    public class WorkerOffer: OfferRef<Worker>
     {
 
     }

@@ -31,7 +31,7 @@ namespace CompanyService.Services
             var reply = new GetCompanyReply();
             if (String.IsNullOrEmpty(request.Guid)) return Task.FromResult(reply);
 
-            var company = _companyRepoService.GetEntity(new Guid(request.Guid), nameof(Models.Company.Masters));
+            var company = _companyRepoService.GetEntity(new Guid(request.Guid), nameof(Models.Company.Workers));
             if (company == null) return Task.FromResult(reply);
             reply.Guid = company.Guid.ToString();
             reply.Name = company.Name;
@@ -40,7 +40,7 @@ namespace CompanyService.Services
             reply.Lat = company.Lat?.ToString() ?? String.Empty;
             reply.Lng = company.Lng?.ToString() ?? String.Empty;
 
-            foreach (var master in company.Masters)
+            foreach (var master in company.Workers)
             {
                 reply.MasterGuids.Add(master.RefGuid.ToString());
                 reply.MasterNames.Add(master.Name);
@@ -52,17 +52,17 @@ namespace CompanyService.Services
         {
             var fitCompanies = new List<Models.Company>();
             var guid = new Guid(request.UserGuid);
-            var totalCompanies = _companyRepoService.GetEntities(nameof(Models.Company.Masters));
+            var totalCompanies = _companyRepoService.GetEntities(nameof(Models.Company.Workers));
             switch (request.Type.ToLower())
             {
                 case "owner":
                     fitCompanies = totalCompanies.Where(x => x.OwnerGuid == guid).ToList(); break;
                 case "forOffer":
-                    fitCompanies = totalCompanies.Where(x => x.OwnerGuid == guid || x.Masters.Any(m => m.RefGuid == guid)).ToList(); break;
+                    fitCompanies = totalCompanies.Where(x => x.OwnerGuid == guid || x.Workers.Any(m => m.RefGuid == guid)).ToList(); break;
                 case "contains":
-                    fitCompanies = totalCompanies.Where(x => x.Masters.Any(m => m.RefGuid == guid)).ToList(); break;
+                    fitCompanies = totalCompanies.Where(x => x.Workers.Any(m => m.RefGuid == guid)).ToList(); break;
                 case "canbecontains":
-                    fitCompanies = totalCompanies.Where(x => x.OwnerGuid != guid && !x.Masters.Any(x => x.RefGuid == guid)).ToList(); break;
+                    fitCompanies = totalCompanies.Where(x => x.OwnerGuid != guid && !x.Workers.Any(x => x.RefGuid == guid)).ToList(); break;
             }
             var reply = new GetCompaniesReply();
             reply.Guids.AddRange(fitCompanies.Select(x => x.Guid.ToString()));

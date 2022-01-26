@@ -31,9 +31,9 @@ namespace CompanyService.EventHandlers
             foreach (var c in ownerCompanies)
                 _companyRepoService.DelEntity(c.Guid);
 
-            var masterCompanies = _companyRepoService.GetCompaniesByMaster(user);
+            var masterCompanies = _companyRepoService.GetCompaniesByWorker(user);
             foreach (var c in masterCompanies)
-                _companyRepoService.DelMaster(c.Guid, user);
+                _companyRepoService.DelWorker(c.Guid, user);
 
             return Task.FromResult(0);
         }

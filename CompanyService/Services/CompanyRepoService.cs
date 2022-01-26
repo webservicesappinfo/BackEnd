@@ -36,7 +36,7 @@ namespace CompanyService.Services
                 var fitCompany = db.Values.Include(x=>x.Masters).FirstOrDefault(x=>x.Guid == guid);
                 if (fitCompany == null) return false;
                 if (fitCompany.Masters.Any(x => x.Guid == masterGuid)) return false;
-                fitCompany.Masters.Add(new MasterRef<Company>() { RefGuid = masterGuid, Name = masterName });
+                fitCompany.Masters.Add(new Worker() { RefGuid = masterGuid, Name = masterName });
                 db.SaveChanges();
             }
             return true;

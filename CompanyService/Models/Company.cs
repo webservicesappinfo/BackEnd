@@ -14,18 +14,18 @@ namespace CompanyService.Models
         public String OwnerName { get; set; }
         public double? Lat { get; set; }
         public double? Lng { get; set; }
-        public List<MasterRef<Company>> Masters { get; } = new List<MasterRef<Company>>();
+        public List<Worker> Masters { get; } = new List<Worker>();
         public List<OfferRef<Company>> Offers { get; } = new List<OfferRef<Company>>(); 
     }
 
     public class CompanyContext : ContextBase<Company> 
     {
-        public DbSet<MasterRef<Company>> Masters{ get; set; }
+        public DbSet<Worker> Masters{ get; set; }
         public DbSet<OfferRef<Company>> Offers { get; set; }
 
         protected override void ModelBuilderConfigure(ModelBuilder builder)
         {
-            builder.Entity<MasterRef<Company>>()
+            builder.Entity<Worker>()
                 .HasOne(j => j.Parent)
                 .WithMany(t => t.Masters)
                 .OnDelete(DeleteBehavior.Cascade);
@@ -35,5 +35,10 @@ namespace CompanyService.Models
                 .WithMany(t => t.Offers)
                 .OnDelete(DeleteBehavior.Cascade);
         }
+    }
+
+    public class Worker: UserRef<Company>
+    {
+
     }
 }

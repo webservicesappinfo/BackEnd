@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Globals.Models
 {
-    public class MasterRef<T> : EntityBase where T : EntityBase
+    public class UserRef<T> : EntityBase where T : EntityBase
     {
         public String Name { get; set; }
 

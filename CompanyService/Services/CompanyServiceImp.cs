@@ -29,6 +29,8 @@ namespace CompanyService.Services
         public override Task<GetCompanyReply> GetCompany(GetCompanyRequest request, ServerCallContext context)
         {
             var reply = new GetCompanyReply();
+            if (String.IsNullOrEmpty(request.Guid)) return Task.FromResult(reply);
+
             var company = _companyRepoService.GetEntity(new Guid(request.Guid), nameof(Models.Company.Masters));
             if (company == null) return Task.FromResult(reply);
             reply.Guid = company.Guid.ToString();

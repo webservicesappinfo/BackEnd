@@ -24,7 +24,7 @@ namespace UserService.EventHandlers
         {
             Console.WriteLine(@event.CompanyGuid);
             //@event.ResponseReceivedEvent.Set();
-            var user = _userRepoService.AddCompany(@event.MasterGuid, @event.CompanyGuid, @event.CompanyName);
+            //var user = _userRepoService.AddCompany(@event.MasterGuid, @event.CompanyGuid, @event.CompanyName);
             return Task.FromResult(0);
         }
     }

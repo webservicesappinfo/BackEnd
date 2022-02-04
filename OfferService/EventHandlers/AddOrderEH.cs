@@ -12,10 +12,10 @@ namespace OfferService.EventHandlers
         private readonly ILogger<AddOrderEvent> _logger;
         private readonly IOfferRepoService _offerRepoService;
 
-        public AddOrderEH(ILogger<AddOrderEvent> logger, IOfferRepoService userRepoService)
+        public AddOrderEH(ILogger<AddOrderEvent> logger, IOfferRepoService offerRepoService)
         {
             _logger = logger;
-            _offerRepoService = userRepoService;
+            _offerRepoService = offerRepoService;
         }
 
         public Task Handle(AddOrderEvent @event)

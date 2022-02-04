@@ -69,11 +69,16 @@ namespace CompanyService.Services
         {
             using (var db = new CompanyContext())
             {
-                var company = db.Values.FirstOrDefault(x => x.Guid == companyGuid);
-                if(company == null) return false;
+                //var company = GetEntity(companyGuid, nameof(Company.Workers));
+                var company = db.Values.Include(x => x.Workers).ThenInclude(x => x.WorkerOffers).FirstOrDefault(x => x.Guid == companyGuid);
+                if (company == null) return false;
                 company.Lat = lat;
                 company.Lng = lng;
                 db.SaveChanges();
+
+                foreach (var worker in company.Workers)
+                    foreach (var offer in worker.WorkerOffers)
+                        _eventBus.Publish(new SendInfoForOffer(offer.RefGuid, company.Name, company.Lat ?? 0.0, company.Lng ?? 0.0));
             }
             return true;
         }
@@ -88,6 +93,8 @@ namespace CompanyService.Services
                 if (fitWorker == null) return false;
                 fitWorker.WorkerOffers.Add(new WorkerOffer() { RefGuid = @event.Guid, Name = @event.Name });
                 db.SaveChanges();
+
+                _eventBus.Publish(new SendInfoForOffer(@event.Guid, fitCompany.Name, fitCompany.Lat ?? 0.0, fitCompany.Lng ?? 0.0));
             }
             return true;
         }

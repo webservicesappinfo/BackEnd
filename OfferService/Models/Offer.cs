@@ -28,6 +28,9 @@ namespace OfferService.Models
 
         public OfferStatus Status { get; set; }
 
+        public double? Lat { get; set; }
+        public double? Lng { get; set; }
+
     }
 
     public class OfferContext : ContextBase<Offer> { }

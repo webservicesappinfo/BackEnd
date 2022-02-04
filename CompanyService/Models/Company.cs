@@ -15,7 +15,6 @@ namespace CompanyService.Models
         public double? Lat { get; set; }
         public double? Lng { get; set; }
         public List<Worker> Workers { get; } = new List<Worker>();
-        //public List<OfferRef<Company>> Offers { get; } = new List<OfferRef<Company>>(); 
     }
 
     public class CompanyContext : ContextBase<Company> 
@@ -34,11 +33,6 @@ namespace CompanyService.Models
                 .HasOne(j => j.Parent)
                 .WithMany(t => t.WorkerOffers)
                 .OnDelete(DeleteBehavior.Cascade);
-
-            /*builder.Entity<OfferRef<Company>>()
-                .HasOne(j => j.Parent)
-                .WithMany(t => t.Offers)
-                .OnDelete(DeleteBehavior.Cascade);*/
         }
     }
 

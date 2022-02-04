@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using EventBus;
 using EventBus.Abstractions;
+using EventBus.Events.ServicesEvents.CompanyEvents;
 using EventBus.Events.ServicesEvents.OrderEvents;
 using EventBus.Events.ServicesEvents.UserRepoEvents;
 using Microsoft.AspNetCore.Builder;
@@ -61,6 +62,7 @@ namespace OfferService
             eventBus.Subscribe<AddOrderEvent, AddOrderEH>();
             eventBus.Subscribe<DelOrderEvent, DelOrderEH>();
             eventBus.Subscribe<DelUserEvent, DelUserEH>();
+            eventBus.Subscribe<SendInfoForOffer, GetInfoFromCompany>();
 
         }
     }

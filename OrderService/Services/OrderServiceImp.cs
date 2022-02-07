@@ -38,7 +38,7 @@ namespace OrderService.Services
             };
             var result = _orderRepoService.AddEntity(order);
             if (result)
-                _eventBus.Publish(new AddOrderEvent(order.Name, order.Guid, order.OfferGuid));
+                _eventBus.Publish(new AddOrderEvent(order.Name, order.Guid, order.OfferGuid, order.MasterGuid, order.UserGuid, order.UserName));
             return Task.FromResult(new AddOrderReply { Result = result });
         }
 
@@ -89,10 +89,17 @@ namespace OrderService.Services
         public override Task<AcceptedOrderReply> AcceptedOrder(AcceptedOrderRequest request, ServerCallContext context)
         {
             var order = _orderRepoService.SetOrderStatus(new Guid(request.Guid), Models.OrderStatus.Accepted);
+            if (order != null)
+                _eventBus.Publish(new AcceptedOrderEvent(order.Name, order.Guid, order.MasterGuid, order.MasterName, order.UserGuid, order.UserName));
             return Task.FromResult(new AcceptedOrderReply { Result = order != null, Name = order.Name, ClientGuid = order?.UserGuid.ToString(), MasterGuid = order?.MasterGuid.ToString() });
         }
 
         public override Task<ExecutedOrderReply> ExecutedOrder(ExecutedOrderRequest request, ServerCallContext context)
-            => Task.FromResult(new ExecutedOrderReply { Result = _orderRepoService.SetOrderStatus(new Guid(request.Guid), Models.OrderStatus.Executed) != null });
+        {
+            var order = _orderRepoService.SetOrderStatus(new Guid(request.Guid), Models.OrderStatus.Executed);
+            if(order != null)
+                _eventBus.Publish(new ExecutedOrderEvent(order.Name, order.Guid, order.MasterGuid, order.MasterName, order.UserGuid, order.UserName));
+            return Task.FromResult(new ExecutedOrderReply { Result =  order != null });
+        }
     }
 }

@@ -14,16 +14,11 @@ namespace NotificationService.Services
     public class NotificationServiceImp : Notification.NotificationBase
     {
         private readonly ILogger<NotificationServiceImp> _logger;
-        private readonly ILoggerFactory _loggerFactory;
-        private readonly IMobileMessagingService _messaging;
         private readonly INotificationRepoService _notificationRepoService;
 
-        public NotificationServiceImp(ILogger<NotificationServiceImp> logger, ILoggerFactory loggerFactory,
-            IMobileMessagingService messaging, INotificationRepoService notificationRepoService)
+        public NotificationServiceImp(ILogger<NotificationServiceImp> logger,INotificationRepoService notificationRepoService)
         {
             _logger = logger;
-            _loggerFactory = loggerFactory;
-            _messaging = messaging;
             _notificationRepoService = notificationRepoService;
         }
 
@@ -34,18 +29,8 @@ namespace NotificationService.Services
 
         public override Task<SendNotificationReply> SendNotification(SendNotificationRequest request, ServerCallContext context)
         {
-            var reply = new SendNotificationReply() { Status = false };
-            var forUser = _notificationRepoService.GetUserByUIDFB(new Guid(request.ForGuid));
-            var fromUser = _notificationRepoService.GetUserByUIDFB(new Guid(request.FromGuid));
-
-            if (forUser == null || fromUser == null) return Task.FromResult(reply);
-
-            /*_notificationRepoService.SetLastSendMessage(fromUser.Guid, $"{forUser.Guid}:{request.Msg}");
-            _notificationRepoService.SetLastGetMessage(forUser.Guid, $"{fromUser.Guid}:{request.Msg}");*/
-
-            _messaging.SendNotification(forUser.Token, "NewMsg", request.Msg);
-
-            reply.Status = true;
+            var reply = new SendNotificationReply();
+            reply.Status = _notificationRepoService.SendNotification(new Guid(request.FromGuid), new Guid(request.ForGuid), request.Msg);
             return Task.FromResult(reply);
         }
     }

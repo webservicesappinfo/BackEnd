@@ -128,8 +128,6 @@ namespace OfferService.Services
                 reply.Names.Add(offer.Name);
                 reply.CompanyGuids.Add(offer.CompanyGuid.ToString());
                 reply.CompanyNames.Add(offer.CompanyName);
-                reply.MasterGuids.Add(offer.CompanyGuid.ToString());
-                reply.MasterNames.Add(offer.CompanyName);
                 reply.MasterGuids.Add(offer.MasterGuid.ToString());
                 reply.MasterNames.Add(offer.MasterName);
                 reply.SkillGuids.Add(offer.SkillGuid.ToString());

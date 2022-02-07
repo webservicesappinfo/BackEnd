@@ -10,6 +10,7 @@ namespace NotificationService.Abstractions
     public interface INotificationRepoService : IRepoServiceBase<NotificationUser>
     {
         NotificationUser GetUserByUIDFB(Guid uidfb);
+        bool SendNotification(Guid fromUserGuid, Guid ForUserGuid, String msg);
         string GetLastGetMessage(string userGuid);
         void SetLastGetMessage(string userGuid, string msg);
         string GetLastSendMessage(string userGuid);

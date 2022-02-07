@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EventBus.Events.ServicesEvents.OrderEvents;
 
 namespace NotificationService
 {
@@ -65,8 +66,13 @@ namespace NotificationService
 
 
             var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
+
             eventBus.Subscribe<AddUserEvent, AddUserEH>();
             eventBus.Subscribe<DelUserEvent, DelUserEH>();
+
+            eventBus.Subscribe<AddOrderEvent, AddOrderEH>();
+            eventBus.Subscribe<AcceptedOrderEvent, AcceptedOrderEH>();
+            eventBus.Subscribe<ExecutedOrderEvent, ExecutedOrderEH>();
         }
     }
 }

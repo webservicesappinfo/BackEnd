@@ -6,22 +6,21 @@ using System.Threading.Tasks;
 
 namespace EventBus.Events.ServicesEvents.OrderEvents
 {
-    public class AddOrderEvent : IntegrationEvent
+    public class AcceptedOrderEvent : IntegrationEvent
     {
         public Guid Guid { get; private set; }
         public String Name { get; private set; }
-        public Guid OfferGuid { get; private set; }
         public Guid MasterGuid { get; private set; }
+        public String MasterName { get; private set; }
         public Guid ClientGuid { get; private set; }
         public String ClientName { get; private set; }
 
-
-        public AddOrderEvent(String name, Guid guid, Guid offerGuid, Guid masterGuid, Guid clientGuid, String clientName)
+        public AcceptedOrderEvent(String name, Guid guid, Guid masterGuid,String masterName, Guid clientGuid, String clientName)
         {
             Guid = guid;
             Name = name;
-            OfferGuid = offerGuid;
             MasterGuid = masterGuid;
+            MasterName = masterName;
             ClientGuid = clientGuid;
             ClientName = clientName;
         }

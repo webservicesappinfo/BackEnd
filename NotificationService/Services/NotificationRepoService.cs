@@ -13,7 +13,13 @@ namespace NotificationService.Services
     public class NotificationRepoService : RepoServiceBase<NotificationUser, NotificationContext>, INotificationRepoService
     {
         private readonly ILogger<NotificationRepoService> _logger;
-        public NotificationRepoService(ILogger<NotificationRepoService> logger) : base(logger) { _logger = logger; }
+        private readonly IMobileMessagingService _messaging;
+
+        public NotificationRepoService(ILogger<NotificationRepoService> logger, IMobileMessagingService messaging) : base(logger) 
+        { 
+            _logger = logger; 
+            _messaging = messaging;
+        }
 
         public NotificationUser GetUserByUIDFB(Guid uidfb)
         {
@@ -51,6 +57,15 @@ namespace NotificationService.Services
                 var findUser = db.Users.FirstOrDefault(x => x.Guid == userGuid);
                 if (findUser != null) findUser.LastSendMessage = msg;
             }*/
+        }
+
+        public bool SendNotification(Guid fromUserGuid, Guid ForUserGuid, string msg)
+        {
+            var forUser = GetUserByUIDFB(ForUserGuid);
+            var fromUser = GetUserByUIDFB(fromUserGuid);
+            if (forUser == null || fromUser == null) return false;
+            _messaging.SendNotification(forUser.Token, "NewMsg", msg);
+            return true;
         }
     }
 }

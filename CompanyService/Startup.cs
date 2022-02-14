@@ -60,6 +60,7 @@ namespace CompanyService
             var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
             eventBus.Subscribe<DelUserEvent, DelUserEH>();
             eventBus.Subscribe<AddOfferEvent, AddOfferEH>();
+            eventBus.Subscribe<DelOfferEvent, DelOfferEH>();
         }
     }
 }

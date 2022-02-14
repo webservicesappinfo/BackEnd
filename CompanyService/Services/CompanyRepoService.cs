@@ -98,5 +98,25 @@ namespace CompanyService.Services
             }
             return true;
         }
+
+        public bool OnDelOfferEvent(DelOfferEvent @event)
+        {
+            using (var db = new CompanyContext())
+            {
+                foreach(var company in db.Values.Include(x=>x.Workers)
+                    .ThenInclude(x=>x.WorkerOffers).Where(x=> x.Workers.Any(x=>x.RefGuid == @event.MasterGuid)))
+                {
+                    var worker = company.Workers.FirstOrDefault(x => x.RefGuid == @event.MasterGuid);
+                    if(worker != null)
+                    {
+                        var offer = worker.WorkerOffers.FirstOrDefault(x => x.RefGuid == @event.Guid);
+                        if (offer != null)
+                            worker.WorkerOffers.Remove(offer);
+                    }
+                }
+                db.SaveChanges();
+            }
+            return true;
+        }
     }
 }

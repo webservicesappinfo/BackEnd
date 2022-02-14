@@ -19,5 +19,7 @@ namespace CompanyService.Abstractions
         Boolean SetCompanyLocation(Guid companyGuid, Double? lat, Double? lng);
 
         Boolean OnAddOfferEvent(AddOfferEvent @event);
+
+        Boolean OnDelOfferEvent(DelOfferEvent @event);
     }
 }

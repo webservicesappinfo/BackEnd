@@ -1,4 +1,6 @@
-﻿using EventBus.Events.ServicesEvents.CompanyEvents;
+﻿using EventBus.Abstractions;
+using EventBus.Events.ServicesEvents.CompanyEvents;
+using EventBus.Events.ServicesEvents.OfferEvents;
 using Globals.Sevices;
 using Microsoft.Extensions.Logging;
 using OfferService.Abstractions;
@@ -11,7 +13,23 @@ namespace OfferService.Services
     public class OfferRepoService: RepoServiceBase<Offer, OfferContext>, IOfferRepoService
     {
         private readonly ILogger<OfferRepoService> _logger;
-        public OfferRepoService(ILogger<OfferRepoService> logger) : base(logger) { _logger = logger; }
+        private readonly IEventBus _eventBus;
+
+        public OfferRepoService(ILogger<OfferRepoService> logger, IEventBus eventBus) : base(logger) { _logger = logger; _eventBus = eventBus; }
+
+        public bool OnDelCompanyEH(Guid companyGuid)
+        {
+            using (var db = new OfferContext())
+            {
+                foreach(var offer in db.Values.Where(x => x.CompanyGuid == companyGuid))
+                {
+                    db.Remove(offer);
+                    _eventBus.Publish(new DelOfferEvent(offer.Name, offer.Guid, offer.MasterGuid));
+                }
+                db.SaveChanges();
+            }
+            return true;
+        }
 
         public bool SetInfoFromCompany(SendInfoForOffer @event)
         {

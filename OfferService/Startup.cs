@@ -62,6 +62,7 @@ namespace OfferService
             eventBus.Subscribe<AddOrderEvent, AddOrderEH>();
             eventBus.Subscribe<DelOrderEvent, DelOrderEH>();
             eventBus.Subscribe<DelUserEvent, DelUserEH>();
+            eventBus.Subscribe<DelCompanyEvent, DelCompanyEH>();
             eventBus.Subscribe<SendInfoForOffer, GetInfoFromCompany>();
 
         }

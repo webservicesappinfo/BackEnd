@@ -22,7 +22,7 @@ namespace OrderService.EventHandlers
         {
             Console.WriteLine(@event.Guid);
             //@event.ResponseReceivedEvent.Set();
-            var result = _orderRepoService.OnDelOffer(@event.Guid, @event.MasterGuid);
+            var result = _orderRepoService.OnDelOfferEH(@event.Guid, @event.MasterGuid);
             return Task.FromResult(result);
         }
     }

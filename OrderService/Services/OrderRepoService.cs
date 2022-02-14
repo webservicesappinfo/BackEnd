@@ -11,7 +11,7 @@ namespace OrderService.Services
     {
         public OrderRepoService(ILogger<RepoServiceBase<Order, OrderContext>> logger) : base(logger) { }
 
-        public bool OnDelOffer(Guid offerGuid, Guid masterGuid)
+        public bool OnDelOfferEH(Guid offerGuid, Guid masterGuid)
         {
             var orders = GetEntities().Where(x=>x.OfferGuid == offerGuid && x.MasterGuid == masterGuid).ToList();
             foreach (var order in orders)

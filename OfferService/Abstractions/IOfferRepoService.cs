@@ -7,8 +7,10 @@ namespace OfferService.Abstractions
 {
     public interface IOfferRepoService : IRepoServiceBase<Offer> 
     {
-        public bool SetStatus(Guid offerGuid, OfferStatus status);
+        bool SetStatus(Guid offerGuid, OfferStatus status);
 
-        public bool SetInfoFromCompany(SendInfoForOffer @event);
+        bool SetInfoFromCompany(SendInfoForOffer @event);
+
+        bool OnDelCompanyEH(Guid companyGuid);
     }
 }

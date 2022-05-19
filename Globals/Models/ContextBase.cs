@@ -18,11 +18,11 @@ namespace Globals.Models
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             NpgsqlConnectionStringBuilder npgsqlConnectionStringBuilder = new NpgsqlConnectionStringBuilder();
-            npgsqlConnectionStringBuilder.Host = "91.219.60.8";
+            npgsqlConnectionStringBuilder.Host = "194.61.53.135";
             npgsqlConnectionStringBuilder.Port = 5432;
             npgsqlConnectionStringBuilder.Database = $"{TypeName }db";
-            npgsqlConnectionStringBuilder.Username = "root";
-            npgsqlConnectionStringBuilder.Password = "root";
+            npgsqlConnectionStringBuilder.Username = "admin";
+            npgsqlConnectionStringBuilder.Password = "admin";
             npgsqlConnectionStringBuilder.IncludeErrorDetails = true;
 
             optionsBuilder.UseNpgsql(npgsqlConnectionStringBuilder.ConnectionString);

@@ -14,35 +14,35 @@ namespace CompanyService.Models
         public String OwnerName { get; set; }
         public double? Lat { get; set; }
         public double? Lng { get; set; }
-        public List<Worker> Workers { get; } = new List<Worker>();
+        public List<CompanyUserRef> Workers { get; } = new List<CompanyUserRef>();
     }
 
     public class CompanyContext : ContextBase<Company> 
     {
-        public DbSet<Worker> Workers { get; set; }
-        public DbSet<WorkerOffer> WorkerOffers { get; set; }
+        public DbSet<CompanyUserRef> Workers { get; set; }
+        public DbSet<CompanyOfferRef> WorkerOffers { get; set; }
 
         protected override void ModelBuilderConfigure(ModelBuilder builder)
         {
-            builder.Entity<Worker>()
+            builder.Entity<CompanyUserRef>()
                 .HasOne(j => j.Parent)
                 .WithMany(t => t.Workers)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.Entity<WorkerOffer>()
+            builder.Entity<CompanyOfferRef>()
                 .HasOne(j => j.Parent)
-                .WithMany(t => t.WorkerOffers)
+                .WithMany(t => t.Offers)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }
 
-    public class Worker: UserRef<Company>
-    {
-        public List<WorkerOffer> WorkerOffers { get; } = new List<WorkerOffer>();
-    }
+    //public class Worker: UserRef<Company>
+    //{
+    //    public List<WorkerOffer> WorkerOffers { get; } = new List<WorkerOffer>();
+    //}
 
-    public class WorkerOffer: OfferRef<Worker>
-    {
+    //public class WorkerOffer: OfferRef<Worker>
+    //{
 
-    }
+    //}
 }

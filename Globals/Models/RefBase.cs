@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace Globals.Models
 {
-    public class OfferRef<T>: EntityBase where T: EntityBase 
+    public class RefBase<T> : EntityBase where T : EntityBase
     {
         public Guid RefGuid { get; set; }
-        public String Name { get; set; }    
         public T Parent { get; set; }
     }
 }

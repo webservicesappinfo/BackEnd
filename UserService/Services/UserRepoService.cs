@@ -29,7 +29,7 @@ namespace UserService.Services
                 var findUser = db.Values.Include(x => x.Companies).FirstOrDefault(x => x.UIDFB == uidfb);
                 if (findUser == null) return false;
                 if (findUser.Companies.Any(x => x.Guid == company)) return false;
-                findUser.Companies.Add(new Globals.Models.CompanyRef<User>() { RefGuid = company, Name = name });
+                findUser.Companies.Add(new UserCompanyRef() { RefGuid = company, Name = name });
                 db.SaveChanges();
             }
             return true;
@@ -56,7 +56,7 @@ namespace UserService.Services
                 var findUser = db.Values.Include(x=>x.Offers).FirstOrDefault(x => x.UIDFB == masterGuid);
                 if (findUser == null) return false;
                 if (findUser.Offers.Any(x => x.Guid == guid)) return false;
-                findUser.Offers.Add(new Globals.Models.OfferRef<User>() { RefGuid = guid, Name = name });
+                findUser.Offers.Add(new UserOfferRef() { RefGuid = guid, Name = name });
                 db.SaveChanges();
             }
             return true;

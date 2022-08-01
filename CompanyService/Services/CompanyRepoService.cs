@@ -38,7 +38,7 @@ namespace CompanyService.Services
                 var fitCompany = db.Values.Include(x=>x.Workers).FirstOrDefault(x=>x.Guid == guid);
                 if (fitCompany == null) return false;
                 if (fitCompany.Workers.Any(x => x.Guid == masterGuid)) return false;
-                fitCompany.Workers.Add(new Worker() { RefGuid = masterGuid, Name = masterName });
+                fitCompany.Workers.Add(new CompanyUserRef() { RefGuid = masterGuid, Name = masterName });
                 db.SaveChanges();
             }
             return true;
@@ -70,14 +70,14 @@ namespace CompanyService.Services
             using (var db = new CompanyContext())
             {
                 //var company = GetEntity(companyGuid, nameof(Company.Workers));
-                var company = db.Values.Include(x => x.Workers).ThenInclude(x => x.WorkerOffers).FirstOrDefault(x => x.Guid == companyGuid);
+                var company = db.Values.Include(x => x.Workers).ThenInclude(x => x.Offers).FirstOrDefault(x => x.Guid == companyGuid);
                 if (company == null) return false;
                 company.Lat = lat;
                 company.Lng = lng;
                 db.SaveChanges();
 
                 foreach (var worker in company.Workers)
-                    foreach (var offer in worker.WorkerOffers)
+                    foreach (var offer in worker.Offers)
                         _eventBus.Publish(new SendInfoForOffer(offer.RefGuid, company.Name, company.Lat ?? 0.0, company.Lng ?? 0.0));
             }
             return true;
@@ -91,7 +91,7 @@ namespace CompanyService.Services
                 if (fitCompany == null) return false;
                 var fitWorker = fitCompany.Workers.FirstOrDefault(x => x.RefGuid == @event.MasterGuid);
                 if (fitWorker == null) return false;
-                fitWorker.WorkerOffers.Add(new WorkerOffer() { RefGuid = @event.Guid, Name = @event.Name });
+                fitWorker.Offers.Add(new CompanyOfferRef() { RefGuid = @event.Guid, Name = @event.Name });
                 db.SaveChanges();
 
                 _eventBus.Publish(new SendInfoForOffer(@event.Guid, fitCompany.Name, fitCompany.Lat ?? 0.0, fitCompany.Lng ?? 0.0));
@@ -104,14 +104,14 @@ namespace CompanyService.Services
             using (var db = new CompanyContext())
             {
                 foreach(var company in db.Values.Include(x=>x.Workers)
-                    .ThenInclude(x=>x.WorkerOffers).Where(x=> x.Workers.Any(x=>x.RefGuid == @event.MasterGuid)))
+                    .ThenInclude(x=>x.Offers).Where(x=> x.Workers.Any(x=>x.RefGuid == @event.MasterGuid)))
                 {
                     var worker = company.Workers.FirstOrDefault(x => x.RefGuid == @event.MasterGuid);
                     if(worker != null)
                     {
-                        var offer = worker.WorkerOffers.FirstOrDefault(x => x.RefGuid == @event.Guid);
+                        var offer = worker.Offers.FirstOrDefault(x => x.RefGuid == @event.Guid);
                         if (offer != null)
-                            worker.WorkerOffers.Remove(offer);
+                            worker.Offers.Remove(offer);
                     }
                 }
                 db.SaveChanges();

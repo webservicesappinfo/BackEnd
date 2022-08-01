@@ -21,8 +21,8 @@ namespace Globals.Models
             npgsqlConnectionStringBuilder.Host = "194.61.53.135";
             npgsqlConnectionStringBuilder.Port = 5432;
             npgsqlConnectionStringBuilder.Database = $"{TypeName }db";
-            npgsqlConnectionStringBuilder.Username = "admin";
-            npgsqlConnectionStringBuilder.Password = "admin";
+            npgsqlConnectionStringBuilder.Username = "root";
+            npgsqlConnectionStringBuilder.Password = "root";
             npgsqlConnectionStringBuilder.IncludeErrorDetails = true;
 
             optionsBuilder.UseNpgsql(npgsqlConnectionStringBuilder.ConnectionString);

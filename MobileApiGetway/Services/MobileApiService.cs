@@ -51,12 +51,32 @@ namespace MobileApiGetway.Services
         }
 
         #region MobileApi
+        public override Task<GetMainDataForUserReply> GetMainDataForUser(GetMainDataForUserRequest request, ServerCallContext context)
+        {
+            var reply = new GetMainDataForUserReply();
+            var fitUser = _userClient.GetUser(new GetUserRequest() { UidFB = request.UserGuid });
+            reply.UserName = fitUser?.Name ?? "NotFound";
+            reply.UserUidFB = fitUser.UidFB;
+            var response = _companyClient.GetCompanies(new GetCompaniesRequest() { UserGuid = request.UserGuid, Type = "owner" });
+            reply.Companies.Add(response.Companies.Select(x => new CompanyReply()
+            {
+                Guid = x.Guid,
+                Name = x.Name,
+                OwnerGuid = x.OwnerGuid,
+                OwnerName = x.OwnerName,
+                Lat = x.Lat,
+                Lng = x.Lng,
+
+            }));
+            return Task.FromResult(reply);
+        }
+
         public override Task<GetFitForCompanyUsersReply> GetFitForCompanyUsers(GetFitForCompanyUsersRequest request, ServerCallContext context)
         {
             var reply = new GetFitForCompanyUsersReply();
             var company = _companyClient.GetCompany(new GetCompanyRequest() { Guid = request.CompanyGuid });
             if (company == null) return Task.FromResult(reply);
-            if (request.IsConsistIn)
+            /*if (request.IsConsistIn)
             {
                 for (var i = 0; i < company.MasterGuids.Count; i++)
                 {
@@ -73,13 +93,13 @@ namespace MobileApiGetway.Services
                     reply.Guids.Add(users.Uids[i]);
                     reply.Names.Add(users.Names[i]);
                 }
-            }
+            }*/
             return Task.FromResult(reply);
         }
 
         #endregion
 
-        #region UserRepoService
+        #region UserService
         public override Task<AddUserReply> ApiAddUser(AddUserRequest request, ServerCallContext context) 
             => Task.FromResult(_userClient.AddUser(request));
 
@@ -94,10 +114,15 @@ namespace MobileApiGetway.Services
         #endregion
 
         #region CompanyService
-        public override Task<AddCompanyReply> ApiAddCompany(AddCompanyRequest request, ServerCallContext context)
+        public override Task<AddCompanyReply> AddCompany(AddCompanyRequest request, ServerCallContext context)
         {
             var reply = _companyClient.AddCompany(request);
             return Task.FromResult(new AddCompanyReply() { Result = reply.Result });
+        }
+        public override Task<DelCompanyReply> DelCompany(DelCompanyRequest request, ServerCallContext context)
+        {
+            var reply = _companyClient.DelCompany(request);
+            return Task.FromResult(reply);
         }
 
         public override Task<JoinToCompanyReply> ApiJoinToCompany(JoinToCompanyRequest request, ServerCallContext context)
@@ -109,7 +134,7 @@ namespace MobileApiGetway.Services
         public override Task<GetCompanyReply> ApiGetCompany(GetCompanyRequest request, ServerCallContext context)
         {
             var reply = _companyClient.GetCompany(request);
-            for (var i = 0; i< reply.MasterGuids.Count; i++)
+            /*for (var i = 0; i< reply.MasterGuids.Count; i++)
             {
                 var user = _userClient.GetUser(new GetUserRequest() { UidFB = reply.MasterGuids[i]});
                 if (user == null)
@@ -118,19 +143,13 @@ namespace MobileApiGetway.Services
                     continue;
                 }
                 reply.MasterNames[i] = user.Name;
-            }
+            }*/
             return Task.FromResult(reply);
         }
 
         public override Task<GetCompaniesReply> ApiGetCompanies(GetCompaniesRequest request, ServerCallContext context)
         {
             var reply = _companyClient.GetCompanies(request);
-            return Task.FromResult(reply);
-        }
-
-        public override Task<DelCompanyReply> ApiDelCompany(DelCompanyRequest request, ServerCallContext context)
-        {
-            var reply = _companyClient.DelCompany(request);
             return Task.FromResult(reply);
         }
 

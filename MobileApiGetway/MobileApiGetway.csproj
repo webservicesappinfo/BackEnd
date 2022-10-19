@@ -13,6 +13,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Protobuf Include="..\..\Protos\msg.proto">
+      <Link>Protos\msg.proto</Link>
+    </Protobuf>
     <Protobuf Include="ClientProtos\location_repo.proto" GrpcServices="Client" />
     <Protobuf Include="..\..\Protos\notification.proto" GrpcServices="Client" />
     <Protobuf Include="..\..\Protos\user.proto" GrpcServices="Client" />
@@ -26,18 +29,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Google.Protobuf" Version="3.19.1" />
-    <PackageReference Include="Grpc.AspNetCore" Version="2.40.0" />
-    <PackageReference Include="Grpc.Net.Client" Version="2.40.0" />
-    <PackageReference Include="Grpc.Tools" Version="2.41.1">
+    <PackageReference Include="Google.Protobuf" Version="3.21.7" />
+    <PackageReference Include="Grpc.AspNetCore" Version="2.49.0" />
+    <PackageReference Include="Grpc.Net.Client" Version="2.49.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.49.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.11.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Protos\" />
   </ItemGroup>
 
 </Project>

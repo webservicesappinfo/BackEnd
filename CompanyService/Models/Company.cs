@@ -35,14 +35,4 @@ namespace CompanyService.Models
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }
-
-    //public class Worker: UserRef<Company>
-    //{
-    //    public List<WorkerOffer> WorkerOffers { get; } = new List<WorkerOffer>();
-    //}
-
-    //public class WorkerOffer: OfferRef<Worker>
-    //{
-
-    //}
 }

@@ -10,6 +10,7 @@ using EventBus.Events.ServicesEvents.CompanyEvents;
 using EventBus.Events.ServicesEvents.UserRepoEvents;
 using Grpc.Core;
 using Microsoft.Extensions.Logging;
+using MobileApiGetway;
 
 namespace CompanyService.Services
 {
@@ -33,19 +34,18 @@ namespace CompanyService.Services
 
             var company = _companyRepoService.GetEntity(new Guid(request.Guid), nameof(Models.Company.Workers));
             if (company == null) return Task.FromResult(reply);
-            reply.Guid = company.Guid.ToString();
-            reply.Name = company.Name;
-            reply.OwnerGuid = company.OwnerGuid.ToString();
-            reply.OwnerName = company.OwnerName;
-            reply.Lat = company.Lat?.ToString() ?? String.Empty;
-            reply.Lng = company.Lng?.ToString() ?? String.Empty;
+            reply.Company.Guid = company.Guid.ToString();
+            reply.Company.Name = company.Name;
+            reply.Company.OwnerGuid = company.OwnerGuid.ToString();
+            reply.Company.OwnerName = company.OwnerName;
+            reply.Company.Lat = company.Lat?.ToString() ?? String.Empty;
+            reply.Company.Lng = company.Lng?.ToString() ?? String.Empty;
 
             foreach (var master in company.Workers)
             {
-                reply.MasterGuids.Add(master.RefGuid.ToString());
-                reply.MasterNames.Add(master.Name);
+                reply.Company.MasterGuids.Add(master.RefGuid.ToString());
+                reply.Company.MasterNames.Add(master.Name);
             }
-
             return Task.FromResult(reply);
         }
         public override Task<GetCompaniesReply> GetCompanies(GetCompaniesRequest request, ServerCallContext context)
@@ -65,8 +65,16 @@ namespace CompanyService.Services
                     fitCompanies = totalCompanies.Where(x => x.OwnerGuid != guid && !x.Workers.Any(x => x.RefGuid == guid)).ToList(); break;
             }
             var reply = new GetCompaniesReply();
-            reply.Guids.AddRange(fitCompanies.Select(x => x.Guid.ToString()));
-            reply.Names.AddRange(fitCompanies.Select(x => x.Name));
+            foreach (var company in fitCompanies)
+                reply.Companies.Add(new CompanyReply()
+                {
+                    Guid = company.Guid.ToString(),
+                    Name = company.Name,
+                    OwnerGuid = company.OwnerGuid.ToString(),
+                    OwnerName = company.OwnerName,
+                    Lat = company.Lat.ToString(),
+                    Lng = company.Lng.ToString()
+                });
             return Task.FromResult(reply);
         }
         public override Task<AddCompanyReply> AddCompany(AddCompanyRequest request, ServerCallContext context)

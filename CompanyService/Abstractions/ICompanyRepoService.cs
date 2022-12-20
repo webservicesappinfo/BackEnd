@@ -14,7 +14,7 @@ namespace CompanyService.Abstractions
 
         Boolean JoinToCompany(Guid guid, Guid masterGuid, String masterName);
 
-        Boolean DelWorker(Guid company, Guid master);
+        Boolean DelWorker(Guid company, Guid masterUIDFB);
 
         Boolean SetCompanyLocation(Guid companyGuid, Double? lat, Double? lng);
 

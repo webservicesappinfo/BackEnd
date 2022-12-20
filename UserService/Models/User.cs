@@ -14,20 +14,27 @@ namespace UserService.Models
         public String Name { get; set; }
         public String LastName { get; set; }
         public String Email { get; set; }
-        public List<UserCompanyRef> Companies { get; } = new List<UserCompanyRef>();
+        public List<UserCompanyRef> OwnCompanies { get; } = new List<UserCompanyRef>();
+        public List<MasterCompanyRef> MasterCompanies { get; } = new List<MasterCompanyRef>();
         public List<UserOfferRef> Offers { get; } = new List<UserOfferRef>();
     }
 
     public class UserContext : ContextBase<User>
     {
-        public DbSet<UserCompanyRef> Companies { get; set; }
+        public DbSet<UserCompanyRef> OwnCompanies { get; set; }
+        public DbSet<MasterCompanyRef> MasterCompanies { get; set; }
         public DbSet<UserOfferRef> Offers { get; set; }
 
         protected override void ModelBuilderConfigure(ModelBuilder builder)
         {
             builder.Entity<UserCompanyRef>()
                 .HasOne(j => j.Parent)
-                .WithMany(t => t.Companies)
+                .WithMany(t => t.OwnCompanies)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<MasterCompanyRef>()
+                .HasOne(j => j.Parent)
+                .WithMany(t => t.MasterCompanies)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<UserOfferRef>()

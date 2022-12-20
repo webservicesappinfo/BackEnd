@@ -8,23 +8,29 @@ namespace OfferService.Models
 {
     public class Offer : EntityBase
     {
-        public String Name { get; set; }
+        private String _name;
+        private String _description;
+        private String _companyName;
+        private String _masterName;
+        private String _skillName;
 
-        public String Description { get; set; }
+        public String Name { get => _name ?? String.Empty; set => _name = value; }
+
+        public String Description { get => _description ?? String.Empty; set => _description = value; }
 
         public Guid CompanyGuid { get; set; }
 
-        public String CompanyName { get; set; }
+        public String CompanyName { get => _companyName ?? String.Empty; set => _companyName = value; }
 
         public Guid MasterGuid { get; set; }
 
-        public String MasterName { get; set; }
+        public String MasterName { get => _masterName ?? String.Empty; set => _masterName = value; }
 
         public Guid OrderGuid { get; set; }
 
         public Guid SkillGuid { get; set; }
 
-        public String SkillName { get; set; }
+        public String SkillName { get => _skillName ?? String.Empty; set => _skillName = value; }
 
         public OfferStatus Status { get; set; }
 

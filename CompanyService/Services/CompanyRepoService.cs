@@ -27,8 +27,8 @@ namespace CompanyService.Services
         public List<Company> GetCompaniesByOwner(Guid owner)
         {
             using (var db = new CompanyContext())
-                //return db.Values.Where(x=>x.OwnerGuid == owner).Include(x => x.Workers).Include(x => x.Offers).ToList();
-                return db.Values.Where(x => x.OwnerGuid == owner).Include(x => x.Workers).ToList();
+                return db.Values.Where(x=>x.OwnerGuid == owner).Include(x => x.Workers).ThenInclude(x => x.Offers).ToList();
+                //return db.Values.Where(x => x.OwnerGuid == owner).Include(x => x.Workers).ToList();
         }
 
         public bool JoinToCompany(Guid guid, Guid masterGuid, String masterName)
@@ -51,13 +51,13 @@ namespace CompanyService.Services
                 return db.Values.Include(x => x.Workers).Where(x => x.Workers.Any(m => m.RefGuid == master)).ToList();
         }
 
-        public Boolean DelWorker(Guid company, Guid master)
+        public Boolean DelWorker(Guid company, Guid masterUIDFB)
         {
             using (var db = new CompanyContext())
             {
                 var fitCompany = db.Values.Include(x => x.Workers).FirstOrDefault(x => x.Guid == company);
                 if (fitCompany == null) return false;
-                var fitMaster = fitCompany.Workers.FirstOrDefault(x => x.RefGuid == master);
+                var fitMaster = fitCompany.Workers.FirstOrDefault(x => x.RefGuid == masterUIDFB);
                 if (fitMaster == null) return false;
                 db.Workers.Remove(fitMaster);
                 db.SaveChanges();

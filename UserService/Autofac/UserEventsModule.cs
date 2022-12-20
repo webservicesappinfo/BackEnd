@@ -16,7 +16,7 @@ namespace UserService.Autofac
         {
             builder.RegisterAssemblyTypes(typeof(AddCompanyEH).GetTypeInfo().Assembly).AsClosedTypesOf(typeof(IIntegrationEventHandler<>));
             builder.RegisterAssemblyTypes(typeof(DelCompanyEH).GetTypeInfo().Assembly).AsClosedTypesOf(typeof(IIntegrationEventHandler<>));
-            builder.RegisterAssemblyTypes(typeof(JoinToCompanyEH).GetTypeInfo().Assembly).AsClosedTypesOf(typeof(IIntegrationEventHandler<>));
+            builder.RegisterAssemblyTypes(typeof(AddMasterEH).GetTypeInfo().Assembly).AsClosedTypesOf(typeof(IIntegrationEventHandler<>));
         }
     }
 }

@@ -13,7 +13,11 @@ namespace Globals.Models
         private String TypeName => typeof(T).Name.Replace("Context", String.Empty);
         public DbSet<T> Values { get; set; }
 
-        public ContextBase() => Database.EnsureCreated();
+        public ContextBase()
+        {
+            //Database.EnsureDeleted();
+            Database.EnsureCreated();
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

@@ -11,10 +11,10 @@ namespace UserService.EventHandlers
 {
     public class DelOfferEH : IIntegrationEventHandler<DelOfferEvent>
     {
-        private readonly ILogger<DelOfferEvent> _logger;
+        private readonly ILogger<DelOfferEH> _logger;
         private readonly IUserRepoService _userRepoService;
 
-        public DelOfferEH(ILogger<DelOfferEvent> logger, IUserRepoService userRepoService)
+        public DelOfferEH(ILogger<DelOfferEH> logger, IUserRepoService userRepoService)
         {
             _logger = logger;
             _userRepoService = userRepoService;

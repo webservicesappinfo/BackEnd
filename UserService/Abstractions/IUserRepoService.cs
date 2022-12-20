@@ -15,6 +15,10 @@ namespace UserService.Abstractions
 
         public Boolean DelCompany(Guid uidfb, Guid company);
 
+        public Boolean JoinToCompany(Guid uidfb, Guid company, String name);
+
+        public Boolean UnJoinCompany(Guid uidfb, Guid company);
+
         public Boolean AddOffer(Guid guid, String Name, Guid masterGuid);
 
         public Boolean OnDelOffer(Guid guid, Guid masterGuid);

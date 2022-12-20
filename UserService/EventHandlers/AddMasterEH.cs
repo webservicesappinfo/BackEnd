@@ -9,22 +9,22 @@ using UserService.Abstractions;
 
 namespace UserService.EventHandlers
 {
-    public class AddCompanyEH : IIntegrationEventHandler<AddCompanyEvent>
+    public class AddMasterEH : IIntegrationEventHandler<AddMasterEvent>
     {
-        private readonly ILogger<AddCompanyEH> _logger;
+        private readonly ILogger<AddMasterEH> _logger;
         private readonly IUserRepoService _userRepoService;
 
-        public AddCompanyEH(ILogger<AddCompanyEH> logger, IUserRepoService userRepoService)
+        public AddMasterEH(ILogger<AddMasterEH> logger, IUserRepoService userRepoService)
         {
             _logger = logger;
             _userRepoService = userRepoService;
         }
 
-        public Task Handle(AddCompanyEvent @event)
+        public Task Handle(AddMasterEvent @event)
         {
-            Console.WriteLine(@event.Name);
+            Console.WriteLine(@event.CompanyGuid);
             //@event.ResponseReceivedEvent.Set();
-            _userRepoService.AddCompany(@event.Owner, @event.Guid, @event.Name);
+            var user = _userRepoService.JoinToCompany(@event.MasterGuid, @event.CompanyGuid, @event.CompanyName);
             return Task.FromResult(0);
         }
     }

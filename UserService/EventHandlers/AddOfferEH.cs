@@ -9,10 +9,10 @@ namespace UserService.EventHandlers
 {
     public class AddOfferEH : IIntegrationEventHandler<AddOfferEvent>
     {
-        private readonly ILogger<AddOfferEvent> _logger;
+        private readonly ILogger<AddOfferEH> _logger;
         private readonly IUserRepoService _userRepoService;
 
-        public AddOfferEH(ILogger<AddOfferEvent> logger, IUserRepoService userRepoService)
+        public AddOfferEH(ILogger<AddOfferEH> logger, IUserRepoService userRepoService)
         {
             _logger = logger;
             _userRepoService = userRepoService;

@@ -60,7 +60,9 @@ namespace UserService
             var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
             eventBus.Subscribe<AddCompanyEvent, AddCompanyEH>();
             eventBus.Subscribe<DelCompanyEvent, DelCompanyEH>();
-            eventBus.Subscribe<JoinToCompanyEvent, JoinToCompanyEH>();
+            eventBus.Subscribe<AddMasterEvent, AddMasterEH>();
+            eventBus.Subscribe<DelMasterEvent, DelMasterEH>();
+
 
             eventBus.Subscribe<AddOfferEvent, AddOfferEH>();
             eventBus.Subscribe<DelOfferEvent, DelOfferEH>();

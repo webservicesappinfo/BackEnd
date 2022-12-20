@@ -8,6 +8,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MobileApiGetway;
+using OfferService.Models;
+using Offer = OfferService.Protos.Offer;
 
 namespace OfferService.Services
 {
@@ -23,120 +26,72 @@ namespace OfferService.Services
             _eventBus = eventBus;
             _offerRepoService = offerRepoService;
         }
-
         public override Task<AddOfferReply> AddOffer(AddOfferRequest request, ServerCallContext context)
         {
-            var offer = new Models.Offer() 
-            { 
-                Name = request.Name, 
-                CompanyGuid = new Guid(request.CompanyGuid),
-                CompanyName = request.CompanyName,
-                MasterGuid = new Guid(request.MasterGuid),
-                MasterName = request.MasterName,
-                SkillGuid= new Guid(request.SkillGuid),
-                SkillName = request.SkillName 
+            var offer = new Models.Offer()
+            {
+                Name = request.Offer.Name,
+                CompanyGuid = new Guid(request.Offer.CompanyGuid),
+                CompanyName = request.Offer.CompanyName,
+                MasterGuid = new Guid(request.Offer.MasterGuid),
+                MasterName = request.Offer.MasterName,
+                SkillGuid = new Guid(request.Offer.SkillGuid),
+                SkillName = request.Offer.SkillName
             };
             var result = _offerRepoService.AddEntity(offer);
 
             if (result)
-                _eventBus.Publish(new AddOfferEvent(offer.Name,offer.Guid, offer.CompanyGuid, offer.MasterGuid));
+                _eventBus.Publish(new AddOfferEvent(offer.Name, offer.Guid, offer.CompanyGuid, offer.MasterGuid));
 
             return Task.FromResult(new AddOfferReply { Result = result });
         }
+        
 
         public override Task<GetOfferReply> GetOffer(GetOfferRequest request, ServerCallContext context)
         {
-            return base.GetOffer(request, context);
+            var offer = _offerRepoService.GetEntity(new Guid(request.Guid));
+            if (offer == null) return Task.FromResult(new GetOfferReply() { Result = false });
+            return Task.FromResult(new GetOfferReply()
+            {
+                Result = true,
+                Offer = ConvertOffer(offer)
+            });
         }
 
         public override Task<GetOffersReply> GetOffers(GetOffersRequest request, ServerCallContext context)
         {
-            var offers = _offerRepoService.GetEntities();
-            if (String.IsNullOrEmpty(request.MasterGuid))
+            var reply = new GetOffersReply();
+            foreach(var guid in request.Guids)
             {
-                var clientGuid = new Guid(request.ClientGuid);
-                offers = offers.Where(x => x.MasterGuid != clientGuid).ToList();
+                var offer = _offerRepoService.GetEntity(new Guid(guid));
+                if (offer == null) continue;
+                reply.Offers.Add(ConvertOffer(offer));
             }
-            else
-            {
-                var masterGuid = new Guid(request.MasterGuid);
-                offers = offers.Where(x => x.MasterGuid == masterGuid).ToList();
-            }
-            if(!String.IsNullOrEmpty(request.SkillGuid))
-            {
-                var skillGuid = new Guid(request.SkillGuid);
-                offers = offers.Where(x => x.SkillGuid == skillGuid).ToList();
-            }
-            if (!request.ForMaster)
-                offers = offers.Where(x => x.Status == Models.OfferStatus.Actived).ToList();
-
-            var reply = ConvertOffersToReply(offers);
             return Task.FromResult(reply);
-        }
-
-        public override Task<GetOffersReply> GetOffersByMaster(GetOffersByMasterRequest request, ServerCallContext context)
-        {
-            var offers = new List<Models.Offer>();
-            if (String.IsNullOrEmpty(request.MasterGuid))
-            {
-                var clientGuid = new Guid(request.ClientGuid);
-                offers = _offerRepoService.GetEntities().Where(x => x.MasterGuid != clientGuid).ToList();
-            }
-            else
-            {
-                var masterGuid = new Guid(request.MasterGuid);
-                offers = _offerRepoService.GetEntities().Where(x => x.MasterGuid == masterGuid).ToList();
-            }
-            if (!request.ForMaster)
-                offers = offers.Where(x => x.Status == Models.OfferStatus.Actived).ToList();
-
-            var reply = ConvertOffersToReply(offers);
-            return Task.FromResult(reply);
-        }
-
-        public override Task<GetOffersReply> GetOffersBySkill(GetOffersBySkillRequest request, ServerCallContext context)
-        {
-            var skillGuid = new Guid(request.SkillGuid);
-            var offers = _offerRepoService.GetEntities();
-            var reply = ConvertOffersToReply(offers.Where(x => x.Status == Models.OfferStatus.Actived && x.SkillGuid == skillGuid).ToList());
-            return Task.FromResult(reply);
-        }
-
-        public override Task<UpdateOfferReply> UpdateOffer(UpdateOfferRequest request, ServerCallContext context)
-        {
-            return base.UpdateOffer(request, context);
         }
 
         public override Task<DelOfferReply> DelOffer(DelOfferRequest request, ServerCallContext context)
         {
-            var offerGuid = new Guid(request.Guid);
-            var offer = _offerRepoService.GetEntity(offerGuid);
-            if (offer == null)
-                return Task.FromResult(new DelOfferReply { Result = false });
-            var result = _offerRepoService.DelEntity(offerGuid);
+            var offer = request.Offer;
+            var result = _offerRepoService.DelEntity(new Guid(offer.Guid));
             if (result)
-                _eventBus.Publish(new DelOfferEvent(offer.Name, offer.Guid, offer.MasterGuid));
-            return Task.FromResult(new DelOfferReply { Result = result });
+                _eventBus.Publish(new DelOfferEvent(offer.Name, new Guid(offer.CompanyGuid), new Guid(offer.MasterGuid)));
+            return Task.FromResult(new DelOfferReply() { Result = result});
         }
-
-        private GetOffersReply ConvertOffersToReply(List<Models.Offer> offers)
+        private OfferApi ConvertOffer(Models.Offer offer)
+        => new OfferApi()
         {
-            var reply = new GetOffersReply();
-            foreach (var offer in offers)
-            {
-                reply.Guids.Add(offer.Guid.ToString());
-                reply.Names.Add(offer.Name);
-                reply.CompanyGuids.Add(offer.CompanyGuid.ToString());
-                reply.CompanyNames.Add(offer.CompanyName);
-                reply.MasterGuids.Add(offer.MasterGuid.ToString());
-                reply.MasterNames.Add(offer.MasterName);
-                reply.SkillGuids.Add(offer.SkillGuid.ToString());
-                reply.SkillNames.Add(offer.SkillName);
-                reply.Statuses.Add(offer.Status.ToString());
-                reply.Lats.Add(offer.Lat.ToString());
-                reply.Lngs.Add( offer.Lng.ToString());
-            }
-            return reply;
-        }
+            Name = offer.Name,
+            Guid = offer.Guid.ToString(),
+            Desc = offer.Description,
+                CompanyGuid = offer.CompanyGuid.ToString(),
+                CompanyName = offer.CompanyName,
+                MasterGuid = offer.MasterGuid.ToString(),
+                MasterName = offer.MasterName,
+                SkillGuid = offer.SkillGuid.ToString(),
+                SkillName = offer.SkillName,
+                OrderGuid = offer.OrderGuid.ToString(),
+                Status = offer.Status.ToString()
+            };
     }
 }

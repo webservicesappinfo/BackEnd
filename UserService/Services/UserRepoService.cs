@@ -26,10 +26,10 @@ namespace UserService.Services
         {
             using (var db = new UserContext())
             {
-                var findUser = db.Values.Include(x => x.Companies).FirstOrDefault(x => x.UIDFB == uidfb);
+                var findUser = db.Values.Include(x => x.OwnCompanies).FirstOrDefault(x => x.UIDFB == uidfb);
                 if (findUser == null) return false;
-                if (findUser.Companies.Any(x => x.Guid == company)) return false;
-                findUser.Companies.Add(new UserCompanyRef() { RefGuid = company, Name = name });
+                if (findUser.OwnCompanies.Any(x => x.Guid == company)) return false;
+                findUser.OwnCompanies.Add(new UserCompanyRef() { RefGuid = company, Name = name });
                 db.SaveChanges();
             }
             return true;
@@ -39,11 +39,11 @@ namespace UserService.Services
         {
             using (var db = new UserContext())
             {
-                var findUser = db.Values.Include(x=>x.Companies).FirstOrDefault(x => x.UIDFB == uidfb);
+                var findUser = db.Values.Include(x=>x.OwnCompanies).FirstOrDefault(x => x.UIDFB == uidfb);
                 if (findUser == null) return false;
-                var findCompany = findUser.Companies.FirstOrDefault(x => x.RefGuid == company);
+                var findCompany = findUser.OwnCompanies.FirstOrDefault(x => x.RefGuid == company);
                 if (findCompany == null) return false;
-                findUser.Companies.Remove(findCompany);
+                findUser.OwnCompanies.Remove(findCompany);
                 db.SaveChanges();
             }
             return true;
@@ -82,6 +82,33 @@ namespace UserService.Services
             using (var db = new UserContext())
                 user = db.Values.FirstOrDefault(x => x.UIDFB == uidfb);
             return user;
+        }
+
+        public bool JoinToCompany(Guid uidfb, Guid company, string name)
+        {
+            using (var db = new UserContext())
+            {
+                var findUser = db.Values.Include(x => x.MasterCompanies).FirstOrDefault(x => x.UIDFB == uidfb);
+                if (findUser == null) return false;
+                if (findUser.MasterCompanies.Any(x => x.Guid == company)) return false;
+                findUser.MasterCompanies.Add(new MasterCompanyRef() { RefGuid = company, Name = name });
+                db.SaveChanges();
+            }
+            return true;
+        }
+
+        public bool UnJoinCompany(Guid uidfb, Guid company)
+        {
+            using (var db = new UserContext())
+            {
+                var findUser = db.Values.Include(x=>x.MasterCompanies).FirstOrDefault(x => x.UIDFB == uidfb);
+                if (findUser == null) return false;
+                var findCompany = findUser.MasterCompanies.FirstOrDefault(x => x.RefGuid == company);
+                if (findCompany == null) return false;
+                findUser.MasterCompanies.Remove(findCompany);
+                db.SaveChanges();
+            }
+            return true;
         }
     }
 }

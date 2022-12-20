@@ -54,20 +54,20 @@ namespace MobileApiGetway.Services
         public override Task<GetMainDataForUserReply> GetMainDataForUser(GetMainDataForUserRequest request, ServerCallContext context)
         {
             var reply = new GetMainDataForUserReply();
-            var fitUser = _userClient.GetUser(new GetUserRequest() { UidFB = request.UserGuid });
+            var fitUser = _userClient.GetUser(new GetUserRequest() { UidFB = request.UserUIDFB });
             reply.UserName = fitUser?.Name ?? "NotFound";
-            reply.UserUidFB = fitUser.UidFB;
-            var response = _companyClient.GetCompanies(new GetCompaniesRequest() { UserGuid = request.UserGuid, Type = "owner" });
-            reply.Companies.Add(response.Companies.Select(x => new CompanyReply()
-            {
-                Guid = x.Guid,
-                Name = x.Name,
-                OwnerGuid = x.OwnerGuid,
-                OwnerName = x.OwnerName,
-                Lat = x.Lat,
-                Lng = x.Lng,
-
-            }));
+            reply.UserUIDFB = fitUser.UidFB;
+            var response = _companyClient.GetCompanies(new GetCompaniesRequest() { UserUIDFB = request.UserUIDFB, Type = "owner" });
+            foreach(var company in response.Companies)
+                foreach(var master in company.Masters)
+                {
+                    var offerRequest = new GetOffersRequest();
+                    offerRequest.Guids.AddRange(master.Offers.Select(x => x.Guid));
+                    var offerReply = _offerClient.GetOffers(offerRequest);
+                    master.Offers.Clear();
+                    master.Offers.AddRange(offerReply.Offers);
+                }
+            reply.Companies.AddRange(response.Companies);
             return Task.FromResult(reply);
         }
 
@@ -115,21 +115,19 @@ namespace MobileApiGetway.Services
 
         #region CompanyService
         public override Task<AddCompanyReply> AddCompany(AddCompanyRequest request, ServerCallContext context)
-        {
-            var reply = _companyClient.AddCompany(request);
-            return Task.FromResult(new AddCompanyReply() { Result = reply.Result });
-        }
+            => Task.FromResult(_companyClient.AddCompany(request));
+
         public override Task<DelCompanyReply> DelCompany(DelCompanyRequest request, ServerCallContext context)
-        {
-            var reply = _companyClient.DelCompany(request);
-            return Task.FromResult(reply);
-        }
+            => Task.FromResult(_companyClient.DelCompany(request));
+
+        public override Task<AddMasterReply> AddMaster(AddMasterRequest request, ServerCallContext context)
+            => Task.FromResult(_companyClient.AddMaster(request));
 
         public override Task<JoinToCompanyReply> ApiJoinToCompany(JoinToCompanyRequest request, ServerCallContext context)
-        {
-            var reply = _companyClient.JoinToCompany(request);
-            return Task.FromResult(new JoinToCompanyReply() { Result = reply.Result });
-        }
+            => Task.FromResult(_companyClient.JoinToCompany(request));
+
+        public override Task<DelMasterReply> DelMaster(DelMasterRequest request, ServerCallContext context)
+            => Task.FromResult(_companyClient.DelMaster(request));
 
         public override Task<GetCompanyReply> ApiGetCompany(GetCompanyRequest request, ServerCallContext context)
         {
@@ -179,20 +177,11 @@ namespace MobileApiGetway.Services
         #endregion
 
         #region OfferService
-        public override Task<AddOfferReply> ApiAddOffer(AddOfferRequest request, ServerCallContext context)
+
+        public override Task<AddOfferReply> AddOffer(AddOfferRequest request, ServerCallContext context)
             => Task.FromResult(_offerClient.AddOffer(request));
-
-        public override Task<GetOffersReply> ApiGetOffers(GetOffersRequest request, ServerCallContext context)
-            => Task.FromResult(_offerClient.GetOffers(request));
-
-        public override Task<GetOffersReply> ApiGetOffersByMaster(GetOffersByMasterRequest request, ServerCallContext context)
-            => Task.FromResult(_offerClient.GetOffersByMaster(request));
-
-        public override Task<GetOffersReply> ApiGetOffersBySkill(GetOffersBySkillRequest request, ServerCallContext context)
-            => Task.FromResult(_offerClient.GetOffersBySkill(request));
-
-        public override Task<DelOfferReply> ApiDelOffer(DelOfferRequest request, ServerCallContext context)
-            => Task.FromResult(_offerClient.DelOffer(request));
+        public override Task<DelOfferReply> DelOffer(DelOfferRequest request, ServerCallContext context)
+        => Task.FromResult(_offerClient.DelOffer(request));
         #endregion
 
         #region OrderService

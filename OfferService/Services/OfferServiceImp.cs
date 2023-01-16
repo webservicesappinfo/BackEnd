@@ -45,7 +45,7 @@ namespace OfferService.Services
 
             return Task.FromResult(new AddOfferReply { Result = result });
         }
-        
+
 
         public override Task<GetOfferReply> GetOffer(GetOfferRequest request, ServerCallContext context)
         {
@@ -61,7 +61,7 @@ namespace OfferService.Services
         public override Task<GetOffersReply> GetOffers(GetOffersRequest request, ServerCallContext context)
         {
             var reply = new GetOffersReply();
-            foreach(var guid in request.Guids)
+            foreach (var guid in request.Guids)
             {
                 var offer = _offerRepoService.GetEntity(new Guid(guid));
                 if (offer == null) continue;
@@ -76,14 +76,14 @@ namespace OfferService.Services
             var result = _offerRepoService.DelEntity(new Guid(offer.Guid));
             if (result)
                 _eventBus.Publish(new DelOfferEvent(offer.Name, new Guid(offer.CompanyGuid), new Guid(offer.MasterGuid)));
-            return Task.FromResult(new DelOfferReply() { Result = result});
+            return Task.FromResult(new DelOfferReply() { Result = result });
         }
         private OfferApi ConvertOffer(Models.Offer offer)
-        => new OfferApi()
-        {
-            Name = offer.Name,
-            Guid = offer.Guid.ToString(),
-            Desc = offer.Description,
+            => new OfferApi()
+            {
+                Name = offer.Name,
+                Guid = offer.Guid.ToString(),
+                Desc = offer.Description,
                 CompanyGuid = offer.CompanyGuid.ToString(),
                 CompanyName = offer.CompanyName,
                 MasterGuid = offer.MasterGuid.ToString(),
@@ -91,6 +91,7 @@ namespace OfferService.Services
                 SkillGuid = offer.SkillGuid.ToString(),
                 SkillName = offer.SkillName,
                 OrderGuid = offer.OrderGuid.ToString(),
+                OrderName = offer.OrderName,
                 Status = offer.Status.ToString()
             };
     }

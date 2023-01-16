@@ -15,7 +15,8 @@ namespace Globals.Models
 
         public ContextBase()
         {
-            //Database.EnsureDeleted();
+            /*if (TypeName == "Offer")
+                Database.EnsureDeleted();*/
             Database.EnsureCreated();
         }
 

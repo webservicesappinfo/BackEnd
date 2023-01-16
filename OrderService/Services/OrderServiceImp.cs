@@ -1,7 +1,9 @@
 ﻿using EventBus.Abstractions;
+using EventBus.Events.ServicesEvents.OfferEvents;
 using EventBus.Events.ServicesEvents.OrderEvents;
 using Grpc.Core;
 using Microsoft.Extensions.Logging;
+using MobileApiGetway;
 using OrderService.Abstractions;
 using OrderService.Protos;
 using System;
@@ -27,79 +29,26 @@ namespace OrderService.Services
         {
             var order = new Models.Order()
             {
-                Name = request.Name,
-                OfferGuid = new Guid(request.OfferGuid),
-                UserGuid = new Guid(request.UserGuid),
-                UserName = request.UserName,
-                MasterGuid = new Guid(request.MasterGuid),
-                MasterName = request.MasterName,
-                SkillGuid = new Guid(request.SkillGuid),
-                SkillName = request.SkillName
+                Name = request.Order.Name,
+                MasterGuid = new Guid(request.Order.MasterGuid),
+                MasterName = request.Order.MasterName,
+                SkillGuid = new Guid(request.Order.SkillGuid),
+                SkillName = request.Order.SkillName
             };
             var result = _orderRepoService.AddEntity(order);
+
             if (result)
                 _eventBus.Publish(new AddOrderEvent(order.Name, order.Guid, order.OfferGuid, order.MasterGuid, order.UserGuid, order.UserName));
+
             return Task.FromResult(new AddOrderReply { Result = result });
         }
-
-        public override Task<GetOrderReply> GetOrder(GetOrderRequest request, ServerCallContext context)
-        {
-            return base.GetOrder(request, context);
-        }
-
-        public override Task<GetOrdersReply> GetOrders(GetOrdersRequest request, ServerCallContext context)
-        {
-            var userGuid = new Guid(request.UserGuid);
-            var orders = request.IsMaster ? _orderRepoService.GetEntities().Where(x => x.MasterGuid == userGuid)
-                : _orderRepoService.GetEntities().Where(x => x.UserGuid == userGuid);
-
-            var reply = new GetOrdersReply();
-
-            foreach (var order in orders)
-            {
-                reply.Guids.Add(order.Guid.ToString());
-                reply.Names.Add(order.Name);
-                reply.OfferGuids.Add(order.OfferGuid.ToString());
-                reply.UserNames.Add(order.UserName);
-                reply.UserGuids.Add(order.UserGuid.ToString());
-                reply.MasterNames.Add(order.MasterName);
-                reply.MasterGuids.Add(order.MasterGuid.ToString());
-                reply.SkillNames.Add(order.SkillName);
-                reply.SkillGuids.Add(order.SkillGuid.ToString());
-                reply.Statuses.Add(order.Status.ToString());
-            }
-            return Task.FromResult(reply);
-        }
-
-        public override Task<UpdateOrderReply> UpdateOrder(UpdateOrderRequest request, ServerCallContext context)
-        {
-            return base.UpdateOrder(request, context);
-        }
-
         public override Task<DelOrderReply> DelOrder(DelOrderRequest request, ServerCallContext context)
         {
-            var orderGuid = new Guid(request.Guid);
-            var delOrder = _orderRepoService.GetEntity(orderGuid);
-            var result = _orderRepoService.DelEntity(orderGuid);
-            if (delOrder != null && result)
-                _eventBus.Publish(new DelOrderEvent(delOrder.Name, delOrder.Guid, delOrder.OfferGuid));
-            return Task.FromResult(new DelOrderReply { Result = result });
-        }
-
-        public override Task<AcceptedOrderReply> AcceptedOrder(AcceptedOrderRequest request, ServerCallContext context)
-        {
-            var order = _orderRepoService.SetOrderStatus(new Guid(request.Guid), Models.OrderStatus.Accepted);
-            if (order != null)
-                _eventBus.Publish(new AcceptedOrderEvent(order.Name, order.Guid, order.MasterGuid, order.MasterName, order.UserGuid, order.UserName));
-            return Task.FromResult(new AcceptedOrderReply { Result = order != null, Name = order.Name, ClientGuid = order?.UserGuid.ToString(), MasterGuid = order?.MasterGuid.ToString() });
-        }
-
-        public override Task<ExecutedOrderReply> ExecutedOrder(ExecutedOrderRequest request, ServerCallContext context)
-        {
-            var order = _orderRepoService.SetOrderStatus(new Guid(request.Guid), Models.OrderStatus.Executed);
-            if(order != null)
-                _eventBus.Publish(new ExecutedOrderEvent(order.Name, order.Guid, order.MasterGuid, order.MasterName, order.UserGuid, order.UserName));
-            return Task.FromResult(new ExecutedOrderReply { Result =  order != null });
+            var order = request.Order;
+            var result = _orderRepoService.DelEntity(new Guid(order.Guid));
+            if (result)
+                _eventBus.Publish(new DelOrderEvent(order.Name, new Guid(order.Guid), new Guid(order.OfferGuid)));
+            return Task.FromResult(new DelOrderReply() { Result = result });
         }
     }
 }

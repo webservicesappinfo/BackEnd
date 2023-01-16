@@ -28,6 +28,8 @@ namespace OfferService.Models
 
         public Guid OrderGuid { get; set; }
 
+        public String OrderName { get; set; }
+
         public Guid SkillGuid { get; set; }
 
         public String SkillName { get => _skillName ?? String.Empty; set => _skillName = value; }

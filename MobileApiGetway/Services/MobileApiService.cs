@@ -178,40 +178,13 @@ namespace MobileApiGetway.Services
 
         #region OfferService
 
-        public override Task<AddOfferReply> AddOffer(AddOfferRequest request, ServerCallContext context)
-            => Task.FromResult(_offerClient.AddOffer(request));
-        public override Task<DelOfferReply> DelOffer(DelOfferRequest request, ServerCallContext context)
-        => Task.FromResult(_offerClient.DelOffer(request));
+        public override Task<AddOfferReply> AddOffer(AddOfferRequest request, ServerCallContext context) => Task.FromResult(_offerClient.AddOffer(request));
+        public override Task<DelOfferReply> DelOffer(DelOfferRequest request, ServerCallContext context) => Task.FromResult(_offerClient.DelOffer(request));
         #endregion
 
         #region OrderService
-        public override Task<AddOrderReply> ApiAddOrder(AddOrderRequest request, ServerCallContext context)
-        {
-            var reply = _orderClient.AddOrder(request);
-            return Task.FromResult(reply);
-        }
-        public override Task<GetOrdersReply> ApiGetOrders(GetOrdersRequest request, ServerCallContext context)
-        {
-            var reply = _orderClient.GetOrders(request);
-            return Task.FromResult(reply);
-        }
-        public override Task<DelOrderReply> ApiDelOrder(DelOrderRequest request, ServerCallContext context)
-        {
-            var reply = _orderClient.DelOrder(request);
-            return Task.FromResult(reply);
-        }
-        public override Task<AcceptedOrderReply> ApiAcceptedOrder(AcceptedOrderRequest request, ServerCallContext context)
-        {
-            var reply = _orderClient.AcceptedOrder(request);
-            if (reply.Result)
-                _notificationClient.SendNotification(new SendNotificationRequest() { FromGuid = reply.MasterGuid, ForGuid = reply.ClientGuid, Msg = $"Odrer {reply.Name} accepted" });
-            return Task.FromResult(reply);
-        }
-        public override Task<ExecutedOrderReply> ApiExecutedOrder(ExecutedOrderRequest request, ServerCallContext context)
-        {
-            var reply = _orderClient.ExecutedOrder(request);
-            return Task.FromResult(reply);
-        }
+        public override Task<AddOrderReply> AddOrder(AddOrderRequest request, ServerCallContext context) => Task.FromResult(_orderClient.AddOrder(request));
+        public override Task<DelOrderReply> DelOrder(DelOrderRequest request, ServerCallContext context) => Task.FromResult(_orderClient.DelOrder(request));
         #endregion
 
         #region NotificationService

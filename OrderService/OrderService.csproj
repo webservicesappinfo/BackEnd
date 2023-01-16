@@ -30,6 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
+	<Protobuf Include="..\..\Protos\msg.proto" GrpcServices="Client" />
     <Protobuf Include="..\..\Protos\order.proto">
       <Link>Protos\order.proto</Link>
     </Protobuf>

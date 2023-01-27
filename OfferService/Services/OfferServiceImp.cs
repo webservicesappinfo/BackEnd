@@ -91,7 +91,7 @@ namespace OfferService.Services
                 SkillGuid = offer.SkillGuid.ToString(),
                 SkillName = offer.SkillName,
                 OrderGuid = offer.OrderGuid.ToString(),
-                OrderName = offer.OrderName,
+                OrderName = offer.OrderName ?? String.Empty,
                 Status = offer.Status.ToString()
             };
     }

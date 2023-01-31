@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+	<Protobuf Include="..\..\Protos\mobile_api.proto" GrpcServices="Client" />
     <Protobuf Include="..\..\Protos\notification.proto">
       <Link>Protos\notification.proto</Link>
     </Protobuf>

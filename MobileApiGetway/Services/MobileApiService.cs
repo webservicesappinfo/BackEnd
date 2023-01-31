@@ -100,66 +100,21 @@ namespace MobileApiGetway.Services
         #endregion
 
         #region UserService
-        public override Task<AddUserReply> ApiAddUser(AddUserRequest request, ServerCallContext context) 
-            => Task.FromResult(_userClient.AddUser(request));
-
-        public override Task<DelUserReply> ApiDelUser(DelUserRequest request, ServerCallContext context)
-            => Task.FromResult(_userClient.DelUser(request));
-
-        public override Task<GetUserReply> ApiGetUser(GetUserRequest request, ServerCallContext context)
-            => Task.FromResult(_userClient.GetUser(request));
-
-        public override Task<GetUsersReply> ApiGetUsers(GetUsersRequest request, ServerCallContext context)
-            => Task.FromResult(_userClient.GetUsers(request));
+        public override Task<AddUserReply> ApiAddUser(AddUserRequest request, ServerCallContext context)  => Task.FromResult(_userClient.AddUser(request));
+        public override Task<DelUserReply> ApiDelUser(DelUserRequest request, ServerCallContext context) => Task.FromResult(_userClient.DelUser(request));
+        public override Task<GetUserReply> ApiGetUser(GetUserRequest request, ServerCallContext context) => Task.FromResult(_userClient.GetUser(request));
+        public override Task<GetUsersReply> ApiGetUsers(GetUsersRequest request, ServerCallContext context) => Task.FromResult(_userClient.GetUsers(request));
         #endregion
 
         #region CompanyService
-        public override Task<AddCompanyReply> AddCompany(AddCompanyRequest request, ServerCallContext context)
-            => Task.FromResult(_companyClient.AddCompany(request));
-
-        public override Task<DelCompanyReply> DelCompany(DelCompanyRequest request, ServerCallContext context)
-            => Task.FromResult(_companyClient.DelCompany(request));
-
-        public override Task<AddMasterReply> AddMaster(AddMasterRequest request, ServerCallContext context)
-            => Task.FromResult(_companyClient.AddMaster(request));
-
-        public override Task<JoinToCompanyReply> ApiJoinToCompany(JoinToCompanyRequest request, ServerCallContext context)
-            => Task.FromResult(_companyClient.JoinToCompany(request));
-
-        public override Task<DelMasterReply> DelMaster(DelMasterRequest request, ServerCallContext context)
-            => Task.FromResult(_companyClient.DelMaster(request));
-
-        public override Task<GetCompanyReply> ApiGetCompany(GetCompanyRequest request, ServerCallContext context)
-        {
-            var reply = _companyClient.GetCompany(request);
-            /*for (var i = 0; i< reply.MasterGuids.Count; i++)
-            {
-                var user = _userClient.GetUser(new GetUserRequest() { UidFB = reply.MasterGuids[i]});
-                if (user == null)
-                {
-                    reply.MasterGuids[i] = String.Empty;
-                    continue;
-                }
-                reply.MasterNames[i] = user.Name;
-            }*/
-            return Task.FromResult(reply);
-        }
-
-        public override Task<GetCompaniesReply> ApiGetCompanies(GetCompaniesRequest request, ServerCallContext context)
-        {
-            var reply = _companyClient.GetCompanies(request);
-            return Task.FromResult(reply);
-        }
-
-        public override Task<SetCompanyLocationReply> apiSetCompanyLocation(SetCompanyLocationRequest request, ServerCallContext context)
-        {
-            var reply = _companyClient.SetCompanyLocation(request);
-            return Task.FromResult(reply);
-        }
+        public override Task<AddCompanyReply> AddCompany(AddCompanyRequest request, ServerCallContext context) => Task.FromResult(_companyClient.AddCompany(request));
+        public override Task<DelCompanyReply> DelCompany(DelCompanyRequest request, ServerCallContext context) => Task.FromResult(_companyClient.DelCompany(request));
+        public override Task<AddMasterReply> AddMaster(AddMasterRequest request, ServerCallContext context) => Task.FromResult(_companyClient.AddMaster(request));
+        public override Task<DelMasterReply> DelMaster(DelMasterRequest request, ServerCallContext context) => Task.FromResult(_companyClient.DelMaster(request));
         #endregion
 
         #region SkillService
-        public override Task<AddSkillReply> ApiAddSkill(AddSkillRequest request, ServerCallContext context)
+        /*public override Task<AddSkillReply> ApiAddSkill(AddSkillRequest request, ServerCallContext context)
         {
             var reply = _skillClient.AddSkill(request);
             return Task.FromResult(reply);
@@ -173,11 +128,10 @@ namespace MobileApiGetway.Services
         {
             var reply = _skillClient.DelSkill(request);
             return Task.FromResult(reply);
-        }
+        }*/
         #endregion
 
         #region OfferService
-
         public override Task<AddOfferReply> AddOffer(AddOfferRequest request, ServerCallContext context) => Task.FromResult(_offerClient.AddOffer(request));
         public override Task<DelOfferReply> DelOffer(DelOfferRequest request, ServerCallContext context) => Task.FromResult(_offerClient.DelOffer(request));
         #endregion

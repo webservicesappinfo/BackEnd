@@ -2,6 +2,7 @@
 using EventBus.Events.ServicesEvents.UserRepoEvents;
 using Grpc.Core;
 using Microsoft.Extensions.Logging;
+using MobileApiGetway;
 using System;
 using System.Collections.Generic;
 using System.Linq;

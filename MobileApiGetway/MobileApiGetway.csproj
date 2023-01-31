@@ -7,15 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="ClientProtos\location_repo.proto" />
-    <None Remove="ClientProtos\notification.proto" />
-    <None Remove="ClientProtos\user_repo.proto" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Protobuf Include="..\..\Protos\msg.proto">
-      <Link>Protos\msg.proto</Link>
-    </Protobuf>
     <Protobuf Include="ClientProtos\location_repo.proto" GrpcServices="Client" />
     <Protobuf Include="..\..\Protos\notification.proto" GrpcServices="Client" />
     <Protobuf Include="..\..\Protos\user.proto" GrpcServices="Client" />

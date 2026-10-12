@@ -1,19 +1,34 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <UserSecretsId>437f11ff-6322-4863-8152-1ab61b39aec7</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <NoWarn>$(NoWarn);CS8981</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
-    <Protobuf Include="ClientProtos\location_repo.proto" GrpcServices="Client" />
-    <Protobuf Include="..\..\Protos\notification.proto" GrpcServices="Client" />
-    <Protobuf Include="..\..\Protos\user.proto" GrpcServices="Client" />
-    <Protobuf Include="..\..\Protos\company.proto" GrpcServices="Client" />
-	<Protobuf Include="..\..\Protos\skill.proto" GrpcServices="Client" />
-	<Protobuf Include="..\..\Protos\offer.proto" GrpcServices="Client" />
-	<Protobuf Include="..\..\Protos\order.proto" GrpcServices="Client" />
+    <Protobuf Include="..\..\Protos\company.proto" GrpcServices="Client">
+      <Link>Protos\company.proto</Link>
+    </Protobuf>
+    <Protobuf Include="..\..\Protos\location_repo.proto" GrpcServices="Client">
+      <Link>Protos\location_repo.proto</Link>
+    </Protobuf>
+    <Protobuf Include="..\..\Protos\notification.proto" GrpcServices="Client">
+      <Link>Protos\notification.proto</Link>
+    </Protobuf>
+    <Protobuf Include="..\..\Protos\offer.proto" GrpcServices="Client">
+      <Link>Protos\offer.proto</Link>
+    </Protobuf>
+    <Protobuf Include="..\..\Protos\order.proto" GrpcServices="Client">
+      <Link>Protos\order.proto</Link>
+    </Protobuf>
+    <Protobuf Include="..\..\Protos\skill.proto" GrpcServices="Client">
+      <Link>Protos\skill.proto</Link>
+    </Protobuf>
+    <Protobuf Include="..\..\Protos\user.proto" GrpcServices="Client">
+      <Link>Protos\user.proto</Link>
+    </Protobuf>
     <Protobuf Include="..\..\Protos\mobile_api.proto" GrpcServices="Server">
       <Link>Protos\mobile_api.proto</Link>
     </Protobuf>

@@ -1,88 +1,152 @@
-version: '3.4'
-
 services:
   mobiapigetway:
     image: ${DOCKER_REGISTRY-}mobileapigetway
     build:
-      context: .
-      dockerfile: MobileApiGetway/Dockerfile
+      context: ..
+      dockerfile: BackEnd/MobileApiGetway/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:80
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
     depends_on:
-      - "rabbitmq"
+      rabbitmq:
+        condition: service_healthy
     ports:
     - "6000:80"
     networks:
       - some-net
+
   userservice:
     image: ${DOCKER_REGISTRY-}userservice
     build:
-      context: .
-      dockerfile: UserService/Dockerfile
+      context: ..
+      dockerfile: BackEnd/UserService/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:80
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
     depends_on:
-      - "rabbitmq"
+      rabbitmq:
+        condition: service_healthy
+      postgres:
+        condition: service_started
     networks:
       - some-net
     ports:
       - "6001:80"
+
   companyservice:
     image: ${DOCKER_REGISTRY-}companyservice
     build:
-      context: .
-      dockerfile: CompanyService/Dockerfile
+      context: ..
+      dockerfile: BackEnd/CompanyService/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:80
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
     depends_on:
-      - "rabbitmq"
+      rabbitmq:
+        condition: service_healthy
+      postgres:
+        condition: service_started
     networks:
       - some-net
     ports:
       - "6002:80"
+
   skillservice:
     image: ${DOCKER_REGISTRY-}skillservice
     build:
-      context: .
-      dockerfile: SkillService/Dockerfile
+      context: ..
+      dockerfile: BackEnd/SkillService/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:80
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
     depends_on:
-      - "rabbitmq"
+      rabbitmq:
+        condition: service_healthy
+      postgres:
+        condition: service_started
     networks:
       - some-net
     ports:
       - "6003:80"
+
   offerservice:
     image: ${DOCKER_REGISTRY-}offerservice
     build:
-      context: .
-      dockerfile: OfferService/Dockerfile
+      context: ..
+      dockerfile: BackEnd/OfferService/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:80
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
     depends_on:
-      - "rabbitmq"
+      rabbitmq:
+        condition: service_healthy
+      postgres:
+        condition: service_started
     networks:
       - some-net
     ports:
       - "6004:80"
+
   orderservice:
     image: ${DOCKER_REGISTRY-}orderservice
     build:
-      context: .
-      dockerfile: OrderService/Dockerfile
+      context: ..
+      dockerfile: BackEnd/OrderService/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:80
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
     depends_on:
-      - "rabbitmq"
+      rabbitmq:
+        condition: service_healthy
+      postgres:
+        condition: service_started
     networks:
       - some-net
     ports:
       - "6005:80"
+
   notificationservice:
     image: ${DOCKER_REGISTRY-}notificationservice
     build:
-      context: .
-      dockerfile: NotificationService/Dockerfile
+      context: ..
+      dockerfile: BackEnd/NotificationService/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:80
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
     depends_on:
-      - "rabbitmq"
+      rabbitmq:
+        condition: service_healthy
+      postgres:
+        condition: service_started
     networks:
       - some-net
     ports:
         - "6006:80"
+
   #userreposervice:
   #  image: ${DOCKER_REGISTRY-}userreposervice
   #  build:
-  #    context: .
-  #    dockerfile: UserRepoService/Dockerfile
+  #    context: ..
+  #    dockerfile: BackEnd/UserRepoService/Dockerfile
   #  networks:
   #    - some-net
   #  ports:
@@ -90,8 +154,8 @@ services:
   #locationservice:
   #  image: ${DOCKER_REGISTRY-}locationservice
   #  build:
-  #    context: .
-  #    dockerfile: LocationService/Dockerfile
+  #    context: ..
+  #    dockerfile: BackEnd/LocationService/Dockerfile
   #  depends_on:
   #    - "rabbitmq"
   #  networks:
@@ -104,6 +168,12 @@ services:
     hostname: "rabbitmq"
     labels:
       NAME: "rabbitmq"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 5s
+      timeout: 10s
+      retries: 10
+      start_period: 10s
     ports:
     - "4369:4369"
     - "5671:5671"
@@ -113,6 +183,42 @@ services:
     - "15672:15672"
     networks:
         - some-net
+
+  postgres:
+    image: postgres:17-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - some-net
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    restart: always
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+      - PGADMIN_CONFIG_SERVER_MODE=False
+      - PGADMIN_REPLACE_SERVERS_ON_STARTUP=True
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+      - ./servers.json:/pgadmin4/servers.json:ro
+    networks:
+      - some-net
+    depends_on:
+      - "postgres"
+
 networks:
   some-net:
     driver: bridge
+
+volumes:
+  postgres-data:
+  pgadmin-data:

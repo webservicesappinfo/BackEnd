@@ -1,4 +1,4 @@
-﻿using Autofac;
+using Autofac;
 using EventBus.Abstractions;
 using EventBus.Events;
 using EventBus.Extansions;
@@ -222,6 +222,12 @@ namespace EventBus.RabbitMQ
         {
             if (!_persistentConnection.IsConnected)            
                 _persistentConnection.TryConnect();
+
+            if (!_persistentConnection.IsConnected)
+            {
+                _logger.LogWarning("Cannot create consumer channel because RabbitMQ is not connected");
+                return null;
+            }
 
             _logger.LogTrace("Creating RabbitMQ consumer channel");
 

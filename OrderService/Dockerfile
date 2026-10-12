@@ -1,16 +1,18 @@
-#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
-FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
+ENV ASPNETCORE_URLS=http://+:80
 
-FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
-COPY ["OrderService/OrderService.csproj", "OrderService/"]
-RUN dotnet restore "OrderService/OrderService.csproj"
-COPY . .
-WORKDIR "/src/OrderService"
+COPY ["BackEnd/OrderService/OrderService.csproj", "BackEnd/OrderService/"]
+COPY ["BackEnd/EventBus/EventBus.csproj", "BackEnd/EventBus/"]
+COPY ["BackEnd/Globals/Globals.csproj", "BackEnd/Globals/"]
+COPY ["Protos/", "Protos/"]
+RUN dotnet restore "BackEnd/OrderService/OrderService.csproj"
+COPY ["BackEnd/", "BackEnd/"]
+WORKDIR "/src/BackEnd/OrderService"
 RUN dotnet build "OrderService.csproj" -c Release -o /app/build
 
 FROM build AS publish
@@ -20,6 +22,4 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
-ENV ASPNETCORE_URLS http://+:6005
-EXPOSE 6005
 ENTRYPOINT ["dotnet", "OrderService.dll"]

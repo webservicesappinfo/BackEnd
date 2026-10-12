@@ -1,7 +1,8 @@
-﻿using CompanyService.Protos;
+using CompanyService.Protos;
 using Grpc.Core;
 using Grpc.Net.Client;
 using Grpc.Net.ClientFactory;
+using LocationService.Protos;
 using NotificationService.Protos;
 using OfferService.Protos;
 using OrderService.Protos;

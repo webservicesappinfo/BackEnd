@@ -1,5 +1,6 @@
-﻿using CompanyService.Protos;
+using CompanyService.Protos;
 using Grpc.Net.ClientFactory;
+using LocationService.Protos;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;

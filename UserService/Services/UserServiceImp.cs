@@ -1,4 +1,4 @@
-﻿using EventBus.Abstractions;
+using EventBus.Abstractions;
 using EventBus.Events.ServicesEvents.UserRepoEvents;
 using Grpc.Core;
 using Microsoft.Extensions.Logging;
@@ -43,10 +43,13 @@ namespace UserService.Services
         {
             var reply = new GetUsersReply();
             var users = _userRepoService.GetEntities();
-            foreach (var user in users)
+            if (users != null)
             {
-                reply.Names.Add(user.Name);
-                reply.Uids.Add(user.UIDFB.ToString());
+                foreach (var user in users)
+                {
+                    reply.Names.Add(user.Name);
+                    reply.Uids.Add(user.UIDFB.ToString());
+                }
             }
             return Task.FromResult(reply);
         }

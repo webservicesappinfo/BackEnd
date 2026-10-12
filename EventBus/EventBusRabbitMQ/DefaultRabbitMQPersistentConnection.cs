@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using Polly;
 using Polly.Retry;
 using RabbitMQ.Client;
@@ -73,16 +73,26 @@ namespace EventBus.RabbitMQ
             {
                 var policy = RetryPolicy.Handle<SocketException>()
                     .Or<BrokerUnreachableException>()
+                    .Or<ConnectFailureException>()
                     .WaitAndRetry(_retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)), (ex, time) =>
                     {
                         _logger.LogWarning(ex, "RabbitMQ Client could not connect after {TimeOut}s ({ExceptionMessage})", $"{time.TotalSeconds:n1}", ex.Message);
                     }
                 );
 
-                policy.Execute(() =>
+
+                try
                 {
-                    _connection = _connectionFactory.CreateConnection();
-                });
+                    policy.Execute(() =>
+                    {
+                        _connection = _connectionFactory.CreateConnection();
+                    });
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogCritical(ex, "FATAL ERROR: RabbitMQ connections could not be created and opened");
+                    return false;
+                }
 
                 if (IsConnected)
                 {

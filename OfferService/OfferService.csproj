@@ -1,9 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <UserSecretsId>659008ab-238c-47b1-98b7-320063a535e1</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <NoWarn>$(NoWarn);CS8981</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,12 +27,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Protos\" />
-    <Folder Include="Protos\" />
-  </ItemGroup>
-
-  <ItemGroup>
-	<Protobuf Include="..\..\Protos\mobile_api.proto" GrpcServices="Client" />
+    <Protobuf Include="..\..\Protos\mobile_api.proto" GrpcServices="Client">
+      <Link>Protos\mobile_api.proto</Link>
+    </Protobuf>
     <Protobuf Include="..\..\Protos\offer.proto">
       <Link>Protos\offer.proto</Link>
     </Protobuf>

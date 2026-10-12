@@ -1,17 +1,16 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <UserSecretsId>d955f38d-b875-4687-9950-f9753ea2cddb</UserSecretsId>
+    <NoWarn>$(NoWarn);CS8981</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="ClientProtos\user_repo.proto" />
-  </ItemGroup>
-
-  <ItemGroup>
-	<Protobuf Include="..\..\Protos\mobile_api.proto" GrpcServices="Client" />
+    <Protobuf Include="..\..\Protos\mobile_api.proto" GrpcServices="Client">
+      <Link>Protos\mobile_api.proto</Link>
+    </Protobuf>
     <Protobuf Include="..\..\Protos\notification.proto">
       <Link>Protos\notification.proto</Link>
     </Protobuf>
@@ -37,8 +36,5 @@
     <ProjectReference Include="..\Globals\Globals.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Protos\" />
-  </ItemGroup>
 
 </Project>

@@ -1,0 +1,13 @@
+{
+  "details": {
+    "methodFqn": "company.Company.SetCompanyLocation"
+  },
+  "requests": [
+    {
+      "location": "SetCompanyLocation-request.json"
+    }
+  ],
+  "operationType": "unary",
+  "invokerName": "grpc",
+  "importStreamId": "26c112f0-61db-4fb6-8418-760c3ec4e2e7"
+}

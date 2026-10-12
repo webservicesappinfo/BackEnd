@@ -1,0 +1,14 @@
+{
+  "order": {
+    "name": "{{ faker.name.last_name }}",
+    "guid": "{{ faker.random.guid }}",
+    "offerGuid": "{{ faker.random.uuid }}",
+    "userName": "{{ faker.internet.user_name }}",
+    "masterName": "Creative French Guiana background",
+    "skillName": "Refined Soft Fish",
+    "userGuid": "{{ faker.random.uuid }}",
+    "masterGuid": "{{ faker.random.uuid }}",
+    "skillGuid": "{{ faker.random.uuid }}",
+    "status": "Quality-focused"
+  }
+}

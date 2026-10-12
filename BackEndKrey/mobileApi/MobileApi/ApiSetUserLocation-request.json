@@ -1,0 +1,5 @@
+{
+  "forGuid": "{{ faker.random.uuid }}",
+  "lat": "Tuvalu Land Multi-lateral",
+  "lng": "Namibia Dollar Technician"
+}

@@ -1,0 +1,3 @@
+{
+  "userGuid": "{{ faker.random.uuid }}"
+}

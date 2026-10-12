@@ -1,0 +1,16 @@
+{
+  "offer": {
+    "guid": "{{ faker.random.guid }}",
+    "name": "{{ faker.name.last_name }}",
+    "desc": "Soft",
+    "companyGuid": "{{ faker.random.uuid }}",
+    "companyName": "{{ faker.company.company_name }}",
+    "masterGuid": "{{ faker.random.uuid }}",
+    "masterName": "4th generation",
+    "orderGuid": "{{ faker.random.uuid }}",
+    "orderName": "United Arab Emirates",
+    "skillGuid": "{{ faker.random.uuid }}",
+    "skillName": "modular North Dakota Argentina",
+    "status": "Grass-roots Handmade Generic Rubber Shoes"
+  }
+}

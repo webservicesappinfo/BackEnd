@@ -1,0 +1,38 @@
+{
+  "master": {
+    "uidFB": "Quality-focused",
+    "name": "{{ faker.name.last_name }}",
+    "companyGuid": "{{ faker.random.uuid }}",
+    "companyName": "{{ faker.company.company_name }}",
+    "offers": [
+      {
+        "guid": "{{ faker.random.guid }}",
+        "name": "{{ faker.name.last_name }}",
+        "desc": "open-source",
+        "companyGuid": "{{ faker.random.uuid }}",
+        "companyName": "{{ faker.company.company_name }}",
+        "masterGuid": "{{ faker.random.uuid }}",
+        "masterName": "Shoals",
+        "orderGuid": "{{ faker.random.uuid }}",
+        "orderName": "Administrator Georgia Syrian Arab Republic",
+        "skillGuid": "{{ faker.random.uuid }}",
+        "skillName": "Administrator generating Spain",
+        "status": "Enterprise-wide strategic"
+      },
+      {
+        "guid": "{{ faker.random.guid }}",
+        "name": "{{ faker.name.last_name }}",
+        "desc": "Research generating",
+        "companyGuid": "{{ faker.random.uuid }}",
+        "companyName": "{{ faker.company.company_name }}",
+        "masterGuid": "{{ faker.random.uuid }}",
+        "masterName": "Right-sized payment",
+        "orderGuid": "{{ faker.random.uuid }}",
+        "orderName": "Books Passage",
+        "skillGuid": "{{ faker.random.uuid }}",
+        "skillName": "Faroe Islands",
+        "status": "Swiss Franc Central Fresh"
+      }
+    ]
+  }
+}

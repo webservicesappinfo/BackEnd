@@ -1,0 +1,6 @@
+{
+  "companyGuid": "{{ faker.random.uuid }}",
+  "companyName": "{{ faker.company.company_name }}",
+  "userUIDFB": "quantify",
+  "userName": "{{ faker.internet.user_name }}"
+}

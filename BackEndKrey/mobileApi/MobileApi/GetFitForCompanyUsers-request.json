@@ -1,0 +1,4 @@
+{
+  "companyGuid": "{{ faker.random.uuid }}",
+  "isConsistIn": false
+}

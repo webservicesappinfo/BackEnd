@@ -1,0 +1,16 @@
+{
+  "offer": {
+    "guid": "{{ faker.random.guid }}",
+    "name": "{{ faker.name.last_name }}",
+    "desc": "deliver white Credit Card Account",
+    "companyGuid": "{{ faker.random.uuid }}",
+    "companyName": "{{ faker.company.company_name }}",
+    "masterGuid": "{{ faker.random.uuid }}",
+    "masterName": "tan Motorway",
+    "orderGuid": "{{ faker.random.uuid }}",
+    "orderName": "Electronics application",
+    "skillGuid": "{{ faker.random.uuid }}",
+    "skillName": "payment Directives wireless",
+    "status": "invoice deposit"
+  }
+}

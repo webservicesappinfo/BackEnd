@@ -1,0 +1,16 @@
+{
+  "offer": {
+    "guid": "{{ faker.random.guid }}",
+    "name": "{{ faker.name.last_name }}",
+    "desc": "Gorgeous indexing",
+    "companyGuid": "{{ faker.random.uuid }}",
+    "companyName": "{{ faker.company.company_name }}",
+    "masterGuid": "{{ faker.random.uuid }}",
+    "masterName": "Unbranded Steel Pants",
+    "orderGuid": "{{ faker.random.uuid }}",
+    "orderName": "deposit parse service-desk",
+    "skillGuid": "{{ faker.random.uuid }}",
+    "skillName": "Team-oriented",
+    "status": "hierarchy THX"
+  }
+}

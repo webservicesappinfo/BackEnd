@@ -1,0 +1,5 @@
+{
+  "uidFB": "Soft Metal",
+  "name": "{{ faker.name.last_name }}",
+  "token": "Awesome Cotton Hat leverage"
+}

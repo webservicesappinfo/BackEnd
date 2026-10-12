@@ -1,0 +1,38 @@
+{
+  "master": {
+    "uidFB": "Fresh Practical Connecticut",
+    "name": "{{ faker.name.last_name }}",
+    "companyGuid": "{{ faker.random.uuid }}",
+    "companyName": "{{ faker.company.company_name }}",
+    "offers": [
+      {
+        "guid": "{{ faker.random.guid }}",
+        "name": "{{ faker.name.last_name }}",
+        "desc": "Chief archive Saint Lucia",
+        "companyGuid": "{{ faker.random.uuid }}",
+        "companyName": "{{ faker.company.company_name }}",
+        "masterGuid": "{{ faker.random.uuid }}",
+        "masterName": "functionalities",
+        "orderGuid": "{{ faker.random.uuid }}",
+        "orderName": "microchip Cliff Clothing & Baby",
+        "skillGuid": "{{ faker.random.uuid }}",
+        "skillName": "Soft",
+        "status": "Alaska"
+      },
+      {
+        "guid": "{{ faker.random.guid }}",
+        "name": "{{ faker.name.last_name }}",
+        "desc": "payment architectures",
+        "companyGuid": "{{ faker.random.uuid }}",
+        "companyName": "{{ faker.company.company_name }}",
+        "masterGuid": "{{ faker.random.uuid }}",
+        "masterName": "Cambridgeshire",
+        "orderGuid": "{{ faker.random.uuid }}",
+        "orderName": "Gorgeous Concrete Keyboard",
+        "skillGuid": "{{ faker.random.uuid }}",
+        "skillName": "Berkshire JBOD harness",
+        "status": "Tasty"
+      }
+    ]
+  }
+}

@@ -1,0 +1,4 @@
+{
+  "fromGuid": "{{ faker.random.uuid }}",
+  "forGuid": "{{ faker.random.uuid }}"
+}

@@ -1,0 +1,38 @@
+{
+  "master": {
+    "uidFB": "redundant Uruguay",
+    "name": "{{ faker.name.last_name }}",
+    "companyGuid": "{{ faker.random.uuid }}",
+    "companyName": "{{ faker.company.company_name }}",
+    "offers": [
+      {
+        "guid": "{{ faker.random.guid }}",
+        "name": "{{ faker.name.last_name }}",
+        "desc": "deposit override Ports",
+        "companyGuid": "{{ faker.random.uuid }}",
+        "companyName": "{{ faker.company.company_name }}",
+        "masterGuid": "{{ faker.random.uuid }}",
+        "masterName": "Savings Account",
+        "orderGuid": "{{ faker.random.uuid }}",
+        "orderName": "Aruban Guilder",
+        "skillGuid": "{{ faker.random.uuid }}",
+        "skillName": "Mission Iraqi Dinar optimal",
+        "status": "Auto Loan Account generating quantify"
+      },
+      {
+        "guid": "{{ faker.random.guid }}",
+        "name": "{{ faker.name.last_name }}",
+        "desc": "core indexing",
+        "companyGuid": "{{ faker.random.uuid }}",
+        "companyName": "{{ faker.company.company_name }}",
+        "masterGuid": "{{ faker.random.uuid }}",
+        "masterName": "Fork Rapids TCP",
+        "orderGuid": "{{ faker.random.uuid }}",
+        "orderName": "Reactive",
+        "skillGuid": "{{ faker.random.uuid }}",
+        "skillName": "capacity",
+        "status": "Mayotte Savings Account"
+      }
+    ]
+  }
+}

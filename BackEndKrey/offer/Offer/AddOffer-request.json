@@ -1,0 +1,16 @@
+{
+  "offer": {
+    "guid": "{{ faker.random.guid }}",
+    "name": "{{ faker.name.last_name }}",
+    "desc": "Implementation calculating",
+    "companyGuid": "{{ faker.random.uuid }}",
+    "companyName": "{{ faker.company.company_name }}",
+    "masterGuid": "{{ faker.random.uuid }}",
+    "masterName": "neural invoice",
+    "orderGuid": "{{ faker.random.uuid }}",
+    "orderName": "Officer",
+    "skillGuid": "{{ faker.random.uuid }}",
+    "skillName": "communities SMTP RAM",
+    "status": "Berkshire programming"
+  }
+}

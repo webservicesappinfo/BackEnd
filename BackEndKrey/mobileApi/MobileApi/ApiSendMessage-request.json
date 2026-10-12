@@ -1,0 +1,5 @@
+{
+  "forGuid": "{{ faker.random.uuid }}",
+  "fromGuid": "{{ faker.random.uuid }}",
+  "msg": "CSS"
+}

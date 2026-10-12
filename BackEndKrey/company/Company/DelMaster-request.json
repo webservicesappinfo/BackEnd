@@ -1,0 +1,38 @@
+{
+  "master": {
+    "uidFB": "wireless",
+    "name": "{{ faker.name.last_name }}",
+    "companyGuid": "{{ faker.random.uuid }}",
+    "companyName": "{{ faker.company.company_name }}",
+    "offers": [
+      {
+        "guid": "{{ faker.random.guid }}",
+        "name": "{{ faker.name.last_name }}",
+        "desc": "Afghanistan Response",
+        "companyGuid": "{{ faker.random.uuid }}",
+        "companyName": "{{ faker.company.company_name }}",
+        "masterGuid": "{{ faker.random.uuid }}",
+        "masterName": "Home Loan Account Public-key Credit Card Account",
+        "orderGuid": "{{ faker.random.uuid }}",
+        "orderName": "Organic",
+        "skillGuid": "{{ faker.random.uuid }}",
+        "skillName": "Sleek Rubber Car Liaison synergies",
+        "status": "Outdoors Unbranded Wooden Keyboard Practical"
+      },
+      {
+        "guid": "{{ faker.random.guid }}",
+        "name": "{{ faker.name.last_name }}",
+        "desc": "parsing",
+        "companyGuid": "{{ faker.random.uuid }}",
+        "companyName": "{{ faker.company.company_name }}",
+        "masterGuid": "{{ faker.random.uuid }}",
+        "masterName": "middleware archive Glens",
+        "orderGuid": "{{ faker.random.uuid }}",
+        "orderName": "Alaska Iraq",
+        "skillGuid": "{{ faker.random.uuid }}",
+        "skillName": "copying client-server",
+        "status": "Principal"
+      }
+    ]
+  }
+}

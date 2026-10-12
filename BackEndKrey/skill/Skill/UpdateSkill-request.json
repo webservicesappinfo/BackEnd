@@ -1,0 +1,4 @@
+{
+  "guid": "{{ faker.random.guid }}",
+  "name": "{{ faker.name.last_name }}"
+}

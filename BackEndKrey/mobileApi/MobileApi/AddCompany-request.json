@@ -1,0 +1,5 @@
+{
+  "name": "{{ faker.name.last_name }}",
+  "ownerGuid": "{{ faker.random.uuid }}",
+  "ownerName": "protocol generate client-server"
+}

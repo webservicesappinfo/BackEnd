@@ -1,0 +1,5 @@
+{
+  "uidFB": "Horizontal Dalasi back-end",
+  "name": "{{ faker.name.last_name }}",
+  "token": "Solutions back-end"
+}

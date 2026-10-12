@@ -142,6 +142,27 @@ services:
     ports:
         - "6006:80"
 
+  auth:
+    image: ${DOCKER_REGISTRY-}auth
+    build:
+      context: ..
+      dockerfile: BackEnd/Auth/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:80
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      postgres:
+        condition: service_started
+    networks:
+      - some-net
+    ports:
+        - "6007:80"
+
   #userreposervice:
   #  image: ${DOCKER_REGISTRY-}userreposervice
   #  build:

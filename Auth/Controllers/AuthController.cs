@@ -3,7 +3,7 @@ using MediatR;
 using MediatR.Users.Register;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Streetcode.Auth.Extensions;
+using Auth.Extensions;
 
 namespace Auth.Controllers
 {

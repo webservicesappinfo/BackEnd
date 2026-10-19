@@ -1,7 +1,7 @@
 ﻿using FluentResults;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Streetcode.Auth.Extensions
+namespace Auth.Extensions
 {
     public static class ResultExtensions
     {

@@ -142,8 +142,8 @@ services:
     ports:
         - "6006:80"
 
-  auth:
-    image: ${DOCKER_REGISTRY-}auth
+  authservice:
+    image: ${DOCKER_REGISTRY-}authservice
     build:
       context: ..
       dockerfile: BackEnd/Auth/Dockerfile
@@ -154,6 +154,7 @@ services:
       - POSTGRES_DB=authdb
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+      - ConnectionStrings__AuthDb=Host=postgres;Port=5432;Database=authdb;Username=postgres;Password=postgres;Include Error Detail=true
       - RABBITMQ_HOST=rabbitmq
       - RABBITMQ_PORT=5672
     depends_on:

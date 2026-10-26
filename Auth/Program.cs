@@ -1,10 +1,22 @@
 using Auth.Data;
+using Auth.Extensions;
+using Auth.Models.DTO;
 using Auth.Models.Entities;
+using AuthService.Services;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Npgsql;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ConfigureEndpointDefaults(listenOptions =>
+    {
+        listenOptions.Protocols = HttpProtocols.Http2;
+    });
+});
+
+builder.Services.AddGrpc();
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -14,69 +26,12 @@ builder.Services.AddControllers()
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
-// Build PostgreSQL connection string
-var host = Environment.GetEnvironmentVariable("POSTGRES_HOST")
-        ?? Environment.GetEnvironmentVariable("DB_HOST");
+// Register AutoMapper
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
-if (string.IsNullOrWhiteSpace(host))
-{
-    bool isRunningInDocker = string.Equals(
-        Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER"),
-        "true",
-        StringComparison.OrdinalIgnoreCase);
-
-    host = isRunningInDocker ? "postgres" : "localhost";
-}
-
-var portEnv = Environment.GetEnvironmentVariable("POSTGRES_PORT")
-           ?? Environment.GetEnvironmentVariable("DB_PORT");
-int port = int.TryParse(portEnv, out var p) ? p : 5432;
-
-var user = Environment.GetEnvironmentVariable("POSTGRES_USER")
-        ?? Environment.GetEnvironmentVariable("DB_USER")
-        ?? "postgres";
-
-var password = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD")
-            ?? Environment.GetEnvironmentVariable("DB_PASSWORD")
-            ?? "postgres";
-
-var dbName = Environment.GetEnvironmentVariable("POSTGRES_DB") ?? "authdb";
-
-var npgsqlConnectionStringBuilder = new NpgsqlConnectionStringBuilder
-{
-    Host = host,
-    Port = port,
-    Database = dbName,
-    Username = user,
-    Password = password,
-    IncludeErrorDetail = true
-};
-
-var connectionString = builder.Configuration.GetConnectionString("AuthDb");
-if (!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("POSTGRES_HOST")) || string.IsNullOrWhiteSpace(connectionString))
-{
-    connectionString = npgsqlConnectionStringBuilder.ConnectionString;
-}
-
-// Register DbContext
-builder.Services.AddDbContext<AuthDbContext>(options =>
-{
-    options.UseNpgsql(connectionString);
-});
-
-// Register Identity and DataProtection
+// Register DataProtection and Infrastructure (PostgreSQL DbContext, Identity, JWT, Token Services)
 builder.Services.AddDataProtection();
-builder.Services.AddIdentityCore<User>(options =>
-{
-    options.Password.RequireDigit = false;
-    options.Password.RequireLowercase = false;
-    options.Password.RequireUppercase = false;
-    options.Password.RequireNonAlphanumeric = false;
-    options.Password.RequiredLength = 6;
-})
-.AddRoles<IdentityRole<int>>()
-.AddEntityFrameworkStores<AuthDbContext>()
-.AddDefaultTokenProviders();
+builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 
@@ -85,10 +40,27 @@ using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
     dbContext.Database.EnsureCreated();
+
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<int>>>();
+    foreach (var roleName in Enum.GetNames<UserRole>())
+    {
+        if (!await roleManager.RoleExistsAsync(roleName))
+        {
+            await roleManager.CreateAsync(new IdentityRole<int>(roleName));
+        }
+    }
 }
 
-//app.MapGet("/", () => "Hello World!");
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapGrpcService<AuthServiceImp>();
 
 app.MapControllers();
+
+app.MapGet("/", async context =>
+{
+    await context.Response.WriteAsync("Communication with gRPC endpoints must be made through a gRPC client.");
+});
 
 app.Run();

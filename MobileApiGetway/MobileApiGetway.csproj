@@ -11,6 +11,9 @@
     <Protobuf Include="..\..\Protos\company.proto" GrpcServices="Client">
       <Link>Protos\company.proto</Link>
     </Protobuf>
+	<Protobuf Include="..\..\Protos\auth.proto" GrpcServices="Client">
+		  <Link>Protos\auth.proto</Link>
+	</Protobuf>
     <Protobuf Include="..\..\Protos\location_repo.proto" GrpcServices="Client">
       <Link>Protos\location_repo.proto</Link>
     </Protobuf>

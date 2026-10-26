@@ -1,3 +1,4 @@
+using AuthService.Protos;
 using CompanyService.Protos;
 using Grpc.Core;
 using Grpc.Net.Client;
@@ -18,6 +19,7 @@ namespace MobileApiGetway.Services
 {
     public class MobileApiService : MobileApi.MobileApiBase
     {
+        private readonly Auth.AuthClient _authClient;
         private readonly User.UserClient _userClient;
         private readonly Company.CompanyClient _companyClient;
         private readonly Skill.SkillClient _skillClient;
@@ -31,6 +33,7 @@ namespace MobileApiGetway.Services
         public MobileApiService
             (
             User.UserClient userClient,
+            Auth.AuthClient authClient,
             Company.CompanyClient companyClient,
             Notification.NotificationClient notificationClient,
             Skill.SkillClient skillClient,
@@ -41,6 +44,7 @@ namespace MobileApiGetway.Services
             )
         {
             _userClient = userClient;
+            _authClient = authClient;
             _companyClient = companyClient;
             _skillClient = skillClient;
             _offerClient = offerClient;
@@ -105,6 +109,13 @@ namespace MobileApiGetway.Services
         public override Task<DelUserReply> ApiDelUser(DelUserRequest request, ServerCallContext context) => Task.FromResult(_userClient.DelUser(request));
         public override Task<GetUserReply> ApiGetUser(GetUserRequest request, ServerCallContext context) => Task.FromResult(_userClient.GetUser(request));
         public override Task<GetUsersReply> ApiGetUsers(GetUsersRequest request, ServerCallContext context) => Task.FromResult(_userClient.GetUsers(request));
+        #endregion
+
+        #region AuthService
+        public override async Task<RegisterReply> ApiRegister(RegisterRequest request, ServerCallContext context)
+        {
+            return await _authClient.RegisterAsync(request, cancellationToken: context.CancellationToken);
+        }
         #endregion
 
         #region CompanyService

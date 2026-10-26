@@ -12,11 +12,8 @@ using NotificationService.Protos;
 using OfferService.Protos;
 using OrderService.Protos;
 using SkillService.Protos;
+using AuthService.Protos;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
 using UserService.Protos;
 
 namespace MobileApiGetway
@@ -30,6 +27,7 @@ namespace MobileApiGetway
             //AppContext.SetSwitch(" System.Net.Http . SocketsHttpHandler.Http2UnencryptedSupport ", true); // allow unencrypted http / 2 protocol
 
             services.AddGrpc();
+            services.AddGrpcClient<Auth.AuthClient>(o => o.Address = new Uri("http://authservice"));
             services.AddGrpcClient<User.UserClient>(o => o.Address = new Uri("http://userservice"));
             services.AddGrpcClient<Company.CompanyClient>(o => o.Address = new Uri("http://companyservice"));
             services.AddGrpcClient<Skill.SkillClient>(o => o.Address = new Uri("http://skillservice"));

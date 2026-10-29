@@ -121,6 +121,11 @@ namespace MobileApiGetway.Services
         {
             return await _authClient.LoginAsync(request, cancellationToken: context.CancellationToken);
         }
+
+        public override async Task<LogoutReply> ApiLogout(LogoutRequest request, ServerCallContext context)
+        {
+            return await _authClient.LogoutAsync(request, cancellationToken: context.CancellationToken);
+        }
         #endregion
 
         #region CompanyService

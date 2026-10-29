@@ -4,6 +4,7 @@ using MediatR.Users.Register;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Auth.Extensions;
+using Auth.MediatR.Users.Login;
 
 namespace Auth.Controllers
 {
@@ -24,6 +25,14 @@ namespace Auth.Controllers
         public async Task<IActionResult> Register(UserRegisterDto request)
         {
             var result = await _mediator.Send(new RegisterUserCommand(request));
+            return this.ToActionResult(result);
+        }
+
+        [AllowAnonymous]
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(UserLoginDto request)
+        {
+            var result = await _mediator.Send(new LoginUserCommand(request));
             return this.ToActionResult(result);
         }
 

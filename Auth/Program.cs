@@ -1,7 +1,7 @@
 using Auth.Data;
 using Auth.Extensions;
+using Serilog;
 using Auth.Models.DTO;
-using Auth.Models.Entities;
 using AuthService.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
@@ -32,6 +32,12 @@ builder.Services.AddAutoMapper(typeof(Program).Assembly);
 // Register DataProtection and Infrastructure (PostgreSQL DbContext, Identity, JWT, Token Services)
 builder.Services.AddDataProtection();
 builder.Services.AddInfrastructure(builder.Configuration);
+
+builder.Host.UseSerilog((context, configuration) =>
+    configuration
+        .MinimumLevel.Debug()
+        .WriteTo.Console()
+        .ReadFrom.Configuration(context.Configuration));
 
 var app = builder.Build();
 

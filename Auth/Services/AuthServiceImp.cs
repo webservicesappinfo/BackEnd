@@ -3,6 +3,7 @@ using AuthService.Protos;
 using Grpc.Core;
 using MediatR;
 using Auth.MediatR.Users.Login;
+using Auth.MediatR.Users.Logout;
 using MediatR.Users.Register;
 using MobileApiGetway;
 
@@ -98,6 +99,36 @@ namespace AuthService.Services
                         Role = result.Value.User.Role.ToString()
                     };
                 }
+            }
+            else
+            {
+                reply.IsSuccess = false;
+                reply.ErrorMessage = string.Join("; ", result.Errors.Select(e => e.Message));
+            }
+
+            return reply;
+        }
+
+        public override async Task<LogoutReply> Logout(LogoutRequest request, ServerCallContext context)
+        {
+            _logger.LogInformation("gRPC Logout request received");
+
+            if (string.IsNullOrWhiteSpace(request.RefreshToken))
+            {
+                return new LogoutReply
+                {
+                    IsSuccess = false,
+                    ErrorMessage = "Refresh token is required."
+                };
+            }
+
+            var result = await _mediator.Send(new LogoutUserCommand(request.RefreshToken));
+
+            var reply = new LogoutReply();
+
+            if (result.IsSuccess)
+            {
+                reply.IsSuccess = true;
             }
             else
             {

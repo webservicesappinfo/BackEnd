@@ -1,10 +1,11 @@
-﻿using Auth.Models.DTO;
+﻿using Auth.Extensions;
+using Auth.MediatR.Users.Login;
+using Auth.MediatR.Users.Logout;
+using Auth.Models.DTO;
 using MediatR;
 using MediatR.Users.Register;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Auth.Extensions;
-using Auth.MediatR.Users.Login;
 
 namespace Auth.Controllers
 {
@@ -33,6 +34,17 @@ namespace Auth.Controllers
         public async Task<IActionResult> Login(UserLoginDto request)
         {
             var result = await _mediator.Send(new LoginUserCommand(request));
+            return this.ToActionResult(result);
+        }
+
+        [Authorize]
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout([FromHeader(Name = "X-Refresh-Token")] string refreshToken)
+        {
+            if (string.IsNullOrWhiteSpace(refreshToken))
+                return BadRequest("Refresh token missing in X-Refresh-Token header.");
+
+            var result = await _mediator.Send(new LogoutUserCommand(refreshToken));
             return this.ToActionResult(result);
         }
 

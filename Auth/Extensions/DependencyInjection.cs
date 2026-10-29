@@ -50,8 +50,8 @@ namespace Auth.Extensions
                 options.Password.RequireDigit = false;
                 options.Password.RequiredLength = 3;
                 options.User.RequireUniqueEmail = true;
-                options.Password.RequireNonAlphanumeric = false; 
-                options.Password.RequireUppercase = false;       
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
             })
             .AddEntityFrameworkStores<AuthDbContext>()
             .AddDefaultTokenProviders();
@@ -59,7 +59,7 @@ namespace Auth.Extensions
             services.AddScoped<IJwtTokenService, JwtTokenService>();
             services.AddScoped<IRefreshTokenService, RefreshTokenService>();
             services.AddScoped<IAuthService, Services.Users.AuthService>();
-            //services.AddScoped<ILoggerService, LoggerService>();
+            services.AddScoped<ILoggerService, LoggerService>();
             services.AddHostedService<TokenCleanupService>();
 
             services.AddAuthentication(options =>

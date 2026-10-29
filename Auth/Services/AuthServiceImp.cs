@@ -2,6 +2,7 @@ using Auth.Models.DTO;
 using AuthService.Protos;
 using Grpc.Core;
 using MediatR;
+using Auth.MediatR.Users.Login;
 using MediatR.Users.Register;
 using MobileApiGetway;
 
@@ -34,6 +35,49 @@ namespace AuthService.Services
             var result = await _mediator.Send(new RegisterUserCommand(registerDto));
 
             var reply = new RegisterReply();
+
+            if (result.IsSuccess)
+            {
+                reply.IsSuccess = true;
+                reply.Token = result.Value.Token ?? string.Empty;
+                reply.RefreshToken = result.Value.RefreshToken ?? string.Empty;
+                reply.ExpireAt = result.Value.ExpireAt.ToString("o");
+
+                if (result.Value.User != null)
+                {
+                    reply.User = new AuthUser
+                    {
+                        Id = result.Value.User.Id,
+                        Name = result.Value.User.Name ?? string.Empty,
+                        Surname = result.Value.User.Surname ?? string.Empty,
+                        Email = result.Value.User.Email ?? string.Empty,
+                        Login = result.Value.User.Login ?? string.Empty,
+                        Role = result.Value.User.Role.ToString()
+                    };
+                }
+            }
+            else
+            {
+                reply.IsSuccess = false;
+                reply.ErrorMessage = string.Join("; ", result.Errors.Select(e => e.Message));
+            }
+
+            return reply;
+        }
+
+        public override async Task<LoginReply> Login(LoginRequest request, ServerCallContext context)
+        {
+            _logger.LogInformation("gRPC Login request received for login: {Login}", request.Login);
+
+            var loginDto = new UserLoginDto
+            {
+                Login = request.Login,
+                Password = request.Password
+            };
+
+            var result = await _mediator.Send(new LoginUserCommand(loginDto));
+
+            var reply = new LoginReply();
 
             if (result.IsSuccess)
             {

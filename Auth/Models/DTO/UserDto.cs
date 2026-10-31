@@ -16,6 +16,7 @@ namespace Auth.Models.DTO
 
     public enum UserRole
     {
+        MainAdministrator,
         Admin,
         Moderator,
         User,

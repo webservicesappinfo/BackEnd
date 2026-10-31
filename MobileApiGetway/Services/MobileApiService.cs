@@ -122,6 +122,11 @@ namespace MobileApiGetway.Services
             return await _authClient.LoginAsync(request, cancellationToken: context.CancellationToken);
         }
 
+        public override async Task<GoogleLoginReply> ApiGoogleLogin(GoogleLoginRequest request, ServerCallContext context)
+        {
+            return await _authClient.GoogleLoginAsync(request, cancellationToken: context.CancellationToken);
+        }
+
         public override async Task<LogoutReply> ApiLogout(LogoutRequest request, ServerCallContext context)
         {
             return await _authClient.LogoutAsync(request, cancellationToken: context.CancellationToken);

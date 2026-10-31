@@ -1,10 +1,12 @@
 using Auth.Data;
 using Auth.Extensions;
-using Serilog;
 using Auth.Models.DTO;
+using Auth.Services.Interfaces.Users;
+using Auth.Services.Users;
 using AuthService.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,12 +28,12 @@ builder.Services.AddControllers()
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
-// Register AutoMapper
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
-// Register DataProtection and Infrastructure (PostgreSQL DbContext, Identity, JWT, Token Services)
 builder.Services.AddDataProtection();
 builder.Services.AddInfrastructure(builder.Configuration);
+
+builder.Services.AddScoped<IGoogleAuthService, GoogleAuthService>();
 
 builder.Host.UseSerilog((context, configuration) =>
     configuration

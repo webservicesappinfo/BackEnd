@@ -3,10 +3,13 @@ using Auth.MediatR.Users.Login;
 using Auth.MediatR.Users.Logout;
 using Auth.MediatR.Users.RefreshToken;
 using Auth.Models.DTO;
+using Auth.Models.DTO.Users;
+using Auth.Models.MediatR.Users.ChangePassword;
 using MediatR;
 using MediatR.Users.Register;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Auth.Controllers
 {
@@ -54,6 +57,20 @@ namespace Auth.Controllers
         public async Task<IActionResult> RefreshToken(RefreshTokenRequestDto request)
         {
             var result = await _mediator.Send(new RefreshTokenCommand(request));
+            return this.ToActionResult(result);
+        }
+
+        [Authorize]
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto request, CancellationToken cancellationToken = default)
+        {
+            string? userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
+            {
+                return Unauthorized();
+            }
+
+            var result = await _mediator.Send(new ChangePasswordCommand(userId, request), cancellationToken);
             return this.ToActionResult(result);
         }
 

@@ -6,6 +6,8 @@ using Auth.MediatR.Users.Login;
 using Auth.MediatR.Users.Logout;
 using MediatR.Users.Register;
 using MobileApiGetway;
+using Auth.Models.DTO.Users;
+using Auth.Models.MediatR.Users.ChangePassword;
 
 namespace AuthService.Services
 {
@@ -99,6 +101,43 @@ namespace AuthService.Services
                         Role = result.Value.User.Role.ToString()
                     };
                 }
+            }
+            else
+            {
+                reply.IsSuccess = false;
+                reply.ErrorMessage = string.Join("; ", result.Errors.Select(e => e.Message));
+            }
+
+            return reply;
+        }
+
+        public override async Task<ChangePasswordReply> ChangePassword(ChangePasswordRequest request, ServerCallContext context)
+        {
+            _logger.LogInformation("gRPC ChangePassword request received for userId: {UserId}", request.UserId);
+
+            if (request.UserId <= 0)
+            {
+                return new ChangePasswordReply
+                {
+                    IsSuccess = false,
+                    ErrorMessage = "Invalid user ID."
+                };
+            }
+
+            var changePasswordDto = new ChangePasswordDto
+            {
+                CurrentPassword = request.CurrentPassword,
+                NewPassword = request.NewPassword,
+                ConfirmNewPassword = request.ConfirmNewPassword
+            };
+
+            var result = await _mediator.Send(new ChangePasswordCommand(request.UserId, changePasswordDto), context.CancellationToken);
+
+            var reply = new ChangePasswordReply();
+
+            if (result.IsSuccess)
+            {
+                reply.IsSuccess = true;
             }
             else
             {

@@ -126,6 +126,11 @@ namespace MobileApiGetway.Services
         {
             return await _authClient.LogoutAsync(request, cancellationToken: context.CancellationToken);
         }
+
+        public override async Task<ChangePasswordReply> ApiChangePassword(ChangePasswordRequest request, ServerCallContext context)
+        {
+            return await _authClient.ChangePasswordAsync(request, cancellationToken: context.CancellationToken);
+        }
         #endregion
 
         #region CompanyService

@@ -1,6 +1,7 @@
 ﻿using Auth.Extensions;
 using Auth.MediatR.Users.Login;
 using Auth.MediatR.Users.Logout;
+using Auth.MediatR.Users.RefreshToken;
 using Auth.Models.DTO;
 using MediatR;
 using MediatR.Users.Register;
@@ -45,6 +46,14 @@ namespace Auth.Controllers
                 return BadRequest("Refresh token missing in X-Refresh-Token header.");
 
             var result = await _mediator.Send(new LogoutUserCommand(refreshToken));
+            return this.ToActionResult(result);
+        }
+
+        [AllowAnonymous]
+        [HttpPost("refresh-token")]
+        public async Task<IActionResult> RefreshToken(RefreshTokenRequestDto request)
+        {
+            var result = await _mediator.Send(new RefreshTokenCommand(request));
             return this.ToActionResult(result);
         }
 

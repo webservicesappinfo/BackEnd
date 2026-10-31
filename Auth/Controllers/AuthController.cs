@@ -1,10 +1,12 @@
-﻿using Auth.Extensions;
+using Auth.Extensions;
 using Auth.MediatR.Users.Login;
+using Auth.MediatR.Users.LoginGoogle;
 using Auth.MediatR.Users.Logout;
 using Auth.MediatR.Users.RefreshToken;
 using Auth.Models.DTO;
 using Auth.Models.DTO.Users;
 using Auth.Models.MediatR.Users.ChangePassword;
+using Auth.Services.Interfaces.Users;
 using MediatR;
 using MediatR.Users.Register;
 using Microsoft.AspNetCore.Authorization;
@@ -18,10 +20,12 @@ namespace Auth.Controllers
     public class AuthController : Controller
     {
         private readonly IMediator _mediator;
+        private readonly IGoogleAuthService _googleAuthService;
 
-        public AuthController(IMediator mediator)
+        public AuthController(IMediator mediator, IGoogleAuthService googleAuthService)
         {
             _mediator = mediator;
+            _googleAuthService = googleAuthService;
         }
 
 
@@ -31,6 +35,33 @@ namespace Auth.Controllers
         {
             var result = await _mediator.Send(new RegisterUserCommand(request));
             return this.ToActionResult(result);
+        }
+
+
+        [HttpPost("google-login")]
+        public async Task<IActionResult> GoogleLogin([FromBody] GoogleLoginRequest request)
+        {
+            try
+            {
+                var payload = await _googleAuthService.ValidateTokenAsync(request.IdToken);
+
+                if (payload == null)
+                    return Unauthorized("Invalid Google Token");
+
+                var loginDto = new GoogleLoginRequestDto
+                {
+                    Email = payload.Email,
+                    Name = payload.GivenName,
+                    Surname = payload.FamilyName
+                };
+
+                var result = await _mediator.Send(new GoogleLoginCommand(loginDto));
+                return this.ToActionResult(result);
+            }
+            catch (Exception)
+            {
+                return Unauthorized("Invalid Google Token");
+            }
         }
 
         [AllowAnonymous]

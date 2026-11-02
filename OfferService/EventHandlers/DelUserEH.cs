@@ -1,4 +1,4 @@
-﻿using EventBus.Abstractions;
+using EventBus.Abstractions;
 using EventBus.Events.ServicesEvents.UserRepoEvents;
 using Microsoft.Extensions.Logging;
 using OfferService.Abstractions;
@@ -24,7 +24,7 @@ namespace OfferService.EventHandlers
             Console.WriteLine(@event.Name);
             var userGuid = new Guid(@event.Guid);
             //@event.ResponseReceivedEvent.Set();
-            var offers = _offerRepoService.GetEntities().Where(x=>x.MasterGuid == userGuid);
+            var offers = _offerRepoService.GetEntities()?.Where(x=>x.MasterGuid == userGuid) ?? Enumerable.Empty<Models.Offer>();
             foreach (var offer in offers)
                 _offerRepoService.DelEntity(offer.Guid);
             return Task.FromResult(true);

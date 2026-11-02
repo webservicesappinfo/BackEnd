@@ -1,4 +1,4 @@
-﻿using EventBus.Abstractions;
+using EventBus.Abstractions;
 using EventBus.Events.ServicesEvents.OfferEvents;
 using Grpc.Core;
 using Microsoft.Extensions.Logging;
@@ -75,7 +75,7 @@ namespace OfferService.Services
             var offer = request.Offer;
             var result = _offerRepoService.DelEntity(new Guid(offer.Guid));
             if (result)
-                _eventBus.Publish(new DelOfferEvent(offer.Name, new Guid(offer.CompanyGuid), new Guid(offer.MasterGuid)));
+                _eventBus.Publish(new DelOfferEvent(offer.Name, new Guid(offer.Guid), new Guid(offer.MasterGuid)));
             return Task.FromResult(new DelOfferReply() { Result = result });
         }
         private OfferApi ConvertOffer(Models.Offer offer)

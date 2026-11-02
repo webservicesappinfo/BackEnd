@@ -1,0 +1,4 @@
+{
+  "login": "Dobra RAM",
+  "password": "{{ faker.internet.password }}"
+}

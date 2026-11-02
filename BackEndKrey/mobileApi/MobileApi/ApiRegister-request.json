@@ -1,0 +1,7 @@
+{
+  "name": "{{ faker.name.last_name }}",
+  "surname": "customer loyalty Armenian Dram",
+  "email": "{{ faker.internet.example_email }}",
+  "password": "{{ faker.internet.password }}",
+  "passwordConfirmation": "withdrawal Analyst"
+}

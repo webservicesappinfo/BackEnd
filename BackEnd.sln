@@ -39,6 +39,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompanyService.Tests", "tes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfferService.Tests", "tests\OfferService.Tests\OfferService.Tests.csproj", "{83CA0787-7CD2-47FA-84EA-CA64E5C2021A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderService.Tests", "tests\OrderService.Tests\OrderService.Tests.csproj", "{53604744-DB31-466E-91D6-079FBC81EE91}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -249,6 +251,18 @@ Global
 		{83CA0787-7CD2-47FA-84EA-CA64E5C2021A}.Release|x64.Build.0 = Release|Any CPU
 		{83CA0787-7CD2-47FA-84EA-CA64E5C2021A}.Release|x86.ActiveCfg = Release|Any CPU
 		{83CA0787-7CD2-47FA-84EA-CA64E5C2021A}.Release|x86.Build.0 = Release|Any CPU
+		{53604744-DB31-466E-91D6-079FBC81EE91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53604744-DB31-466E-91D6-079FBC81EE91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53604744-DB31-466E-91D6-079FBC81EE91}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{53604744-DB31-466E-91D6-079FBC81EE91}.Debug|x64.Build.0 = Debug|Any CPU
+		{53604744-DB31-466E-91D6-079FBC81EE91}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{53604744-DB31-466E-91D6-079FBC81EE91}.Debug|x86.Build.0 = Debug|Any CPU
+		{53604744-DB31-466E-91D6-079FBC81EE91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53604744-DB31-466E-91D6-079FBC81EE91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53604744-DB31-466E-91D6-079FBC81EE91}.Release|x64.ActiveCfg = Release|Any CPU
+		{53604744-DB31-466E-91D6-079FBC81EE91}.Release|x64.Build.0 = Release|Any CPU
+		{53604744-DB31-466E-91D6-079FBC81EE91}.Release|x86.ActiveCfg = Release|Any CPU
+		{53604744-DB31-466E-91D6-079FBC81EE91}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -258,6 +272,7 @@ Global
 		{6488C32F-4802-4D52-82A2-46198FC2C17C} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 		{98305351-B784-4504-9801-EA1829854A62} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 		{83CA0787-7CD2-47FA-84EA-CA64E5C2021A} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
+		{53604744-DB31-466E-91D6-079FBC81EE91} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CA2C4BE3-38A7-408D-9F33-0A2B44BC4277}

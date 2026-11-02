@@ -1,8 +1,9 @@
+#nullable enable
 using Grpc.Core;
 using System;
 using System.Threading.Tasks;
 
-namespace MobileApiGetway.Tests.Helpers
+namespace Globals.Tests
 {
     public static class GrpcTestHelpers
     {

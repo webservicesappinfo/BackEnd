@@ -1,10 +1,11 @@
+#nullable enable
 using Grpc.Core;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MobileApiGetway.Tests.Helpers
+namespace Globals.Tests
 {
     public class TestServerCallContext : ServerCallContext
     {
@@ -31,13 +32,13 @@ namespace MobileApiGetway.Tests.Helpers
         protected override WriteOptions? WriteOptionsCore { get; set; }
         protected override AuthContext AuthContextCore => new(null, new Dictionary<string, List<AuthProperty>>());
 
-        protected override ContextPropagationToken CreatePropagationTokenCore(ContextPropagationOptions? options)
+        protected override ContextPropagationToken CreatePropagationTokenCore(ContextPropagationOptions? options) 
             => throw new NotImplementedException();
 
-        protected override Task WriteResponseHeadersAsyncCore(Metadata responseHeaders)
+        protected override Task WriteResponseHeadersAsyncCore(Metadata responseHeaders) 
             => Task.CompletedTask;
 
-        public static TestServerCallContext Create(CancellationToken cancellationToken = default)
+        public static TestServerCallContext Create(CancellationToken cancellationToken = default) 
             => new(cancellationToken: cancellationToken);
     }
 }

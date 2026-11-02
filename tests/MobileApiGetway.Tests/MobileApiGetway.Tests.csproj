@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\MobileApiGetway\MobileApiGetway.csproj" />
+    <ProjectReference Include="..\..\Globals\Globals.csproj" />
   </ItemGroup>
 
 </Project>

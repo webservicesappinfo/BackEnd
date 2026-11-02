@@ -5,7 +5,7 @@ using Grpc.Core;
 using LocationService.Protos;
 using MobileApiGetway;
 using MobileApiGetway.Services;
-using MobileApiGetway.Tests.Helpers;
+using Globals.Tests;
 using Moq;
 using NotificationService.Protos;
 using OfferService.Protos;

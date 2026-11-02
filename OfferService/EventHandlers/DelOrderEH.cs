@@ -1,4 +1,4 @@
-﻿using EventBus.Abstractions;
+using EventBus.Abstractions;
 using EventBus.Events.ServicesEvents.OrderEvents;
 using Microsoft.Extensions.Logging;
 using OfferService.Abstractions;
@@ -23,7 +23,7 @@ namespace OfferService.EventHandlers
             Console.WriteLine(@event.Name);
             //@event.ResponseReceivedEvent.Set();
             var offer = _offerRepoService.GetEntity(@event.OfferGuid);
-            if (offer.Status == Models.OfferStatus.Submitted || offer.Status == Models.OfferStatus.Accepted)
+            if (offer != null && (offer.Status == Models.OfferStatus.Submitted || offer.Status == Models.OfferStatus.Accepted))
             {
                 var result = _offerRepoService.SetStatus(@event.OfferGuid, Models.OfferStatus.Actived);
                 return Task.FromResult(result);

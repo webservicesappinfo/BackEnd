@@ -1,4 +1,4 @@
-﻿using EventBus.Abstractions;
+using EventBus.Abstractions;
 using EventBus.Events.ServicesEvents.OfferEvents;
 using EventBus.Events.ServicesEvents.OrderEvents;
 using Grpc.Core;
@@ -30,6 +30,9 @@ namespace OrderService.Services
             var order = new Models.Order()
             {
                 Name = request.Order.Name,
+                OfferGuid = string.IsNullOrEmpty(request.Order.OfferGuid) ? Guid.Empty : new Guid(request.Order.OfferGuid),
+                UserGuid = string.IsNullOrEmpty(request.Order.UserGuid) ? Guid.Empty : new Guid(request.Order.UserGuid),
+                UserName = request.Order.UserName ?? string.Empty,
                 MasterGuid = new Guid(request.Order.MasterGuid),
                 MasterName = request.Order.MasterName,
                 SkillGuid = new Guid(request.Order.SkillGuid),

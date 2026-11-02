@@ -61,7 +61,7 @@ namespace MobileApiGetway.Services
             var reply = new GetMainDataForUserReply();
             var fitUser = _userClient.GetUser(new GetUserRequest() { UidFB = request.UserUIDFB });
             reply.UserName = fitUser?.Name ?? "NotFound";
-            reply.UserUIDFB = fitUser.UidFB;
+            reply.UserUIDFB = fitUser?.UidFB ?? string.Empty;
             var response = _companyClient.GetCompanies(new GetCompaniesRequest() { UserUIDFB = request.UserUIDFB, Type = "owner" });
             foreach(var company in response.Companies)
                 foreach(var master in company.Masters)

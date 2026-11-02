@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -64,12 +64,20 @@ namespace CompanyService.Services
 
             var company = _companyRepoService.GetEntity(new Guid(request.Guid), nameof(Models.Company.Workers));
             if (company == null) return Task.FromResult(reply);
-            reply.Company.Guid = company.Guid.ToString();
-            reply.Company.Name = company.Name;
-            reply.Company.OwnerGuid = company.OwnerGuid.ToString();
-            reply.Company.OwnerName = company.OwnerName;
-            reply.Company.Lat = company.Lat?.ToString() ?? String.Empty;
-            reply.Company.Lng = company.Lng?.ToString() ?? String.Empty;
+            reply.Company = new CompanyReply()
+            {
+                Guid = company.Guid.ToString(),
+                Name = company.Name,
+                OwnerGuid = company.OwnerGuid.ToString(),
+                OwnerName = company.OwnerName,
+                Lat = company.Lat?.ToString() ?? String.Empty,
+                Lng = company.Lng?.ToString() ?? String.Empty
+            };
+
+
+
+
+
 
             foreach (var worker in company.Workers)
                 reply.Company.Masters.Add(new MasterReply() { UidFB = worker.RefGuid.ToString() });
@@ -85,6 +93,7 @@ namespace CompanyService.Services
                 case "owner":
                     //fitCompanies = totalCompanies.Where(x => x.OwnerGuid == guid).ToList(); break;
                     fitCompanies = _companyRepoService.GetCompaniesByOwner(guid);break;
+                case "foroffer":
                 case "forOffer":
                     fitCompanies = totalCompanies.Where(x => x.OwnerGuid == guid || x.Workers.Any(m => m.RefGuid == guid)).ToList(); break;
                 case "contains":
@@ -98,26 +107,26 @@ namespace CompanyService.Services
                 var companyReply = new CompanyReply()
                 {
                     Guid = company.Guid.ToString(),
-                    Name = company.Name,
+                    Name = company.Name ?? String.Empty,
                     OwnerGuid = company.OwnerGuid.ToString(),
-                    OwnerName = company.OwnerName,
-                    Lat = company.Lat.ToString(),
-                    Lng = company.Lng.ToString(),
+                    OwnerName = company.OwnerName ?? String.Empty,
+                    Lat = company.Lat?.ToString() ?? String.Empty,
+                    Lng = company.Lng?.ToString() ?? String.Empty,
                 };
                 foreach (var worker in company.Workers)
                 {
                     var master = new MasterReply()
                     {
                         UidFB = worker.RefGuid.ToString(),
-                        Name = worker.Name,
+                        Name = worker.Name ?? String.Empty,
                         CompanyGuid = company.Guid.ToString(),
-                        CompanyName = company.Name,
+                        CompanyName = company.Name ?? String.Empty,
                     };
                     foreach (var offer in worker.Offers)
                         master.Offers.Add(new OfferApi()
                         {
                             Guid = offer.RefGuid.ToString(),
-                            Name = offer.Name,
+                            Name = offer.Name ?? String.Empty,
                             Desc = String.Empty
                         });
                     companyReply.Masters.Add(master);

@@ -1,0 +1,7 @@
+{
+  "name": "{{ faker.name.last_name }}",
+  "surname": "Serbia",
+  "email": "{{ faker.internet.example_email }}",
+  "password": "{{ faker.internet.password }}",
+  "passwordConfirmation": "withdrawal Tasty Fresh Computer hierarchy"
+}

@@ -4,6 +4,7 @@ using Auth.Models.DTO;
 using Auth.Services.Interfaces.Users;
 using Auth.Services.Users;
 using AuthService.Services;
+using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Serilog;
@@ -29,6 +30,7 @@ builder.Services.AddControllers()
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
+builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 
 builder.Services.AddDataProtection();
 builder.Services.AddInfrastructure(builder.Configuration);
